@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Research</title>
+    <style type="text/css">
+        body{font-family: Arial, Helvetica, sans-serif;}
+        th{font-family:normal ;}
+        i{font-family:normal ;}
+        #A{
+  background-image:  url('');
+  background-repeat:  no-repeat;
+  background-attachment: fixed;
+  background-size: 110%;
+  background-position:
+    center
+}
+    </style>
+</head>
+
+<body bgcolor=#AFEEEE>
+    <section id="A">
+    <table align="RIGHT" border="5" cellspacing="5">
+        <tbody>
+            <tr>
+                <th>
+                    <a href="index.html">
+                        <img width="100" align="top" src="yen.png">
+                    </a>
+                    <br>
+                    HYY Home
+                </th>
+            </tr>
+        </tbody>
+    </table>
+    <h1>
+        <img width="190" align="top" src="yen.png">
+        <br>
+        <i>Hao-Yang Yen</i>
+    </h1>
+    <hr>
+    <center>
+        <table border="10" cellspacing="5">
+            <tbody>
+                <tr>
+                    <th>
+                        <a href="experience.html">
+                            <img width="50" align="top" src="exp.png">
+                        </a>
+                        <br>
+                        Experience
+                    </th>
+                    <th>
+                        <a href="learning.html">
+                        <img width="50" align="top" src="l.png">
+                        </a>
+                        <br>
+                        Learning
+                    </th>
+                    <th>
+                        <a href="research.html">
+                        <img width="50" align="top" src="r.png">
+                        </a>
+                        <br>
+                        Research
+                    </th>
+                    <th>
+                        <a href="Explore.html">
+                            <img width="50" align="top" src="e.png">
+                            </a>
+                        <br>
+                        Expplore
+                    </th>
+                </tr>
+            </tbody>
+        </table>
+    </center>
+<hr>
+</section>
+<h1>
+    Tensor Network Approach for Stochastic dynamics  
+</h1>
+<h3><ul> I do this research in 2024 summer. PI: Prof. Hong-Yan Shih and Yi-Ping Huang, Academia Sinica</ul></h3>
+
+
+<ul>
+     <u1>
+        The tensor network (TN) framework is a robust approach for solving many-body quantum system problems. 
+        Techniques such as matrix product states (MPS) and the density matrix renormalization group (DMRG) provide efficient
+        numerical tools for these challenges. Recently, physicists have found that these methods can also be applied to other systems, 
+        including stochastic dynamics problems. Genetic algorithms (GAs), which simulate stochastic evolutionary dynamics, 
+        are powerful tools used across various interdisciplinary research fields. However, the computational complexity of 
+        GAs increases significantly when the evolutionary dynamics become complex. Therefore, I aim to apply the TN approach to 
+        GAs in order to reduce this computational complexity. In this research, I will explore how TN can be integrated into evolutionary
+         dynamics and GAs.
+    <br>
+    <h3>
+        <li>Meeting Slides</li>
+    </h3>
+    
+    <a href="Group_Meeting_slide__2.pdf">Group Meeting Slides #1</a>.
+
+    <h3>
+        <li>A Simple Model for Geneic Algorithm</li>
+    </h3>
+    In this section, I will detail the construction of the genetic algorithm and explain how to achieve the animation results. 
+    The genetic algorithm is an iterative method that allows us to repeat the process until a specific condition is met. The steps are as follows:
+    <ul>
+        <h4>
+            <li>Step 1: Generate Random Chromosomes</li>
+        </h4>
+        Initially, we create a set of chromosomes of equal length, generated randomly. Typically represented as sequences of numbers, 
+        in this case, we use binary sequences. The more chromosomes generated and the longer their lengths, 
+        the better the potential results.
+         <h4>
+            <li>Step 2: Perform Crossover (Mating)</li>
+        </h4>
+        This step simulates the mating process found in evolution. We randomly select two chromosomes and exchange several 
+        genes—specific numbers at corresponding positions—to create a new pair of chromosomes. This crossover can occur multiple times. 
+        It's important to balance the number of exchanged genes; too few or too many can negatively impact the results.
+         <h4>
+            <li>Step 3: Apply Mutation</li>
+        </h4>   
+        In this phase, we introduce genetic mutation. We randomly select some chromosomes and modify a few of their genes, 
+        resulting in new chromosomes. After this step, we will have double the number of chromosomes compared to the beginning.
+         <h4>
+            <li>        Step 4: Evaluate Fitness</li>
+        </h4>
+        Here, we define a evolutionary function that assigns a real number to each chromosome, indicating its fitness. 
+        We then select the top half of the chromosomes based on this evaluation, returning to the same number of chromosomes as in Step 1.
+    </ul>
+    <br>
+    We can perform these steps until a certain condition is satisfied. 
+    <br>
+    <br>
+    I randomly generate a perfect chromosome, the most optimized chromosome, at the beginning. The fitness function is defined as the number 
+    of genes different to the perfect chromosome.
+    We can perform the geneic algorithm to see how the evolution looks like. As the following animation demonstrate:
+    <br> 
+    <br>
+<center>
+    <img width="500" align="top" src="ga.gif">
+    <figcaption><h4> An implment result of geneic algorithm.</h4></figcaption>
+</center>
+</body>
+</html>
