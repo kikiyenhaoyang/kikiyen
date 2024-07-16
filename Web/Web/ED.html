@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Learning</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+  <style type="text/css">
+    body{ 
+            font-family: Arial, Helvetica, sans-serif;
+            }
+    th{font-family:normal ;}
+    i{font-family:normal ;}
+    #A{
+  background-image:  url('');
+  background-repeat:  no-repeat;
+  background-attachment: fixed;
+  background-size: 110%;
+  background-position:
+    center
+}
+</style>
+</head>
+
+<body bgcolor=#d9dcc0>
+    <section id="A">
+    <table align="RIGHT" border="5" cellspacing="5">
+        <tbody>
+            <tr>
+                <th>
+                    <a href="index.html">
+                        <img width="100" align="top" src="yen.png">
+                    </a>
+                    <br>
+                    HYY Home
+                </th>
+            </tr>
+        </tbody>
+    </table>
+    <h1>
+        <img width="190" align="top" src="yen.png">
+        <br>
+        <i>Hao-Yang Yen</i>
+    </h1>
+    
+    <hr>
+    <center>
+        <table border="10" cellspacing="5">
+            <tbody>
+                <tr>
+                    <th>
+                        <a href="experience.html">
+                            <img width="50" align="top" src="exp.png">
+                        </a>
+                        <br>
+                        Experience
+                    </th>
+                    <th>
+                        <a href="learning.html">
+                        <img width="50" align="top" src="l.png">
+                        </a>
+                        <br>
+                        Learning
+                    </th>
+                    <th>
+                        <a href="research.html">
+                        <img width="50" align="top" src="r.png">
+                        </a>
+                        <br>
+                        Research
+                    </th>
+                    <th>
+                        <a href="Explore.html">
+                            <img width="50" align="top" src="e.png">
+                            </a>
+                        <br>
+                        Explore
+                    </th>
+                </tr>
+            </tbody>
+        </table>
+    </center>
+</section>
+<hr>
+    </section>
+<h1>
+        Plasma Astrophysics: Introduction to Magnetohydrodynamics and Simplify Stellar Model
+</h1>
+<h3>
+    <ul> I worked on project in 2024 spring.</ul>
+</h3>
+<h2><li>Abstract</li></h2>
+In this project, I delve into the foundational concepts of magnetohydrodynamics (MHD) and expound upon the MHD equations. Moreover, I undertake the construction of a simplified two-dimensional model representing stellar wind. By leveraging the MHD equations, I simulate the dynamics of this model. Through these simulations, we gain insights into various phenomena inherent in stellar winds. Furthermore, the comparison of our simulated results with real-world data enables us to validate and refine our understanding of these intricate processes.
+<br>
+
+<h2><li>Modeling</li></h2>
+In order to streamline computational processes,
+ I opt to confine our analysis to the x and z axes within the model, 
+ maintaining an assumption of uniformity in physical attributes along the y-axis. 
+ In our endeavor to depict stellar winds, we observe a tendency for plasma to aggregate predominantly on the right-hand side and would never exhausted, 
+ mimicking the natural behavior of stars. Through the utilization of numerical methodologies, 
+ we embark on the task of simulating plasma parameters, aiming to capture and emulate these complex phenomena in our model.
+ <br>
+ <br>
+ <center>
+    <img width="500" align="top" src="edmodel.jpg">
+    <figcaption><h4> Figure for the constructed model.</h4></figcaption>
+</center>
+<br>
+<br>
+<h2><li>Simulation Results</li></h2>
+It's clearly that we need to set the mass density accumulat on the right-hand side and therefore so does pressure at the beginning
+<br>
+<br>
+<center>
+    <img width="800" align="top" src="mhd1.jpg">
+    <figcaption><h4> Initial condition of \(\rho,p,\vec{v},\vec{A}\) (\(v_y=0,A_x=0,A_z=0\))</h4></figcaption>
+</center>
+<center>
+    <img width="800" align="top" src="mhd4.gif">
+    <figcaption><h4> Simulation result of \(\vec{B},\vec{v},\rho\)</h4></figcaption>
+</center>
+Distinguishing itself from the conventional dynamics observed in hydrodynamics,
+ the plasma under consideration displays a unique behavior, 
+ with the capacity to flow in both the rightward and leftward directions within the system.
+  As the plasma traverses towards the left-hand side, it undergoes a discernible damping period,
+  
+  marking a transitional phase in its motion. Meanwhile, the magnetic field surrounding the stellar body,
+   particularly on the right-hand side, manifests a distinct pattern of twisting, 
+indicative of the intricate interplay between magnetic forces and plasma dynamics.
+ This twisting phenomenon stands in stark contrast to the relatively uniform magnetic field observed on the left-hand side.
+  Moreover, as the system evolves over time, there is a noticeable tendency for the 
+  magnetic field to gradually attain a state of rest or stationary equilibrium, marking a significant aspect of its temporal evolution.
+<br>
+<br>
+<br>
+<center>
+    <img width="800" align="top" src="mhd2.gif">
+    <figcaption><h4> Simulation result of \(\vec{B},\vec{v},\rho\)</h4></figcaption>
+</center>
+The \(\vec{B}\) field noticeably experiences damping initially, gradually stabilizing as time progresses.
+ Concurrently, the field undergoes discernible changes in its evolution over time, 
+ with the right-hand side twisted more obiviously.
+ <br>
+ <br>
+ <center>
+    <img width="480" align="top" src="mhd1.gif">
+    <img width="600" align="top" src="Wind-speed-time-series.png">
+    <figcaption><h4> Simulation result observed \(v(t)\) v.s. The real world data</h4></figcaption>
+</center>
+<br>
+ <br>
+ <center>
+    <img width="480" align="top" src="mhd5.gif">
+    <img width="600" align="top" src="realdensitydata.jpg">
+    <figcaption><h4> Simulation result observed \(\rho(t)\) v.s. The real world data</h4></figcaption>
+</center>
+</body>
+</html>
