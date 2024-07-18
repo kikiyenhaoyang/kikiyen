@@ -103,6 +103,14 @@ A simple differential equation used to describe virus spread in space, S represe
     \(\displaystyle\frac{dR}{dt}=\gamma I\)
 </center>
 <br>
+These relations are described by a differential equations system. Definitely, we can employ 
+numerous kinds of numerical method to sovle these differentional equations. We can get the result like:
+<br>
+<center>
+    <img width="450" align="top" src="sirdiff.jpg">
+    <figcaption><h4> A well-known numerical result of the SIR model.</h4></figcaption>
+</center>
+<br>
 There are only three variables considered in this model. One can consider more variables to make the model more complete, for example, the \(SEIR\) model is a kind of model with the varivle "exposed"(\(E\)) consideres. However, the more variables are considered, the more complex the model is.
 The algorithm used to solve the differential equations would become more complex, too. To avoid solveing these complex equations.
 We use the Monte Carlo method to simulate equation, it can well improve the simulate of multiple differential equation and show straightforward result.
@@ -126,9 +134,13 @@ To model these equations in the probability form, we have the following assumpto
     </li>
 </ul>
 Then we can view the individuals as lattices in the space. Thus, the differential equations model changes to the probability model as the figur demonstrating.
+<br>
+<br>
 <center>
     <img width="500" align="top" src="mcsir.png">
 </center>
+<br>
+
 The \(S\) lattice spreads to the nearest lattices with probability corresponding to \(\alpha\) and
 \(I\) lattice changes to the \(R\) lattice with probability corresponding to \(\gamma\).
 This model can be easily generalized to other models.
@@ -140,6 +152,14 @@ We first simulate the simplest epidamic model \(SIR\) model first.
     <figcaption><h4> Diffusion in 2-D Space (\(S=0,E=1,I=2,R=-1,Q=-2\)) and the corresponding number of individuals.</h4></figcaption>
 </center>
 We can see that the result is similar to that computed by solving differential equations.
+<br>
+<br>
+<center>
+    <img width="400" align="top" src="sir.jpg">
+    <img width="400" align="top" src="sirdiff.jpg">
+    <figcaption><h4> Comparison of numerical results of differential equations and Monte Carlo methid.</h4></figcaption>
+</center>
+<br>
 <h2><li>SIR+Q Model</li></h2>
 Adding quarantine term, now infectious may get quarantine and cannot contagious susceptibility With different quarantine strength it may affect the result differently.
 Note that \(I\) may get recovery directly instead go to quarantine.
@@ -254,11 +274,6 @@ Finally consider now recover may have chances to get contagious only their anti-
 
 <h2><li>Camparison</li></h2>
 Here we plot everyday who got virus of our simulation with actual data in taiwan, unfortunately the they delete all data in the previous part of epidemic, but we can still see the plot looks similar. The most difference is that the some part of our simulation, they would be no people got virus, whereas in reality everyday people would get virus. In simulation everyone will get virus at first outbreak, whereas in reality aren’t. lso, there are too many factor in reality and may not be well to quantify.
-<br>
-<br>
-<center>
-    <img width="400" align="top" src="highq.gif">
-</center>
 <br>
 <br>
 <center>
