@@ -138,15 +138,13 @@
         There are two phases in the one-dimensional SIS model.
         <br>
         <br>
-        In differential equation form we have the theorem
-        <center>
-            If \(\beta/\gamma\leq 1\),then \(\lim_{t\xrightarrow{}\infty} (S,I)=(N,0),\)
-            <br>
-            <br>
-            If \(\beta/\gamma> 1\), then \(\lim_{t\xrightarrow{}\infty} (S,I)=(\frac{\gamma}{\beta}N,(\frac{\gamma}{\beta}-1)N).\)
-        </center>
+        In differential equation form we can analyze the differential equations anr therefore have the theorem
         <br>
-        These two convergence behaviors correspond to the absorbing phase and the endemic phase respectively.
+            $$\text{If \(\beta/\gamma\leq 1\),then }\lim_{t\xrightarrow{}\infty} (S,I)=(N,0)\;\text{(absorbing phase)},$$
+           $$\text{ If \(\beta/\gamma> 1\), then }\lim_{t\xrightarrow{}\infty} (S,I)=(\frac{\gamma}{\beta}N,(\frac{\gamma}{\beta}-1)N)\;\text{(endemic phase)}.$$
+        
+        These two convergence behaviors correspond to the absorbing phase and the endemic phase respectively. The numerical simulations of these two phases 
+        are as follows:
         <br>
         <br>
         <center> 
@@ -154,6 +152,9 @@
             <img width="400" align="top" src="sisdiff.jpg">
             <figcaption><h4>The numerical solutions of the absorbing phase and the endemic phase.</h4></figcaption>
         </center>
+        <br>
+        <br>
+        We can obtain similar results by the Monte Carlo method as well, the result is as follows:
         <br>
         <br>
     <center> 
