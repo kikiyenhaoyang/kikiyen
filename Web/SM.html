@@ -19,6 +19,7 @@
   background-position:
     center
 }
+
 </style>
 </head>
 
@@ -174,10 +175,10 @@ Then, \(\bm{a}^{[1]}\) inputs to the second layer and output \(\bm{a}^{[2]}\), t
 The final output is <center>
     \(\bm{z}=g(\bm{a}^{[3]}\bf{W}^{[4]}+\bm{b}^{[4]})\)
 </center>
-Generalize this process to any dimension of parameters and numbers of layers $n$, it could be written as <center>
+Generalize this process to any dimension of parameters and numbers of layers \(n\), it could be written as <center>
     \(\bm{a}^{[i+1]}=g(\bm{a}^{[i]}\bf{W}^{[i+1]}+\bm{b}^{[i+1]})\)
 </center>
-, where \(\bm{a}^{[0]}=\bm{x}\) and \(\bm{a}^{[n+1]}=\bm{z}\).\\
+, where \(\bm{a}^{[0]}=\bm{x}\) and \(\bm{a}^{[n+1]}=\bm{z}\).
 There are many kinds of activation functions, in this report, I use <center>
     \(g(\bm{z})=\frac{1}{\sum_je^{z_j}}\begin{pmatrix}
     e^{z_1}\\
@@ -224,15 +225,102 @@ quantity
      I use a classical data set \(\bm{iris}\) in R as an example, we use the neural network to predict the categorical data \(\bm{Species}\).
       Before explaining the neural network is a kind of renormalization group,
        we need to explain what does critical point means for the samples in the data set. 
-       Let's visualize the predictors. First plot the scatter plots between the continuous predictors (Figure 1).
-We can see that some predictors have a significant correlation with the response.
-Moreover, some predictors have a significant correlation with other predictors, too.
-Considering there are 150 individuals in the data set and the randomness of sampling, we can believe that the parameters can have the predictors have such correlation in every individual. So we can say that even if sepals and petals are only small
-parts of the iris, they still highly correlate with other characters of the individuals.
-This is why we could say the samples are at a critical point.
+       Let's visualize the predictors. First plot the scatter plots between the continuous predictors:
+       <br>
+       <br>
+       <center>
+        <img width="500" align="top" src="rplot1.jpg">
+       </center>
+       <br>
+       And compute the Pearson correlation between the continuous predictors:
+       <br>
+       <center>
+        <table border="1" cellspacing="0" cellpadding="5">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Sepal.Length</th>
+                    <th>Sepal.Width</th>
+                    <th>Petal.Length</th>
+                    <th>Petal.Width</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><b>Sepal.Length</b></td>
+                    <td>1.0000000</td>
+                    <td>-0.1175698</td>
+                    <td>0.8717538</td>
+                    <td>0.8179411</td>
+                </tr>
+                <tr>
+                    <td><b>Sepal.Width</b></td>
+                    <td>-0.1175698</td>
+                    <td>1.0000000</td>
+                    <td>-0.4284401</td>
+                    <td>-0.3661259</td>
+                </tr>
+                <tr>
+                    <td><b>Petal.Length</b></td>
+                    <td>0.8717538</td>
+                    <td>-0.4284401</td>
+                    <td>1.0000000</td>
+                    <td>0.9628654</td>
+                </tr>
+                <tr>
+                    <td><b>Petal.Width</b></td>
+                    <td>0.8179411</td>
+                    <td>-0.3661259</td>
+                    <td>0.9628654</td>
+                    <td>1.0000000</td>
+                </tr>
+            </tbody>
+            <caption>Correlation matrix of the <i>iris</i></caption>
+        </table>
+        
+       </center>
+       <br>
+Since the response is a categorical variable, we draw the box plot to visualize its relation with other continuous predictors:
+<br>
+<br>
+<center>
+    <img width="500" align="top" src="rplot2.jpg">
+</center>
+<br>
+And compute the Point-Biserial correlation between the response and  predictors:
+<br>
+<br>
+<center>
+<table border="1" cellspacing="0" cellpadding="5">
+    <thead>
+        <tr>
+            <th>Sepal.Length</th>
+            <th>Sepal.Width</th>
+            <th>Petal.Length</th>
+            <th>Petal.Width</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>0.7825612</td>
+            <td>-0.4266576</td>
+            <td>0.9490347</td>
+            <td>0.9565473</td>
+        </tr>
+    </tbody>
+    <caption>Point-Biserial Correlation for <i>iris</i></caption>
+</table>
+</center>
+<br>
+We can see that some predictors have a significant correlation with the response. Moreover, some predictors
+ have a significant correlation with other predictors, too. Considering there are 150 individuals in the data set and the randomness of sampling,
+  we can believe that the parameters can have the predictors have such correlation in every individual. So we can say that even if 
+  sepals and petals are only small parts of the iris, they still highly correlate with other characters of the individuals. 
+  This is why we could say the samples are at a critical point. This phenomenon is why the biological systems have enough adapting ability. 
+  When the environment changes, the systems only need to change a little part of the biological character to adapt to the change. 
+  This is why many biological systems are at the so-called critical point.
 </ul>
 
- 
   <ul>
      <li>
       <h3>
@@ -258,6 +346,37 @@ for predicting data. Then we use the model to predict the data for the test set.
 draw the confusion matrix and compute the prediction accuracy in the test set to
 see the prediction ability of this model.
 <br>
+<br>
+<center>
+<table border="1" cellspacing="0" cellpadding="5">
+    <caption>Confusion matrix for test set</caption>
+    <tr>
+        <th></th>
+        <th>Setosa</th>
+        <th>Versicolor</th>
+        <th>Virginica</th>
+    </tr>
+    <tr>
+        <th>Setosa</th>
+        <td>6</td>
+        <td>0</td>
+        <td>0</td>
+    </tr>
+    <tr>
+        <th>Versicolor</th>
+        <td>0</td>
+        <td>10</td>
+        <td>3</td>
+    </tr>
+    <tr>
+        <th>Virginica</th>
+        <td>0</td>
+        <td>0</td>
+        <td>11</td>
+    </tr>
+</table>
+</center>
+<br>
 <center>
     \(Accuracy=\frac{27}{30}=90\%\)
 </center>
@@ -270,6 +389,38 @@ see the prediction ability of this model.
       This statement can be verified easily by using the outlier to train the model, then the accuracy would significantly decrease.
     The sample size of this data set isn't large enough, we don't have enough outliers. 
     Therefore, we use the \(\bm{runif}\) function to generate the random numerical value in the range of each parameter. And use these values as sixty new "individuals" as the outlier and replace some individuals in the training set. The accuracy decreases significantly.
+    <br>
+    <br>
+    <center>
+        <table border="1" cellspacing="0" cellpadding="5">
+            <caption>Confusion matrix for test set</caption>
+            <tr>
+                <th></th>
+                <th>Setosa</th>
+                <th>Versicolor</th>
+                <th>Virginica</th>
+            </tr>
+            <tr>
+                <th>Setosa</th>
+                <td>5</td>
+                <td>1</td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <th>Versicolor</th>
+                <td>1</td>
+                <td>7</td>
+                <td>3</td>
+            </tr>
+            <tr>
+                <th>Virginica</th>
+                <td>4</td>
+                <td>2</td>
+                <td>7</td>
+            </tr>
+        </table>
+    </center>
+    <br>    
     <center>
         \(Accuracy=\frac{27}{30}=63.3\%\)
     </center>
@@ -296,9 +447,37 @@ see the prediction ability of this model.
     the goal of this process is the same as rescaling in the renormalization group theory theory,
      with this process, the parameters would have the same form in every layer.
       Moreover, this process can make the output parameters in the domain \((0,1)\) to avoid the parameters diverging. 
-      Generally, the relevant parameters would flow to the three fixed points \((1,0,0),\;(0,1,0),\) and \((0,0,1)\) which correspond to three categories, and the irrelevant ones would be neglected. Like what is shown in the following table which is a part of the prediction output.
-      </ul>
-      <h2><li>Futher Idea</li></h2>
+      Generally, the relevant parameters would flow to the three fixed points \((1,0,0),\;(0,1,0),\) and \((0,0,1)\) which correspond to three 
+      categories, and the irrelevant ones would be neglected. Like what is shown in the following table which is a part of the prediction output:
+      <br>
+      <br>
+      <center>
+        <table border="1" cellspacing="0" cellpadding="5">
+            <caption>Part of the output of the prediction</caption>
+        <tr>
+            <th>setosa</th>
+            <th>versicolor</th>
+            <th>virginica</th>
+        </tr>
+        <tr>
+            <td>1.000000e+00</td>
+            <td>7.886223e-04</td>
+            <td>1.736939e-48</td>
+        </tr>
+        <tr>
+            <td>5.111283e-15</td>
+            <td>1.000000e+00</td>
+            <td>9.634484e-21</td>
+        </tr>
+        <tr>
+            <td>1.403715e-19</td>
+            <td>1.000000e+00</td>
+            <td>1.720226e-12</td>
+        </tr>
+        </table>
+    </center>
+    </ul>
+      <h2><li>Futher Ideas</li></h2>
       If we believe that the neural network is indeed a kind of renormalization group and there is a precise corresponding relation between them, then we can build a relation between statistical mechanics and other research fields.
       <ul>
         <li>
