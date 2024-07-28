@@ -5,13 +5,16 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
-  <style type="text/css">
-     body{ 
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  
+ <style type="text/css">
+    body{ 
             font-family: Arial, Helvetica, sans-serif;
             }
     th{font-family:normal ;}
     i{font-family:normal ;}
-#A{
+    #A{
   background-image:  url('');
   background-repeat:  no-repeat;
   background-attachment: fixed;
@@ -169,5 +172,233 @@
         <figcaption><h4>The endemic phase of the SIS model simulation with foward Euler method and Monte Carlo method.</h4></figcaption>
     </center>
     </ul>
+    <h3>
+        <li>The Infinite-Size Density Matrix Renormalization Group (DMRG) for the Ising Model</li>
+    </h3>
+    The algorithm of the infinite-size DMRG is:
+    <br>
+    <br>
+    <ol>
+        <li class="step">
+            Start with two blocks containing a single site; these are the first system block and environment block.
+        </li>
+        <li class="step">
+            Form two enlarged blocks by adding a site to the right of the system block and to the left of the environment block.
+        </li>
+        <li class="step">
+            Form the superblock by connecting the system block to the environment block.
+        </li>
+        <li class="step">
+            Diagonalize the superblock to find the state vector \(|\psi_i\rangle\) and the energy of the target state (usually ground state).
+        </li>
+        <li class="step">
+            Form the reduced density matrix for the enlarged system block by first constructing the density matrix for the superblock \(\hat{\rho}_s=|\psi_i\rangle\langle\psi_i|\) and then taking the partial trace over the environment \(\hat{\rho}_s=Tr_e(\hat{\rho})\).
+        <li class="step">
+            Diagonalize the reduced density matrix and order its eigenvectors by descending weight. Keep only the <span class="emphasis">m<sub>0</sub></span> eigenvectors with the largest weights.
+        </li>
+        <li class="step">
+            Form the truncation operator \(\hat{O}\) from the eigenvectors with larger eigenvalues and project all operators onto the truncated basis \(\hat{A}_{L+1}=\hat{O}^\dag\hat{A}_L\hat{O}\).
+        </li>
+        <li class="step">
+            Reflect the system block to get the new environment block.
+        </li>
+        <li class="step">
+            Repeat steps 2 - 8 until certain condition is satisfied.
+        </li>
+    </ol>
+    <br>
+    The Hamiltonian operator of the Ising model is
+        $$\hat{H}=-J\sum_i \sigma^x_i\otimes\sigma^x_{i+1}-h\sum_i \sigma_i^z,$$
+    where \(\sigma_i^\alpha\) are Pauli matrix.
+    <br>
+    Consider the system part with an additional site first.
+    Take \(J=h=1\) and write the Hamiltonian  for a single in explicit matrix form:
+    <br>
+    the first part (interaction part) is 
+    $$\hat{H}_{interaction}=-\sigma^x_i\otimes \sigma^x_{i+1}
+     =-\begin{pmatrix}0&1\\
+     1&0\end{pmatrix}\otimes \begin{pmatrix}0&1\\
+     1&0\end{pmatrix}=\begin{pmatrix}0&0&0&-1\\
+                                 0&0&-1&0\\
+                                 0&-1&0&0\\
+                                 -1&0&0&0\\
+     \end{pmatrix}$$
+     and the second part (external part) is
+     $$\hat{H}_{external}=-(\sigma^x_i\otimes \mathbb{I}+ \mathbb{I}\otimes\sigma^x_i)
+     =\begin{pmatrix}-1&0\\
+     0&1\end{pmatrix}\otimes \begin{pmatrix}1&0\\
+     0&1\end{pmatrix}+\begin{pmatrix}1&0\\
+     0&1\end{pmatrix}\otimes 
+     \begin{pmatrix}-1&0\\
+     0&1\end{pmatrix}=\begin{pmatrix}-2&0&0&0\\
+                                 0&0&0&0\\
+                                 0&0&0&0\\
+                                 0&0&0&2\\
+     \end{pmatrix}.$$
+     <br>
+     This is the Hamiltonian for both of the system \(\hat{H}_s\) and the eviroment \(\hat{H}_e\).
+     <br>
+      $$\hat{H}_s=\hat{H}_e=\begin{pmatrix}-2&0&0&-1\\
+      0&0&-1&0\\
+      0&-1&0&0\\
+      -1&0&0&2\\
+\end{pmatrix}$$
+     <br>
+Since the additional sites of the system and the enviroment are
+     $$\sigma^x_s=\mathbb{I}\otimes \sigma^x=\begin{pmatrix}0&1&0&0\\
+     1&0&0&0\\
+     0&0&0&1\\
+     0&0&1&0\\
+     \end{pmatrix},$$
+     $$\sigma^x_e=\sigma^x\otimes\mathbb{I}=\begin{pmatrix}0&0&1&0\\
+     0&0&0&1\\
+     1&0&0&0\\
+     0&1&0&0\\
+     \end{pmatrix}.$$
+the term describing the interaction between the system and the enviroment \(\hat{H}_{s,e}\) is
+     $$\hat{H}_{s,e}=\sigma^x_s\otimes\sigma^x_e=\begin{pmatrix}0&1&0&0\\
+     1&0&0&0\\
+     0&0&0&1\\
+     0&0&1&0\\
+     \end{pmatrix}\otimes \begin{pmatrix}0&0&1&0\\
+     0&0&0&1\\
+     1&0&0&0\\
+     0&1&0&0\\
+     \end{pmatrix}$$
+     <br>
+     The Hamiltonian of the super block is 
+     <div class="math">
+        \[
+        \begin{align*}
+        \hat{H}_{super}&=\hat{H}_{s,e}+\hat{H}_e\otimes \mathbb{I}+\mathbb{I}\otimes\hat{H}_s
+        \\
+        &\\
+        &=\begin{pmatrix}0&1&0&0\\
+        1&0&0&0\\
+        0&0&0&1\\
+        0&0&1&0\\
+        \end{pmatrix}\otimes \begin{pmatrix}0&0&1&0\\
+        0&0&0&1\\
+        1&0&0&0\\
+        0&1&0&0\\
+        \end{pmatrix}+\begin{pmatrix}0&0&0&-1\\
+        0&0&-1&0\\
+        0&-1&0&0\\
+        -1&0&0&0\\
+\end{pmatrix}\otimes \mathbb{I}+\mathbb{I}\otimes\begin{pmatrix}0&0&0&-1\\
+0&0&-1&0\\
+0&-1&0&0\\
+-1&0&0&0\\
+\end{pmatrix}\\
+&\\
+&=
+\begin{pmatrix}
+-4 & 0 & 0 & -1 & 0 & 0 & -1 & 0 & 0 & 0 & 0 & 0 & -1 & 0 & 0 & 0 \\
+0 & -2 & -1 & 0 & 0 & 0 & 0 & -1 & 0 & 0 & 0 & 0 & 0 & -1 & 0 & 0 \\
+0 & -1 & -2 & 0 & -1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & -1 & 0 \\
+-1 & 0 & 0 & 0 & 0 & -1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & -1 \\
+0 & 0 & -1 & 0 & -2 & 0 & 0 & -1 & -1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & -1 & 0 & 0 & -1 & 0 & 0 & -1 & 0 & 0 & 0 & 0 & 0 & 0 \\
+-1 & 0 & 0 & 0 & 0 & -1 & 0 & 0 & 0 & 0 & -1 & 0 & 0 & 0 & 0 & 0 \\
+0 & -1 & 0 & 0 & -1 & 0 & 0 & 2 & 0 & 0 & 0 & -1 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & -1 & 0 & 0 & 0 & -2 & 0 & 0 & -1 & 0 & 0 & -1 & 0 \\
+0 & 0 & 0 & 0 & 0 & -1 & 0 & 0 & 0 & 0 & -1 & 0 & 0 & 0 & 0 & -1 \\
+0 & 0 & 0 & 0 & 0 & 0 & -1 & 0 & 0 & -1 & 0 & 0 & -1 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 & 0 & 0 & -1 & -1 & 0 & 0 & 2 & 0 & -1 & 0 & 0 \\
+-1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & -1 & 0 & 0 & 0 & 0 & -1 \\
+0 & -1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & -1 & 0 & 2 & -1 & 0 \\
+0 & 0 & -1 & 0 & 0 & 0 & 0 & 0 & -1 & 0 & 0 & 0 & 0 & -1 & 2 & 0 \\
+0 & 0 & 0 & -1 & 0 & 0 & 0 & 0 & 0 & -1 & 0 & 0 & -1 & 0 & 0 & 4
+\end{pmatrix}
+
+        \end{align*}
+        \]
+    </div>
+Obtain the ground state and its energy by diagonalize the Hamiltonian.
+$$|\psi_0\rangle=\begin{pmatrix}
+0.901912354634962 \\
+-5.56199760821483 \times 10^{-18} \\
+-5.85412182282601 \times 10^{-17} \\
+0.224549392555643 \\
+-4.91221161698398 \times 10^{-17} \\
+0.108783940777690 \\
+0.235245687968295 \\
+-1.30321195493619 \times 10^{-17} \\
+-6.39433063812845 \times 10^{-17} \\
+0.0578827258889768 \\
+0.108783940777690 \\
+0 \\
+0.224549392555643 \\
+1.11022302462516 \times 10^{-16} \\
+-1.11022302462516 \times 10^{-16} \\
+0.0578827258889768
+\end{pmatrix},\;E_0=-4.7588.$$
+Construct the density matrix of the ground state
+\(\hat{\rho}=|\psi_0\rangle\langle\psi_0|\) and the partial trace with respect to the enviroment
+$$\hat{\rho}_s=Tr_e(\hat{\rho})=\begin{pmatrix}
+0.863868325140290 & -6.16068231629410 \times 10^{-17} & -6.43615460212374 \times 10^{-17} & 0.215521402309545 \\
+-6.16068231629410 \times 10^{-17} & 0.0671744794788005 & 0.0318876640133076 & -2.58247502971470 \times 10^{-17} \\
+-6.43615460212374 \times 10^{-17} & 0.0318876640133076 & 0.0151843557274623 & -2.00096006810010 \times 10^{-17} \\
+0.215521402309545 & -2.58247502971470 \times 10^{-17} & -2.00096006810010 \times 10^{-17} & 0.0537728396534469
+\end{pmatrix}.$$
+Obtain the eigenvectors of \(\hat{\rho}_s\)
+<br>
+$$\begin{pmatrix}
+-0.242065387519222 \\
+3.31523704612564 \times 10^{-13} \\
+-6.98026732995345 \times 10^{-13} \\
+0.970259938452150
+\end{pmatrix},\;\begin{pmatrix}
+1.86972294615153 \times 10^{-13} \\
+0.429036222745096 \\
+-0.903287285182638 \\
+-7.49835273480727 \times 10^{-13}
+\end{pmatrix},\;\begin{pmatrix}
+-1.03143740520239 \times 10^{-16} \\
+-0.903287285182638 \\
+-0.429036222745096 \\
+-7.07156036113279 \times 10^{-17}
+\end{pmatrix},\;\begin{pmatrix}
+0.970259938452150 \\
+-8.90351313767094 \times 10^{-17} \\
+-3.26463287170708 \times 10^{-16} \\
+0.242065387519222
+\end{pmatrix},$$
+with eigenvalues $$3.46332325113635\times 10^{-6},\;3.86062578813962\times 10^{-5},0.0823202289483816\;,0.917637701470486$$
+<br>    
+Select two eigenvectors with larger eigenvalues to obtain the truncation operator:
+$$\hat{O}=\begin{pmatrix}
+0.970259938452150 & -1.03143740520239 \times 10^{-16} \\
+-8.90351313767094 \times 10^{-17} & -0.903287285182638 \\
+-3.26463287170708 \times 10^{-16} & -0.429036222745096 \\
+0.242065387519222 & -7.07156036113279 \times 10^{-17}
+\end{pmatrix}.$$
+Use the tuncation operator to obtain the new blocks.
+<br>
+The first ones are the new blocks, including both system and eviroment:
+$$\sigma^z_{new}=\hat{O}^\dag\hat{H}_s\hat{O}=\hat{O}^\dag\hat{H}_e\hat{O}\begin{pmatrix}
+-2.23535008865227 & -7.35925074368388 \times 10^{-17} \\
+-7.35925074368388 \times 10^{-17} & -0.775085929776862
+\end{pmatrix}.$$
+The second one is the new interaction term of system and eviroment, which can be described by \(\sigma^x\):
+$$\sigma^x_{s,new}=\hat{O}^\dag \sigma^x_{s} \hat{O}=\begin{pmatrix}
+-3.30825366418843 \times 10^{-16} & -0.980278285244490 \\
+-0.980278285244490 & 2.47015969641306 \times 10^{-16}
+\end{pmatrix}.$$
+<br>
+We can therefore construct the Hamiltonian of the new super block by
+these new \(\sigma^\alpha_{new}\). We can iteratively do this process until certain condition reached.
+<br>
+<br>
+The numerical result of the groud state energy is as follow: 
+<center> 
+        <img width="400" align="top" src="infdmrg.jpg">
+    </center>
+<br>
+We know that the ground state of the infinite Ising model is negative infinity, which is the same as the numericaal result.
+<h3>
+    <li>The Finite-Size DMRG for the Ising Model</li>
+</h3>
+
 </body>
 </html>
