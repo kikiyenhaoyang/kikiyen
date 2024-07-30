@@ -108,6 +108,8 @@
     <a href="Subgroup_Meeting_slide__2.pdf">Subgroup Meeting Slides #2</a>.
     <br>
     <a href="Group_Meeting_slide__3.pdf">Subgroup Meeting Slides #3</a>.
+    <br>
+    <a href="Group_Meeting_slide__4.pdf">Subgroup Meeting Slides #3</a>.
     <h3>
         <li>The SIS Model and the TN Approach</li>
     </h3>
@@ -203,9 +205,23 @@
             Reflect the system block to get the new environment block.
         </li>
         <li class="step">
-            Repeat steps 2 - 8 until certain condition is satisfied.
+            Repeat steps 2 - 8 until certain conditions are satisfied.
         </li>
     </ol>
+    As an isslustration, see the following figure:
+    <br>
+    <br>
+    <center> 
+        <img width="400" align="top" src="infdmrg.jpg">
+    </center>
+    <br>
+    <br>
+    Construct two blocks (system and eviroment) with some computationable finite size, 
+    add twos sites to form a super block. Truncate the basis of the
+    operators to form a new blocks with the same dimension. 
+    <br>
+    <br>
+    Add two sites again. Repeat until certain conditions are satisfied.
     <br>
     The Hamiltonian operator of the Ising model is
         $$\hat{H}=-J\sum_i \sigma^x_i\otimes\sigma^x_{i+1}-h\sum_i \sigma_i^z,$$
@@ -391,14 +407,37 @@ these new \(\sigma^\alpha_{new}\). We can iteratively do this process until cert
 <br>
 <br>
 The numerical result of the groud state energy is as follow: 
+<br>
+<br>
 <center> 
-        <img width="400" align="top" src="infdmrg.jpg">
-    </center>
+        <img width="400" align="top" src="infdmrg_groudstate.jpg">
+</center>
 <br>
 We know that the ground state of the infinite Ising model is negative infinity, which is the same as the numericaal result.
 <h3>
     <li>The Finite-Size DMRG for the Ising Model</li>
 </h3>
-
+The algorithm of the finite-size DMRG is:
+<br>
+<ol>
+    <li class="step">Carry out the steps of the infinite system algorithm until the superblock reaches a predetermined size \( L \). The size of the system block should now be \( l = L/2 \). Blocks should be stored for all sizes, from \( l = 1 \) to \( l = L/2 \).</li>
+    <li class="step">[Start of sweep] Grow the system block to size \( l + 1 \). Retrieve a block of size \( L - l - 2 \) from storage and reflect it to get an environment block. Grow the environment block to size \( L - l - 1 \).</li>
+    <li class="step">Carry out steps 3 - 7 of the infinite system algorithm.</li>
+    <li class="step">Store the truncated block as the new block.</li>
+    <li class="step">Set \( l = l + 1 \) and repeat steps 2 - 4 until \( l = L/2 - 2 \). At this point, set \( l = 1 \) and retrieve a block of size 1 to be the new system block.</li>
+    <li class="step">[End of sweep] Repeat steps 2 - 5 until \( l = L/2 \). This concludes a sweep.</li>
+    <li class="step">Repeatedly sweep over the system (steps 2 - 6) until certain conditions are satisfied.</li>
+</ol>
+As an isslustration, see the following figure:
+<br>
+<br>
+<center> 
+    <img width="400" align="top" src="finitedmrg.jpg">
+</center>
+<br>
+<br>
+Construct a finite super block, add twos sites and 
+sweep them form the left two the right. Repeatly sweep until 
+certain conditions are satisfied.
 </body>
 </html>
