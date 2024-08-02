@@ -439,5 +439,90 @@ As an isslustration, see the following figure:
 Construct a finite super block, add twos sites and 
 sweep them form the left two the right. Repeatly sweep until 
 certain conditions are satisfied.
+<h3>
+    <li>DMRG in Matrix Product State (MPS) and Matrix Product Operator (MPO) Language</li>
+</h3>
+The great success behind DMRG is MPS and MPO. The DMRG algorithm 
+is actually the variational in the MPS space. Since the state
+of the quantum system is $$|\Psi\rangle=\sum_{s_1,\cdots,s_N}\Psi_{s_1s_2\cdots s_N}\bigotimes_{i=1}^N|s_i\rangle,$$
+where \(\Psi_{s_1\cdots s_N}\) is a rank-\(N\) tensor and can therefore 
+be decomposed by singular value decomposition (SVD).
+The quantum state is therefore
+$$|\Psi\rangle=\sum_{s_1,\cdots,s_N}A_1^{s_1}A_2^{s_2}\cdots A_3^{s_N}\bigotimes_{i=1}^N|s_i\rangle$$
+where \(A_i^{s_i}\) are matrices. The quantum state can be described by 
+matrix product, this state is called MPS. By the same argument,
+we can decompose the quantum operators by SVD as well. The 
+quantum operators are written as $$\hat{O}=Q_1^{s_1}Q_2^{s_2}\cdots Q_3^{s_N},$$
+where \(Q_i^{s_i}\) are matrices.
+<ul>
+<h3>
+<li>The Finite-Size variational Method and the DMRG</li>
+</h3>
+Finding the ground state in the finite-size system is
+$$E_0=\inf_{|\Psi\rangle}\frac{\langle\Psi|\hat{H}|\Psi\rangle}{\langle\Psi|\Psi\rangle}.$$
+We can definitely obtain the ground state energy and its eigenstate (ground state)
+by solving the optimazation problem $$\min_{|\Psi\rangle}\frac{\langle\Psi|\hat{H}|\Psi\rangle}{\langle\Psi|\Psi\rangle}.$$
+The most intuitive way to solve this is diagonalizing the Hamiltonian.
+However, this is impossible for huge systems.
+Since we know that the quantum states and the Hamiltonian
+can be written as MPS and MPO. We can perform the optimization
+tensor by tensor. 
+Consider the effective Hamiltonian \(\hat{H}_{eff}\) with respect to \(A\), \(\langle\Psi|\hat{H}|\Psi\rangle\)
+without \(A^\dag\) and \(A\).
+The local optimization problem is
+$$\min_{A}(A^\dag\hat{H}_{eff}A-\lambda (A^\dag \hat{N} A-1)),$$
+where \(\lambda\) is the Lagrangian multiplier to constraint
+that \(\langle\Psi|\Psi\rangle=1\).
+It is natural to consider the gradient with respect to the tensor
+ \(A^\dag\) to perform the optimization, that is, 
+$$\nabla_{A^\dag}(A^\dag\hat{H}_{eff}A-\lambda (A^\dag \hat{N} A-1))=0,$$
+which leads to a generalized eigenvalue problem naturally
+$$\hat{H}_{eff}A=\lambda \hat{N} A.$$
+Now we discuss why the finite-size DMRG is equivalent to performing the variational
+method in MPS space. This notion is similar to the conjugate gradient method, gradient descendent method, and the 
+tangent space method. We consider the optimization
+in a subspace of the complete parameter space to make sure 
+that the computational complexity will not be to large. We can approximately
+obtain the solution by iterations.
+<br>
+<br>
+The finite-size DMRG is almost equivalent to the variational method
+explained above, the only difference is that the super blocks in
+ the finite-size DMRG having two sites and
+ the super block in the variational method having only one site.
+ The algorithm of the finite-size DMRG is:
+ <br>
+ <ol>
+    <li class="step">Generate MPSs and MPOs: Create the Matrix Product States (MPSs) and Matrix Product Operators (MPOs) for the system.</li>
+    <li class="step">[Start of Right Sweep] Optimization: Optimize the matrices by diagonalizing the chosen matrices within the indexed tensor of the effective Hamiltonian.</li>
+    <li class="step">Normalization: Perform Singular Value Decomposition (SVD) to normalize the matrices on the left-hand side, integrating the left matrices into the subsequent tensor.</li>
+    <li class="step">[End of Right Sweep] Iteration: Use the newly obtained matrices as the starting point for the next tensor. Repeat steps 2 and 3 until the right boundary of the system is reached.</li>
+    <li class="step">[Start of Left Sweep] Optimization: Optimize the matrices by diagonalizing the chosen matrices within the indexed tensor of the effective Hamiltonian.</li>
+    <li class="step"> Normalization: Perform SVD to normalize the matrices on the left-hand side, integrating the left matrices into the subsequent tensor.</li>
+    <li class="step">[End of Left Sweep] Iteration: Use the newly obtained matrices as the starting point for the next tensor. Repeat steps 5 and 6 until the left boundary of the system is reached.</li>
+    <li class="step">Iterative Sweeping: Repeat the entire sweeping process (steps 2 through 7) until convergence criteria are met.</li>
+</ol>
+<br>
+<br>
+<center> 
+    <img width="400" align="top" src="tn.jpg">
+</center>
+<br>
+<br>
+<center> 
+    <img width="400" align="top" src="finite_vmps.jpg">
+</center>
+<br>
+<br>
+<p>
+    \[
+    \begin{array}{cccccccccccccccccccc}
+    1 \times 2 \times 2, & 2 \times 2 \times 4, & 4 \times 2 \times 8, & 8 \times 2 \times 16, & 16 \times 2 \times 16, & 16 \times 2 \times 16, & 16 \times 2 \times 16, & 16 \times 2 \times 16, & 16 \times 2 \times 16,\\
+    16 \times 2 \times 16, & 16 \times 2 \times 16, & 16 \times 2 \times 16, & 16 \times 2 \times 16, & 16 \times 2 \times 16, & 16 \times 2 \times 16, & 16 \times 2 \times 8, & 8 \times 2 \times 4, & 4 \times 2 \times 2,& 2 \times 2 \times 1
+    \end{array}
+    \]
+    
+</p>
+</ul>
 </body>
 </html>
