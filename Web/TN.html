@@ -22,6 +22,7 @@
   background-position:
     center
 }
+
 </style>
 </head>
 
@@ -355,9 +356,11 @@ $$|\psi_0\rangle=\begin{pmatrix}
 -1.11022302462516 \times 10^{-16} \\
 0.0578827258889768
 \end{pmatrix},\;E_0=-4.7588.$$
+
 Construct the density matrix of the ground state
 \(\hat{\rho}=|\psi_0\rangle\langle\psi_0|\) and the partial trace with respect to the enviroment
-$$\hat{\rho}_s=Tr_e(\hat{\rho})=\begin{pmatrix}
+\(\hat{\rho}_s=Tr_e(\hat{\rho})\):
+$$\begin{pmatrix}
 0.863868325140290 & -6.16068231629410 \times 10^{-17} & -6.43615460212374 \times 10^{-17} & 0.215521402309545 \\
 -6.16068231629410 \times 10^{-17} & 0.0671744794788005 & 0.0318876640133076 & -2.58247502971470 \times 10^{-17} \\
 -6.43615460212374 \times 10^{-17} & 0.0318876640133076 & 0.0151843557274623 & -2.00096006810010 \times 10^{-17} \\
@@ -375,7 +378,8 @@ $$\begin{pmatrix}
 0.429036222745096 \\
 -0.903287285182638 \\
 -7.49835273480727 \times 10^{-13}
-\end{pmatrix},\;\begin{pmatrix}
+\end{pmatrix},$$
+$$,\;\begin{pmatrix}
 -1.03143740520239 \times 10^{-16} \\
 -0.903287285182638 \\
 -0.429036222745096 \\
@@ -385,7 +389,7 @@ $$\begin{pmatrix}
 -8.90351313767094 \times 10^{-17} \\
 -3.26463287170708 \times 10^{-16} \\
 0.242065387519222
-\end{pmatrix},$$
+\end{pmatrix}$$
 with eigenvalues $$3.46332325113635\times 10^{-6},\;3.86062578813962\times 10^{-5},0.0823202289483816\;,0.917637701470486$$
 <br>    
 Select two eigenvectors with larger eigenvalues to obtain the truncation operator:
@@ -515,21 +519,170 @@ explained above, the only difference is that the super blocks in
 </center>
 <br>
 <br>
+Suppose that we have 50 sites in the system.
+The MPO has 50 sites also, it can be expressed as 
+$$\hat{H}=\hat{L}\hat{M}\cdots\hat{M}\hat{R},\;\hat{L}=\begin{pmatrix}
+\mathbb{I}\\
+0\\
+0\end{pmatrix},\;\hat{R}=\begin{pmatrix}0\\
+0\\
+\mathbb{I}\end{pmatrix},\;\hat{M}=\begin{pmatrix}
+ \mathbb{I}&\sigma^z&-\sigma^x\\
+ 0&0&-\sigma^z\\
+ 0&0&\mathbb{I}
+\end{pmatrix}.$$
+
+<br>
+<br>
+ Take \(\chi=16\), the MPS will have the size as follows:
+<center>
+<h2>Size Information</h2>
+<table class="outer-table">
+    <tr>
+        <td>
+            <table border="1" cellspacing="0" cellpadding="5">
+                <thead>
+                    <tr>
+                        <th>Index</th>
+                        <th>Size Information</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>1</td><td>1x2x2 double</td></tr>
+                    <tr><td>2</td><td>2x2x4 double</td></tr>
+                    <tr><td>3</td><td>4x2x8 double</td></tr>
+                    <tr><td>4</td><td>8x2x16 double</td></tr>
+                    <tr><td>5</td><td>16x2x16 double</td></tr>
+                    <tr><td>6</td><td>16x2x16 double</td></tr>
+                    <tr><td>7</td><td>16x2x16 double</td></tr>
+                    <tr><td>8</td><td>16x2x16 double</td></tr>
+                    <tr><td>9</td><td>16x2x16 double</td></tr>
+                    <tr><td>10</td><td>16x2x16 double</td></tr>
+                </tbody>
+            </table>
+        </td>
+        <td>
+            <table border="1" cellspacing="0" cellpadding="5">
+                <thead>
+                    <tr>
+                        <th>Index</th>
+                        <th>Size Information</th>
+                    </tr>
+                </thead>
+                <tr><td>11</td><td>16x2x16 double</td></tr>
+<tr><td>12</td><td>16x2x16 double</td></tr>
+<tr><td>13</td><td>16x2x16 double</td></tr>
+<tr><td>14</td><td>16x2x16 double</td></tr>
+<tr><td>15</td><td>16x2x16 double</td></tr>
+<tr><td>16</td><td>16x2x16 double</td></tr>
+<tr><td>17</td><td>16x2x16 double</td></tr>
+<tr><td>18</td><td>16x2x16 double</td></tr>
+<tr><td>19</td><td>16x2x16 double</td></tr>
+<tr><td>20</td><td>16x2x16 double</td></tr>
+</tbody>
+</table>
+</td>
+<td>
+    <table border="1" cellspacing="0" cellpadding="5">
+        <thead>
+            <tr>
+                <th>Index</th>
+                <th>Size Information</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>21</td><td>16x2x16 double</td></tr>
+            <tr><td>22</td><td>16x2x16 double</td></tr>
+            <tr><td>23</td><td>16x2x16 double</td></tr>
+            <tr><td>24</td><td>16x2x16 double</td></tr>
+            <tr><td>25</td><td>16x2x16 double</td></tr>
+            <tr><td>26</td><td>16x2x16 double</td></tr>
+            <tr><td>27</td><td>16x2x16 double</td></tr>
+            <tr><td>28</td><td>16x2x16 double</td></tr>
+            <tr><td>29</td><td>16x2x16 double</td></tr>
+            <tr><td>30</td><td>16x2x16 double</td></tr>
+        </tbody>
+    </table>
+</td>
+<td>
+    <table border="1" cellspacing="0" cellpadding="5">
+        <thead>
+            <tr>
+                <th>Index</th>
+                <th>Size Information</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>31</td><td>16x2x16 double</td></tr>
+            <tr><td>32</td><td>16x2x16 double</td></tr>
+            <tr><td>33</td><td>16x2x16 double</td></tr>
+            <tr><td>34</td><td>16x2x16 double</td></tr>
+            <tr><td>35</td><td>16x2x16 double</td></tr>
+            <tr><td>36</td><td>16x2x16 double</td></tr>
+            <tr><td>37</td><td>16x2x16 double</td></tr>
+            <tr><td>38</td><td>16x2x16 double</td></tr>
+            <tr><td>39</td><td>16x2x16 double</td></tr>
+            <tr><td>40</td><td>16x2x16 double</td></tr>
+        </tbody>
+    </table>
+</td>
+<td>
+    <table border="1" cellspacing="0" cellpadding="5">
+        <thead>
+            <tr>
+                <th>Index</th>
+                <th>Size Information</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>41</td><td>16x2x16 double</td></tr>
+            <tr><td>42</td><td>16x2x16 double</td></tr>
+            <tr><td>43</td><td>16x2x16 double</td></tr>
+            <tr><td>44</td><td>16x2x16 double</td></tr>
+            <tr><td>45</td><td>16x2x16 double</td></tr>
+            <tr><td>46</td><td>16x2x16 double</td></tr>
+                    <tr><td>47</td><td>16x2x8 double</td></tr>
+                    <tr><td>48</td><td>8x2x4 double</td></tr>
+                    <tr><td>49</td><td>4x2x2 double</td></tr>
+                    <tr><td>50</td><td>2x2x1 double</td></tr>
+                </tbody>
+            </table>
+        </td>
+    </tr>
+</table>
+</center>
+<br>
+<br>
+\(\hat{L}\) and \(\hat{R}\) are rank-3 tensors with \(\hat{M}\) is rank-4 tensor. The matrices in the MPS are rank-3 tensors except those 
+on the boundary are rank-2 tensors.
+<br>
+The diagram of \(\langle\Psi|\hat{H}|\Psi\rangle\) can be expressed as:
+<br>
+<br>
 <center> 
-    <img width="800" align="top" src="vmps_transverse_ising_model_different_chi.jpg">
+    <img width="500" align="top" src="tn_transverse_ising.jpg">
+</center>
+<br>
+<br>
+With 4 sweeps (4\(\times\)2\(\times\)50 iterations), we can have the result as follows (assume that the best solution of \(\chi=256\) is the exact solution):
+<br>
+<br>
+<center> 
+    <img width="500" align="top" src="vmps_transverse_ising_model.jpg">
 </center>
 <br>
 <br>
 The value of \(\chi\) does not change the convergence rate of the algorithm but is highly related to the upper bound of its effectiveness.
-<p>
-    \[
-    \begin{array}{cccccccccccccccccccc}
-    1 \times 2 \times 2, & 2 \times 2 \times 4, & 4 \times 2 \times 8, & 8 \times 2 \times 16, & 16 \times 2 \times 16, & 16 \times 2 \times 16, & 16 \times 2 \times 16, & 16 \times 2 \times 16, & 16 \times 2 \times 16,\\
-    16 \times 2 \times 16, & 16 \times 2 \times 16, & 16 \times 2 \times 16, & 16 \times 2 \times 16, & 16 \times 2 \times 16, & 16 \times 2 \times 16, & 16 \times 2 \times 8, & 8 \times 2 \times 4, & 4 \times 2 \times 2,& 2 \times 2 \times 1
-    \end{array}
-    \]
-    
-</p>
+Moreover, the smaller the number of sites is, the more exact the result is. Suppose that we have 
+a twenty-site system, the reslut is as follows:
+<br>
+<br>
+<center> 
+    <img width="500" align="top" src="vmps_transverse_ising_model_twenty.jpg">
+</center>
+<br>
+<br>
+We can see that the error is about \(10^{-8}\) with 4 sweeps.
 </ul>
 </body>
 </html>
