@@ -529,8 +529,8 @@ $$\hat{H}=\hat{L}\hat{M}\cdots\hat{M}\hat{R},\;\hat{L}=\begin{pmatrix}
 0\end{pmatrix},\;\hat{R}=\begin{pmatrix}0\\
 0\\
 \mathbb{I}\end{pmatrix},\;\hat{M}=\begin{pmatrix}
- \mathbb{I}&\sigma^z&-\sigma^x\\
- 0&0&-\sigma^z\\
+ \mathbb{I}&\sigma^z&-h\sigma^x\\
+ 0&0&-J\sigma^z\\
  0&0&\mathbb{I}
 \end{pmatrix}.$$
 
@@ -684,7 +684,21 @@ a twenty-site system, the reslut is as follows:
 </center>
 <br>
 <br>
-We can see that the error is about \(10^{-8}\) with 4 sweeps.
+We can see that the error can get to about \(10^{-8}\) with 4 sweeps.
+<br>
+<br>
+Notice that we take \(J=H=1\), which is the critical point, here. The divergence of the correlated length makes we need
+larger bond dimension to get the accurate result. If we chage the parameters to \(J=50\) and \(h=1\), which is far form the critical point,
+then the result is as follows:
+<br>
+<br>
+<center> 
+    <img width="500" align="top" src="vmps_tising_far_from_critical.jpg">
+</center>
+<br>
+<br>
+We can see the the results obtained from larger and smaller bond dimension are not very differenta and the resluts are more accurate.
+
 </ul>
 </body>
 </html>
