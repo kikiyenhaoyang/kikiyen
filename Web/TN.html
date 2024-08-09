@@ -523,16 +523,16 @@ explained above, the only difference is that the super blocks in
 <br>
 Suppose that we have 50 sites in the system.
 The MPO has 50 sites also, it can be expressed as 
-$$\hat{H}=\hat{L}\hat{M}\cdots\hat{M}\hat{R},\;\hat{L}=\begin{pmatrix}
-\mathbb{I}\\
+$$\hat{H}=\hat{L}\hat{M}\cdots\hat{M}\hat{R},\;\hat{M}=\begin{pmatrix}
+\mathbb{I}&\sigma^z&-h\sigma^x\\
+0&0&-J\sigma^z\\
+0&0&\mathbb{I}
+\end{pmatrix},\;\hat{L}=\begin{pmatrix}
+1\\
 0\\
-0\end{pmatrix},\;\hat{R}=\begin{pmatrix}0\\
+0\end{pmatrix}^T\hat{M},\;\hat{R}=\hat{M}\begin{pmatrix}0\\
 0\\
-\mathbb{I}\end{pmatrix},\;\hat{M}=\begin{pmatrix}
- \mathbb{I}&\sigma^z&-h\sigma^x\\
- 0&0&-J\sigma^z\\
- 0&0&\mathbb{I}
-\end{pmatrix}.$$
+1\end{pmatrix}.$$
 
 <br>
 <br>
@@ -698,7 +698,60 @@ then the result is as follows:
 <br>
 <br>
 We can see the the results obtained from larger and smaller bond dimension are not very differenta and the resluts are more accurate.
-
 </ul>
+<h3>
+<li>The TN Approach fot the SIS Model</li>
+</h3>
+<br>
+<br>
+The Hamiltonian of the SIS model is 
+$$\hat{W}=\lambda\sum_{i=1}^{N-1}(\hat{n}_i\hat{w}_{i+1}^{0\xrightarrow{}1}
++\hat{w}_i^{0\xrightarrow{}1}\hat{n}_{i+1})+\sum_{i=1}^{N-1}\hat{w}_i^{1\xrightarrow{}0}
++\hat{W}_{driv}(\alpha),$$
+where \(\hat{n}=|1\rangle\langle1|\), \(\hat{w}^{0\xrightarrow{}1}=|1\rangle\langle 0|-|0\rangle\langle 0|\)
+, \(\hat{w}^{1\xrightarrow{}0}=|0\rangle\langle 1|-|1\rangle\langle 1|.\)
+<br>
+The MPO is 
+$$\hat{H}=\hat{L}\hat{M}\cdots\hat{M}\hat{R},\;\hat{M}=\begin{pmatrix}
+\mathbb{I}&0&0&0\\
+\lambda\hat{w}^{0\xrightarrow{}1}&0&0&0\\
+\lambda\hat{n}&0&0&0\\
+\hat{w}^{1\xrightarrow{}0}&\hat{n}&\hat{w}^{0\xrightarrow{}1}&\mathbb{I}
+\end{pmatrix},\;\hat{L}=\begin{pmatrix}
+0\\
+0\\
+0\\
+1\end{pmatrix}^T\hat{M},\;\hat{R}=\hat{M}\begin{pmatrix}1\\
+0\\
+0\\
+0\end{pmatrix}.$$
+<br>
+<br>
+<center> 
+    <img width="500" align="top" src="vmps_sis.jpg">
+</center>
+<br>
+<br>
+<center> 
+    <img width="500" align="top" src="vmps_sis_critical.jpg">
+</center>
+<br>
+<br>
+<center> 
+    <img width="500" align="top" src="vmps_sis_larger.jpg">
+</center>
+<h3><li>References</li></h3>
+<br>
+
+
+[1] <a href="https://journals.aps.org/pre/abstract/10.1103/PhysRevE.108.024303">
+    Efficient simulations of epidemic models with tensor networks: Application to the one-dimensional susceptible-infected-susceptible model.
+</a><br>
+[2] 
+<a href="https://arxiv.org/abs/2304.13395">Density-matrix renormalization group: a pedagogical introduction.
+</a>
+    <br>
+[3] <a href="https://link.springer.com/book/10.1007/978-1-4020-8765-3">Non-equilibrium phase transitions.
+</a>
 </body>
 </html>
