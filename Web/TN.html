@@ -742,6 +742,27 @@ $$\hat{H}=\hat{L}\hat{M}\cdots\hat{M}\hat{R},\;\hat{M}=\begin{pmatrix}
 <center> 
     <img width="500" align="top" src="vmps_sis_larger.jpg">
 </center>
+<br>
+<br>
+As an accurate enough \(\lambda=0\) is enough, we also get
+the eigenstate, that is, the NESS. However, we can not employ it
+directly since it is in MPS form. To utilize it, we need to construct 
+some operators to project them to certain quantities.
+<br>
+Is we want to compute the expected value of number of gaps with length \(k\),
+we can construct an operator
+$$\hat{L}_k\hat{M}_k\cdots\hat{M}_k\hat{R}_k,$$
+where \(\hat{M}_k=\begin{pmatrix}\mathbb{I}&\hat{n}&0&\cdots&&0\\
+ 0&0&\hat{v}&&&0\\
+ &&&\ddots&&\vdots\\
+ \vdots&&&&\hat{v}&0\\
+ &&&&&\hat{n}\\
+ 0&&&\cdots&0&\mathbb{I}
+\end{pmatrix},\;\hat{L}_k=\begin{pmatrix}1&0&\cdots&0\end{pmatrix}\hat{M}_k,\;\hat{R}_k=\hat{M}_k\begin{pmatrix}0\\
+\vdots\\0\\1\end{pmatrix}\).
+<h3><li>Final Poster</li></h3>
+<br>
+<a href="Poster_v01.pdf">Poster version 01</a>
 <h3><li>References</li></h3>
 <br>
 
