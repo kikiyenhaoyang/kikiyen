@@ -345,78 +345,91 @@ the term describing the interaction between the system and the enviroment \(\hat
     </div>
 Obtain the ground state and its energy by diagonalize the Hamiltonian.
 $$|\psi_0\rangle=\begin{pmatrix}
-0.901912354634962 \\
--5.56199760821483 \times 10^{-18} \\
--5.85412182282601 \times 10^{-17} \\
-0.224549392555643 \\
--4.91221161698398 \times 10^{-17} \\
-0.108783940777690 \\
-0.235245687968295 \\
--1.30321195493619 \times 10^{-17} \\
--6.39433063812845 \times 10^{-17} \\
-0.0578827258889768 \\
-0.108783940777690 \\
-0 \\
-0.224549392555643 \\
-1.11022302462516 \times 10^{-16} \\
--1.11022302462516 \times 10^{-16} \\
-0.0578827258889768
+0.902 \\
+-0.000 \\
+-0.000 \\
+0.225 \\
+-0.000 \\
+0.109 \\
+0.235 \\
+-0.000 \\
+-0.000 \\
+0.058 \\
+0.109 \\
+0.000 \\
+0.225 \\
+0.000 \\
+0.000 \\
+0.058
 \end{pmatrix},\;E_0=-4.7588.$$
 
 Construct the density matrix of the ground state
 \(\hat{\rho}=|\psi_0\rangle\langle\psi_0|\) and the partial trace with respect to the enviroment
 \(\hat{\rho}_s=Tr_e(\hat{\rho})\):
 $$\begin{pmatrix}
-0.863868325140290 & -6.16068231629410 \times 10^{-17} & -6.43615460212374 \times 10^{-17} & 0.215521402309545 \\
--6.16068231629410 \times 10^{-17} & 0.0671744794788005 & 0.0318876640133076 & -2.58247502971470 \times 10^{-17} \\
--6.43615460212374 \times 10^{-17} & 0.0318876640133076 & 0.0151843557274623 & -2.00096006810010 \times 10^{-17} \\
-0.215521402309545 & -2.58247502971470 \times 10^{-17} & -2.00096006810010 \times 10^{-17} & 0.0537728396534469
+0.864 & -0.000 & -0.000 & 0.216 \\
+-0.000 & 0.067 & 0.032 & -0.000 \\
+-0.000 & 0.032 & 0.015 & -0.000 \\
+0.216 & -0.000 & -0.000 & 0.054
 \end{pmatrix}.$$
 Obtain the eigenvectors of \(\hat{\rho}_s\)
 <br>
-$$\begin{pmatrix}
--0.242065387519222 \\
-3.31523704612564 \times 10^{-13} \\
--6.98026732995345 \times 10^{-13} \\
-0.970259938452150
-\end{pmatrix},\;\begin{pmatrix}
-1.86972294615153 \times 10^{-13} \\
-0.429036222745096 \\
--0.903287285182638 \\
--7.49835273480727 \times 10^{-13}
-\end{pmatrix},$$
-$$,\;\begin{pmatrix}
--1.03143740520239 \times 10^{-16} \\
--0.903287285182638 \\
--0.429036222745096 \\
--7.07156036113279 \times 10^{-17}
-\end{pmatrix},\;\begin{pmatrix}
-0.970259938452150 \\
--8.90351313767094 \times 10^{-17} \\
--3.26463287170708 \times 10^{-16} \\
-0.242065387519222
-\end{pmatrix}$$
-with eigenvalues $$3.46332325113635\times 10^{-6},\;3.86062578813962\times 10^{-5},0.0823202289483816\;,0.917637701470486$$
+\[
+\begin{pmatrix}
+-0.242 \\
+0.000 \\
+-0.000 \\
+0.970
+\end{pmatrix}, \quad
+\begin{pmatrix}
+0.000 \\
+0.429 \\
+-0.903 \\
+0.000
+\end{pmatrix}, \quad
+\begin{pmatrix}
+0.000 \\
+-0.903 \\
+-0.429 \\
+0.000
+\end{pmatrix}, \quad
+\begin{pmatrix}
+0.970 \\
+-0.000 \\
+-0.000 \\
+-0.242
+\end{pmatrix}
+\]
+with eigenvalues \[
+\lambda_1 = 0.000, \quad \lambda_2 = 0.000, \quad \lambda_3 = 0.082, \quad \lambda_4 = 0.918
+\]
+
 <br>    
 Select two eigenvectors with larger eigenvalues to obtain the truncation operator:
-$$\hat{O}=\begin{pmatrix}
-0.970259938452150 & -1.03143740520239 \times 10^{-16} \\
--8.90351313767094 \times 10^{-17} & -0.903287285182638 \\
--3.26463287170708 \times 10^{-16} & -0.429036222745096 \\
-0.242065387519222 & -7.07156036113279 \times 10^{-17}
-\end{pmatrix}.$$
+\[
+\hat{O} = \begin{pmatrix}
+0.970 & -0.000 \\
+-0.000 & -0.903 \\
+-0.000 & -0.429 \\
+0.242 & -0.000
+\end{pmatrix}
+\]
 Use the tuncation operator to obtain the new blocks.
 <br>
 The first ones are the new blocks, including both system and eviroment:
-$$\sigma^z_{new}=\hat{O}^\dag\hat{H}_s\hat{O}=\hat{O}^\dag\hat{H}_e\hat{O}\begin{pmatrix}
--2.23535008865227 & -7.35925074368388 \times 10^{-17} \\
--7.35925074368388 \times 10^{-17} & -0.775085929776862
-\end{pmatrix}.$$
+\[
+\sigma^z_{\text{new}} = \hat{O}^\dag \hat{H}_s \hat{O} = \hat{O}^\dag \hat{H}_e \hat{O} = \begin{pmatrix}
+-2.24 & -0.000 \\
+-0.000 & -0.775
+\end{pmatrix}
+\]
 The second one is the new interaction term of system and eviroment, which can be described by \(\sigma^x\):
-$$\sigma^x_{s,new}=\hat{O}^\dag \sigma^x_{s} \hat{O}=\begin{pmatrix}
--3.30825366418843 \times 10^{-16} & -0.980278285244490 \\
--0.980278285244490 & 2.47015969641306 \times 10^{-16}
-\end{pmatrix}.$$
+\[
+\sigma^x_{s,\text{new}} = \hat{O}^\dag \sigma^x_s \hat{O} = \begin{pmatrix}
+-0.000 & -0.980 \\
+-0.980 & 0.000
+\end{pmatrix}
+\]
 <br>
 We can therefore construct the Hamiltonian of the new super block by
 these new \(\sigma^\alpha_{new}\). We can iteratively do this process until certain condition reached.
@@ -765,6 +778,37 @@ where \(\hat{M}_k=\begin{pmatrix}\mathbb{I}&\hat{n}&0&\cdots&&0\\
 <h3><li>Final Poster</li></h3>
 <br>
 <a href="Poster_v03.pdf">Poster version 03</a>
+<br>
+<h3><li>Application in Ecology</li></h3>
+Consider a one-dimensional lattice with \(L\) sites, where each site can be in one of four states: empty, occupied by a prey, occupied by a predator, or occupied by both a prey and a predator. The dynamics of the model are governed by the following algorithm:
+<ol>
+    <li class="step">
+        Initialize the lattice with a uniform distribution of preys and predators, ensuring that no site is initially occupied by both a prey and a predator.
+    </li>
+    <li class="step">
+        <strong>Prey Reproduction:</strong> Implement this step with probability \(r\). At each time step, for every site occupied by a prey, the prey can reproduce by adding an offspring to a neighboring site that is either empty or occupied by a predator (i.e., a site without a prey).
+    </li>
+    <li class="step">
+        <strong>Predator Predation and Reproduction:</strong> Implement these step with probability \(1-r\). At each time step, if a site is occupied by both a prey and a predator, the predator consumes the prey. Subsequently, the predator may reproduce by adding an offspring to a neighboring site that is either empty or occupied by a prey (i.e., a site without a predator).
+    </li>
+    <li class="step">
+        <strong>Predator Death:</strong> Implement these step with probability \(1-r\). At each time step, if a site is occupied by a predator only (with no prey present), the predator dies due to starvation.
+    </li>
+</ol>
+The parameter of this model is \(r\), the critical point of this model is \(r\approx 0.400\). When
+ \(r < 0.400 \), the system is in the absorbing phase and the predators will ultimately extinct. When
+ \(r > 0.400 \), the system is in the active phase and the predators will keep competing.
+ <br>
+ <br>
+ <center> 
+    <img width="500" align="top" src="prey_predator_mc_absorbing.jpg">
+    <img width="500" align="top" src="prey_predator_mc_active.jpg">
+    <br>
+    <figcaption><h4>Left: The absorbing phase of the prey-predator model (Extinction) Right: The active phase of the prey-predator model (Competition)</h4></figcaption>
+</center>
+<ul>
+    <h4><li>The TN Approach</li></h4>
+</ul>
 <h3><li>References</li></h3>
 <br>
 
