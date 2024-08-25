@@ -795,9 +795,9 @@ Consider a one-dimensional lattice with \(L\) sites, where each site can be in o
         <strong>Predator Death:</strong> Implement these step with probability \(1-r\). At each time step, if a site is occupied by a predator only (with no prey present), the predator dies due to starvation.
     </li>
 </ol>
-The parameter of this model is \(r\), the critical point of this model is \(r\approx 0.400\). When
- \(r < 0.400 \), the system is in the absorbing phase and the predators will ultimately extinct. When
- \(r > 0.400 \), the system is in the active phase and the predators will keep competing.
+The parameter of this model is \(r\), the critical point of this model is \(r\approx 0.177\). When
+ \(r < 0.177 \), the system is in the absorbing phase and the predators will ultimately extinct. When
+ \(r > 0.177 \), the system is in the active phase and the predators will keep competing.
  <br>
  <br>
  <center> 
@@ -808,6 +808,26 @@ The parameter of this model is \(r\), the critical point of this model is \(r\ap
 </center>
 <ul>
     <h4><li>The TN Approach</li></h4>
+    $$\begin{align*}
+    \hat{W}=&\sum_{i=1}^{N-1}\bigg((\hat{n}_i^1\hat{w}^{01}_{i+1}+\hat{w}^{01}_i\hat{n}^1_{i+1})
+    +(\hat{n}_i^2\hat{w}^{13}_{i+1}
+    +\hat{w}^{13}_i\hat{n}^2_{i+1})+(\hat{n}_i^1\hat{w}^{23}_{i+1}
+    +\hat{w}^{23}_i\hat{n}^1_{i+1})
+    +(\hat{n}_i^1\hat{w}^{01}_{i+1}+\hat{w}^{01}_i\hat{n}^1_{i+1})\\
+    &+(\hat{n}_i^3\hat{w}^{01}_{i+1}+\hat{w}^{01}_i\hat{n}^3_{i+1})
+    +(\hat{n}_i^3\hat{w}^{13}_{i+1}
+    +\hat{w}^{13}_i\hat{n}^3_{i+1})+(\hat{n}_i^3\hat{w}^{23}_{i+1}
+    +\hat{w}^{23}_i\hat{n}^3_{i+1})
+    +(\hat{n}_i^3\hat{w}^{01}_{i+1}+\hat{w}^{01}_i\hat{n}^3_{i+1})\bigg)\\
+    &+\sum_{i=2}^{N-1}\bigg((\hat{n}_{i-1}^1\hat{w}^{03}_i\hat{n}_{i+1}^2
+    +\hat{n}^2_{i-1}\hat{w}^{03}_i\hat{n}^1_{i+1})+(\hat{n}_{i-1}^3\hat{w}^{03}_i\hat{n}_{i+1}^2
+    +\hat{n}^3_{i-1}\hat{w}^{03}_i\hat{n}^1_{i+1})
+    +(\hat{n}_{i-1}^1\hat{w}^{03}_i\hat{n}_{i+1}^3
+    +\hat{n}^2_{i-1}\hat{w}^{03}_i\hat{n}^3_{i+1})\\
+    &+(\hat{n}_{i-1}^3\hat{w}^{03}_i\hat{n}_{i+1}^3
+    +\hat{n}^3_{i-1}\hat{w}^{03}_i\hat{n}^3_{i+1})\bigg)+(1-r)\sum_{i=1}^{N-1}\bigg(\hat{n}_i^3\hat{w}^{03}_{i+1}+\hat{w}^{03}_i\hat{n}^3_{i+1}\bigg)
+    +\sum_{i=1}^{N}\bigg(\hat{w}^{20}_{i}+\hat{w}^{32}_i\bigg)
+    \end{align*}$$
 </ul>
 <h3><li>References</li></h3>
 <br>
