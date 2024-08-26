@@ -22,6 +22,10 @@
   background-position:
     center
 }
+.container {
+	width: 1200px;
+	margin: 0 auto; /* the auto value on the sides, coupled with the width, centers the layout */
+}
 
 </style>
 </head>
@@ -67,9 +71,9 @@
                         <br>
                         Learning
                     </th>
-                    <th>
+                    <th style="color:white;background-color: black;">
                         <a href="research.html">
-                        <img width="50" align="top" src="r.png">
+                        <img width="50" align="top" src="flipped_r.png">
                         </a>
                         <br>
                         Research
@@ -87,6 +91,7 @@
     </center>
 <hr>
 </section>
+<div class="container">
 <h1>
    Tensor Network Approach for Stochastic dynamics 
 </h1>
@@ -764,7 +769,7 @@ the eigenstate, that is, the NESS. However, we can not employ it
 directly since it is in MPS form. To utilize it, we need to construct 
 some operators to project them to certain quantities.
 <br>
-Is we want to compute the expected value of number of gaps with length \(k\),
+If we want to compute the expected value of number of gaps with length \(k\),
 we can construct an operator
 $$\hat{L}_k\hat{M}_k\cdots\hat{M}_k\hat{R}_k,$$
 where \(\hat{M}_k=\begin{pmatrix}\mathbb{I}&\hat{n}&0&\cdots&&0\\
@@ -775,10 +780,6 @@ where \(\hat{M}_k=\begin{pmatrix}\mathbb{I}&\hat{n}&0&\cdots&&0\\
  0&&&\cdots&0&\mathbb{I}
 \end{pmatrix},\;\hat{L}_k=\begin{pmatrix}1&0&\cdots&0\end{pmatrix}\hat{M}_k,\;\hat{R}_k=\hat{M}_k\begin{pmatrix}0\\
 \vdots\\0\\1\end{pmatrix}\).
-<h3><li>Final Poster</li></h3>
-<br>
-<a href="Poster_v03.pdf">Poster version 03</a>
-<br>
 <h3><li>Application in Ecology</li></h3>
 Consider a one-dimensional lattice with \(L\) sites, where each site can be in one of four states: empty, occupied by a prey, occupied by a predator, or occupied by both a prey and a predator. The dynamics of the model are governed by the following algorithm:
 <ol>
@@ -841,6 +842,15 @@ The parameter of this model is \(r\), the critical point of this model is \(r\ap
 </a>
     <br>
 [3] <a href="https://link.springer.com/book/10.1007/978-1-4020-8765-3">Non-equilibrium phase transitions.
+    <!-- end .container --></div>
+ <hr style="height:0.7px;border:none;color:#333;background-color:#333;">
+ <section><p></p></section>
+ <footer>
+    <figure>
+    <p style="text-align:center"><img src="NTHU-Photoroom.png" height="100 px" align="middle" style="padding:0px 20px 0 20px" alt="">     
+    <img src="ips_logo-Photoroom.png" height="100" align="middle" style="padding:0px 20px 0 20px" alt="">
+    </figure>
+    </footer>
 </a>
 </body>
 </html>

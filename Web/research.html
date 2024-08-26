@@ -16,10 +16,15 @@
   background-position:
     center
 }
+.container {
+	width: 1200px;
+	margin: 0 auto; /* the auto value on the sides, coupled with the width, centers the layout */
+}
     </style>
 </head>
 
 <body bgcolor=#d9dcc0>
+    
     <section id="A">
     <table align="RIGHT" border="5" cellspacing="5">
         <tbody>
@@ -34,10 +39,12 @@
             </tr>
         </tbody>
     </table>
-    <h1>
+    
+    <h1> 
         <img width="190" align="top" src="yen.png">
         <br>
-        <i>Hao-Yang Yen</i>
+        <i>  Hao-Yang Yen</i>
+
     </h1>
     <hr>
     <center>
@@ -58,9 +65,9 @@
                         <br>
                         Learning
                     </th>
-                    <th>
+                    <th style="color:white;background-color: black;">
                         <a href="research.html">
-                        <img width="50" align="top" src="r.png">
+                        <img width="50" align="top" src="flipped_r.png">
                         </a>
                         <br>
                         Research
@@ -78,7 +85,7 @@
     </center>
 <hr>
 </section>
-
+<div class="container">
 <h1>
    Ongoing Research
 </h1>
@@ -89,16 +96,12 @@
             <a href="TN.html">Tensor Network Approach for Stochastic dynamics (PI: Prof. Hong-Yan Shih and Yi-Ping Huang, Academia Sinica)</a>
         </summary>
         <br>
-        <div style="display: flex; align-items: center;">
-            <div style="flex: 1;">
+        
                 <p style="margin: 0;">This research focuses on utilizing the tensor network approach to find the steady state of evolutionary dynamic system. The one-dimensional SIS model is a simple but classic and useful model that can describe the non-equilibrium phase transitions. Tensor network approach is highly accurate and efficient method for solving many-body quantum system. Recently, physicists found that this approach can also be applied to solving differential equations and analyzing stochastic dynamics. It has been known that the TN approach may be a powerful method that can solve the one-dimensional model effectively. We want to explore the principles behind applying the TN approach to the one-dimensional SIS model and extend it to other stochastic dynamical systems.</p>
                 <br>
-                <img width="950" src="tn_fig.jpg" alt="Tensor Network Approach">
-            </div>
-            <div style="flex: 0.8; margin-left: -20px; text-align: center;">
+                <center>
                 <img width="300" src="leveraging_variational_matrix_product_sttate_for_the_analysis_ofstochastic_dynamical _systems.jpg" alt="Tensor Network Approach">
-            </div>
-        </div>
+                </center>
     </details>
     
     
@@ -244,6 +247,16 @@ and critical phenomena. This helps in understanding the symmetry properties and 
 <br>
   </ul>
  </ul>
+ 
+ <!-- end .container --></div>
+ <hr style="height:0.7px;border:none;color:#333;background-color:#333;">
+ <section><p></p></section>
+ <footer>
+    <figure>
+    <p style="text-align:center"><img src="NTHU-Photoroom.png" height="100 px" align="middle" style="padding:0px 20px 0 20px" alt="">     
+    <img src="ips_logo-Photoroom.png" height="100" align="middle" style="padding:0px 20px 0 20px" alt="">
+    </figure>
+    </footer>
 </body>
 </div>
 </html>
