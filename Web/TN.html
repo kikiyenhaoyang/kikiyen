@@ -28,7 +28,6 @@
 
 </style>
 </head>
-
 <body bgcolor=#d9dcc0>
     <section id="A"> 
     <table align="RIGHT" border="5" cellspacing="5">
@@ -126,730 +125,348 @@
             <a href="Group_Meeting_slide__9.pdf">Slides #7</a>.
         </ul>
     </details>
-    
-    <h3>
-        <li>The SIS Model and the TN Approach</li>
-    </h3>
-    <u1>
-        The one-dimensional SIS model is a simple but
-        classic and useful model that can describe the non-equillibrium phase transitions. We can solve this model 
-        by sovliving differential equations or Monte Carlo method. As the following figures demonstrate:
-   <br> 
-   <br>
-   <center> 
-       <img width="400" align="top" src="sisdiff_2.jpg">
-       <img width="400" align="top" src="sismonte_2.jpg">
-       <figcaption><h4>The absorbing phase of the SIS model simulation with foward Euler method and Monte Carlo method.</h4></figcaption>
-   </center>
-   <center> 
-       <img width="400" align="top" src="sisdiff.jpg">
-       <img width="400" align="top" src="sismonte.jpg">
-       <figcaption><h4>The endemic phase of the SIS model simulation with foward Euler method and Monte Carlo method.</h4></figcaption>
-   </center>
-    <ul>
-        The SIS model can be described in differential equation form
-        <br>
-        <center>
-            \(\displaystyle\frac{dS}{dt}=-\beta S I+\gamma I\)
-            <br>
-            <br>
-            \(\displaystyle\frac{dI}{dt}=\beta S I-\gamma I\)
-        </center>
-        <br>
 
-        There are two phases in the one-dimensional SIS model.
-        <br>
-        <br>
-        In differential equation form we can analyze the differential equations anr therefore have the theorem
-        <br>
-            $$\text{If \(\beta/\gamma\leq 1\),then }\lim_{t\xrightarrow{}\infty} (S,I)=(N,0)\;\text{(absorbing phase)},$$
-           $$\text{ If \(\beta/\gamma> 1\), then }\lim_{t\xrightarrow{}\infty} (S,I)=(\frac{\gamma}{\beta}N,(\frac{\gamma}{\beta}-1)N)\;\text{(endemic phase)}.$$
-        
-        These two convergence behaviors correspond to the absorbing phase and the endemic phase respectively. The numerical simulations of these two phases 
-        are as follows:
-        <br>
-        <br>
-        <center> 
-            <img width="400" align="top" src="sisdiff_2.jpg">
-            <img width="400" align="top" src="sisdiff.jpg">
-            <figcaption><h4>The numerical solutions of the absorbing phase and the endemic phase.</h4></figcaption>
-        </center>
-        <br>
-        <br>
-        We can obtain similar results by the Monte Carlo method as well, the result is as follows:
-        <br>
-        <br>
-    <center> 
-        <img width="400" align="top" src="sismonte_2.jpg">
-        <img width="400" align="top" src="montesis_2.gif">
-        <figcaption><h4>The absorbing phase of the SIS model simulation with foward Euler method and Monte Carlo method.</h4></figcaption>
-    </center>
-    <br>
-    <center> 
-        <img width="400" align="top" src="sismonte.jpg">
-        <img width="400" align="top" src="montesis.gif">
-        <figcaption><h4>The endemic phase of the SIS model simulation with foward Euler method and Monte Carlo method.</h4></figcaption>
-    </center>
-    </ul>
-    <h3>
-        <li>The Infinite-Size Density Matrix Renormalization Group (DMRG) for the Ising Model</li>
-    </h3>
-    The algorithm of the infinite-size DMRG is:
-    <br>
-    <br>
-    <ol>
-        <li class="step">
-            Start with two blocks containing a single site; these are the first system block and environment block.
-        </li>
-        <li class="step">
-            Form two enlarged blocks by adding a site to the right of the system block and to the left of the environment block.
-        </li>
-        <li class="step">
-            Form the superblock by connecting the system block to the environment block.
-        </li>
-        <li class="step">
-            Diagonalize the superblock to find the state vector \(|\psi_i\rangle\) and the energy of the target state (usually ground state).
-        </li>
-        <li class="step">
-            Form the reduced density matrix for the enlarged system block by first constructing the density matrix for the superblock \(\hat{\rho}_s=|\psi_i\rangle\langle\psi_i|\) and then taking the partial trace over the environment \(\hat{\rho}_s=Tr_e(\hat{\rho})\).
-        <li class="step">
-            Diagonalize the reduced density matrix and order its eigenvectors by descending weight. Keep only the <span class="emphasis">m<sub>0</sub></span> eigenvectors with the largest weights.
-        </li>
-        <li class="step">
-            Form the truncation operator \(\hat{O}\) from the eigenvectors with larger eigenvalues and project all operators onto the truncated basis \(\hat{A}_{L+1}=\hat{O}^\dag\hat{A}_L\hat{O}\).
-        </li>
-        <li class="step">
-            Reflect the system block to get the new environment block.
-        </li>
-        <li class="step">
-            Repeat steps 2 - 8 until certain conditions are satisfied.
-        </li>
-    </ol>
-    As an isslustration, see the following figure:
-    <br>
-    <br>
-    <center> 
-        <img width="400" align="top" src="infdmrg.jpg">
-    </center>
-    <br>
-    <br>
-    Construct two blocks (system and eviroment) with some computationable finite size, 
-    add twos sites to form a super block. Truncate the basis of the
-    operators to form a new blocks with the same dimension. 
-    <br>
-    <br>
-    Add two sites again. Repeat until certain conditions are satisfied.
-    <br>
-    The Hamiltonian operator of the Ising model is
-        $$\hat{H}=-J\sum_i \sigma^x_i\otimes\sigma^x_{i+1}-h\sum_i \sigma_i^z,$$
-    where \(\sigma_i^\alpha\) are Pauli matrix.
-    <br>
-    Consider the system part with an additional site first.
-    Take \(J=h=1\) and write the Hamiltonian  for a single in explicit matrix form:
-    <br>
-    the first part (interaction part) is 
-    $$\hat{H}_{interaction}=-\sigma^x_i\otimes \sigma^x_{i+1}
-     =-\begin{pmatrix}0&1\\
-     1&0\end{pmatrix}\otimes \begin{pmatrix}0&1\\
-     1&0\end{pmatrix}=\begin{pmatrix}0&0&0&-1\\
-                                 0&0&-1&0\\
-                                 0&-1&0&0\\
-                                 -1&0&0&0\\
-     \end{pmatrix}$$
-     and the second part (external part) is
-     $$\hat{H}_{external}=-(\sigma^x_i\otimes \mathbb{I}+ \mathbb{I}\otimes\sigma^x_i)
-     =\begin{pmatrix}-1&0\\
-     0&1\end{pmatrix}\otimes \begin{pmatrix}1&0\\
-     0&1\end{pmatrix}+\begin{pmatrix}1&0\\
-     0&1\end{pmatrix}\otimes 
-     \begin{pmatrix}-1&0\\
-     0&1\end{pmatrix}=\begin{pmatrix}-2&0&0&0\\
-                                 0&0&0&0\\
-                                 0&0&0&0\\
-                                 0&0&0&2\\
-     \end{pmatrix}.$$
-     <br>
-     This is the Hamiltonian for both of the system \(\hat{H}_s\) and the eviroment \(\hat{H}_e\).
-     <br>
-      $$\hat{H}_s=\hat{H}_e=\begin{pmatrix}-2&0&0&-1\\
-      0&0&-1&0\\
-      0&-1&0&0\\
-      -1&0&0&2\\
-\end{pmatrix}$$
-     <br>
-Since the additional sites of the system and the enviroment are
-     $$\sigma^x_s=\mathbb{I}\otimes \sigma^x=\begin{pmatrix}0&1&0&0\\
-     1&0&0&0\\
-     0&0&0&1\\
-     0&0&1&0\\
-     \end{pmatrix},$$
-     $$\sigma^x_e=\sigma^x\otimes\mathbb{I}=\begin{pmatrix}0&0&1&0\\
-     0&0&0&1\\
-     1&0&0&0\\
-     0&1&0&0\\
-     \end{pmatrix}.$$
-the term describing the interaction between the system and the enviroment \(\hat{H}_{s,e}\) is
-     $$\hat{H}_{s,e}=\sigma^x_s\otimes\sigma^x_e=\begin{pmatrix}0&1&0&0\\
-     1&0&0&0\\
-     0&0&0&1\\
-     0&0&1&0\\
-     \end{pmatrix}\otimes \begin{pmatrix}0&0&1&0\\
-     0&0&0&1\\
-     1&0&0&0\\
-     0&1&0&0\\
-     \end{pmatrix}$$
-     <br>
-     The Hamiltonian of the super block is 
-     <div class="math">
-        \[
-        \begin{align*}
-        \hat{H}_{super}&=\hat{H}_{s,e}+\hat{H}_e\otimes \mathbb{I}+\mathbb{I}\otimes\hat{H}_s
-        \\
-        &\\
-        &=\begin{pmatrix}0&1&0&0\\
-        1&0&0&0\\
-        0&0&0&1\\
-        0&0&1&0\\
-        \end{pmatrix}\otimes \begin{pmatrix}0&0&1&0\\
-        0&0&0&1\\
-        1&0&0&0\\
-        0&1&0&0\\
-        \end{pmatrix}+\begin{pmatrix}0&0&0&-1\\
-        0&0&-1&0\\
-        0&-1&0&0\\
-        -1&0&0&0\\
-\end{pmatrix}\otimes \mathbb{I}+\mathbb{I}\otimes\begin{pmatrix}0&0&0&-1\\
-0&0&-1&0\\
-0&-1&0&0\\
--1&0&0&0\\
-\end{pmatrix}\\
-&\\
-&=
-\begin{pmatrix}
--4 & 0 & 0 & -1 & 0 & 0 & -1 & 0 & 0 & 0 & 0 & 0 & -1 & 0 & 0 & 0 \\
-0 & -2 & -1 & 0 & 0 & 0 & 0 & -1 & 0 & 0 & 0 & 0 & 0 & -1 & 0 & 0 \\
-0 & -1 & -2 & 0 & -1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & -1 & 0 \\
--1 & 0 & 0 & 0 & 0 & -1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & -1 \\
-0 & 0 & -1 & 0 & -2 & 0 & 0 & -1 & -1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
-0 & 0 & 0 & -1 & 0 & 0 & -1 & 0 & 0 & -1 & 0 & 0 & 0 & 0 & 0 & 0 \\
--1 & 0 & 0 & 0 & 0 & -1 & 0 & 0 & 0 & 0 & -1 & 0 & 0 & 0 & 0 & 0 \\
-0 & -1 & 0 & 0 & -1 & 0 & 0 & 2 & 0 & 0 & 0 & -1 & 0 & 0 & 0 & 0 \\
-0 & 0 & 0 & 0 & -1 & 0 & 0 & 0 & -2 & 0 & 0 & -1 & 0 & 0 & -1 & 0 \\
-0 & 0 & 0 & 0 & 0 & -1 & 0 & 0 & 0 & 0 & -1 & 0 & 0 & 0 & 0 & -1 \\
-0 & 0 & 0 & 0 & 0 & 0 & -1 & 0 & 0 & -1 & 0 & 0 & -1 & 0 & 0 & 0 \\
-0 & 0 & 0 & 0 & 0 & 0 & 0 & -1 & -1 & 0 & 0 & 2 & 0 & -1 & 0 & 0 \\
--1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & -1 & 0 & 0 & 0 & 0 & -1 \\
-0 & -1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & -1 & 0 & 2 & -1 & 0 \\
-0 & 0 & -1 & 0 & 0 & 0 & 0 & 0 & -1 & 0 & 0 & 0 & 0 & -1 & 2 & 0 \\
-0 & 0 & 0 & -1 & 0 & 0 & 0 & 0 & 0 & -1 & 0 & 0 & -1 & 0 & 0 & 4
-\end{pmatrix}
+    <h1>Leveraging Variational Matrix Product States for the Analysis of Stochastic Dynamical Systems</h1>
+    <p><strong>Authors:</strong> Hao-Yang Yen, Anfray Valentin, Yi-Ping Huang, Hong-Yan Shih</p>
+    <p><strong>Date:</strong> September 8, 2024</p>
 
-        \end{align*}
-        \]
+    <div class="table-of-contents">
+        <h2>Table of Contents</h2>
+        <ul>
+            <li><a href="#introduction">Introduction</a></li>
+            <li><a href="#models">Models</a>
+                <ul>
+                    <li><a href="#transverse-ising-model">Transverse Ising Model</a></li>
+                    <li><a href="#sis-model">SIS Model</a></li>
+                </ul>
+            </li>
+            <li><a href="#methodology">Methodology</a>
+                <ul>
+                    <li><a href="#diagonalizability">Diagonalizability</a></li>
+                    <li><a href="#spectrum">Spectrum</a></li>
+                    <li><a href="#matrix-product-state">Matrix Product State (MPS)</a></li>
+                    <li><a href="#algorithms">Algorithms</a></li>
+                </ul>
+            </li>
+            <li><a href="#accuracy">Accuracy</a>
+                <ul>
+                    <li><a href="#transverse-ising-model-accuracy">Transverse Ising Model</a></li>
+                    <li><a href="#sis-model-accuracy">SIS Model</a></li>
+                </ul>
+            </li>
+            <li><a href="#large-deviation-computation">Large Deviation Computation</a></li>
+            <li><a href="#advantages">Advantages</a>
+                <ul>
+                    <li><a href="#rare-event-simulation">Rare Event Simulation</a></li>
+                </ul>
+            </li>
+            <li><a href="#conclusion">Conclusion</a></li>
+            <li><a href="#outlooking">Outlooking</a></li>
+        </ul>
     </div>
-Obtain the ground state and its energy by diagonalize the Hamiltonian.
-$$|\psi_0\rangle=\begin{pmatrix}
-0.902 \\
--0.000 \\
--0.000 \\
-0.225 \\
--0.000 \\
-0.109 \\
-0.235 \\
--0.000 \\
--0.000 \\
-0.058 \\
-0.109 \\
-0.000 \\
-0.225 \\
-0.000 \\
-0.000 \\
-0.058
-\end{pmatrix},\;E_0=-4.7588.$$
 
-Construct the density matrix of the ground state
-\(\hat{\rho}=|\psi_0\rangle\langle\psi_0|\) and the partial trace with respect to the enviroment
-\(\hat{\rho}_s=Tr_e(\hat{\rho})\):
-$$\begin{pmatrix}
-0.864 & -0.000 & -0.000 & 0.216 \\
--0.000 & 0.067 & 0.032 & -0.000 \\
--0.000 & 0.032 & 0.015 & -0.000 \\
-0.216 & -0.000 & -0.000 & 0.054
-\end{pmatrix}.$$
-Obtain the eigenvectors of \(\hat{\rho}_s\)
-<br>
+    <div id="introduction" class="section">
+        <h2>Introduction</h2>
+        Variational matrix product state (VMPS) is a powerful algorithm that can compute the states and energy of huge quantum many-body systems very accurately.
+Recently, physicists found that this approach can also be applied to classical stochastic systems. Like we can employ VMPS to find the ground state and the energy of many-body quantum systems, we seek to apply VMPS to find the non-equilibrium
+steady state (NESS) and its eigenvalue of huge stochastic lattice models.
+We first study the differences between utilizing VMPS for quantum lattice models and classical stochastic lattice models. We take the quantum transverse Ising model and the SIS model \cite{merbis2023efficient} as examples of quantum lattice models and classical stochastic lattice models, respectively. Then, naturally, we need to ask how accurate utilizing VMPS is for classical stochastic models and how is the convergence behaviors. Lastly, we discuss the advantages of leveraging VMPS in these contexts and what something new it can provide us.    </div>
+
+    <div id="models" class="section">
+        <h2>Models</h2>
+
+        <div id="transverse-ising-model" class="section">
+            <h3>Transverse Ising Model</h3>
+            The transverse Ising model plays a crucial role in quantum computing and statistical mechanics. Unlike the classical Ising model, which lacks phase transitions and critical phenomena, the quantum transverse Ising model exhibits both phase transitions and critical behavior due to its quantum nature.
+
+            The Hamiltonian for the quantum transverse Ising model with \( N \) sites is given by:
+            \[
+            \hat{H} = J \sum_{i=1}^{N-1} \sigma_i^z \otimes \sigma_{i+1}^z + h \sum_{i=1}^N \sigma_i^x,
+            \]
+            where \(\sigma^\alpha_j\) represents the Pauli matrices at site \( j \), \( J \) is the interaction strength between adjacent sites, and \( h \) denotes the strength of the transverse field. The Hilbert space of the \( i \)-th site is
+            \[
+            \mathcal{H}_i = \text{Span}\{|\uparrow\rangle_i, |\downarrow\rangle_i\},
+            \]
+            and the total Hilbert space is
+            \[
+            \mathcal{H} = \bigotimes_{i=1}^N \mathcal{H}_i.
+            \]
+            
+            The parameters \( J \) and \( h \) determine the phases of the quantum transverse Ising model. The system is in the ordered phase when \( J/h > 1 \) and in the disordered phase when \( J/h < 1 \). The critical point, where the phase transition occurs, is at \( J/h = 1 \).
+                    </div>
+
+        <div id="sis-model" class="section">
+            <h3>SIS Model</h3>
+            The SIS model is a fundamental model in mathematical epidemiology. Despite being a classical model, its dynamics can exhibit phase transitions. The binary nature of the SIS model bears resemblance to the Ising model.
+
+In the SIS model, the state of a site is represented by a vector
 \[
-\begin{pmatrix}
--0.242 \\
-0.000 \\
--0.000 \\
-0.970
-\end{pmatrix}, \quad
-\begin{pmatrix}
-0.000 \\
-0.429 \\
--0.903 \\
-0.000
-\end{pmatrix}, \quad
-\begin{pmatrix}
-0.000 \\
--0.903 \\
--0.429 \\
-0.000
-\end{pmatrix}, \quad
-\begin{pmatrix}
-0.970 \\
--0.000 \\
--0.000 \\
--0.242
-\end{pmatrix}
+|P(T)\rangle_i = \begin{pmatrix}
+    P_S(t) \\
+    P_I(t)
+\end{pmatrix}_i = P_S(t)|S\rangle + P_I(t)|I\rangle,
 \]
-with eigenvalues \[
-\lambda_1 = 0.000, \quad \lambda_2 = 0.000, \quad \lambda_3 = 0.082, \quad \lambda_4 = 0.918
+where \( P_S(t) \), \( P_I(t) \) denote the probabilities of the site being in state \( S \) (susceptible) and state \( I \) (infected), respectively and \(|S\rangle=\begin{pmatrix}
+    1\\
+    0
+\end{pmatrix}\), \(|I\rangle=\begin{pmatrix}
+    0\\
+    1
+\end{pmatrix}\). Consequently, the state of the entire system with \( N \) sites is described by the tensor product of the individual site vectors:
+\[
+|P(t)\rangle = \bigotimes_{i=1}^N |P(t)\rangle_i.
 \]
 
-<br>    
-Select two eigenvectors with larger eigenvalues to obtain the truncation operator:
-\[
-\hat{O} = \begin{pmatrix}
-0.970 & -0.000 \\
--0.000 & -0.903 \\
--0.000 & -0.429 \\
-0.242 & -0.000
-\end{pmatrix}
-\]
-Use the tuncation operator to obtain the new blocks.
-<br>
-The first ones are the new blocks, including both system and eviroment:
-\[
-\sigma^z_{\text{new}} = \hat{O}^\dag \hat{H}_s \hat{O} = \hat{O}^\dag \hat{H}_e \hat{O} = \begin{pmatrix}
--2.24 & -0.000 \\
--0.000 & -0.775
-\end{pmatrix}
-\]
-The second one is the new interaction term of system and eviroment, which can be described by \(\sigma^x\):
-\[
-\sigma^x_{s,\text{new}} = \hat{O}^\dag \sigma^x_s \hat{O} = \begin{pmatrix}
--0.000 & -0.980 \\
--0.980 & 0.000
-\end{pmatrix}
-\]
-<br>
-We can therefore construct the Hamiltonian of the new super block by
-these new \(\sigma^\alpha_{new}\). We can iteratively do this process until certain condition reached.
-<br>
-<br>
-The numerical result of the groud state energy is as follow: 
-<br>
-<br>
-<center> 
-        <img width="400" align="top" src="infdmrg_groudstate.jpg">
-</center>
-<br>
-We know that the ground state of the infinite Ising model is negative infinity, which is the same as the numericaal result.
-<h3>
-    <li>The Finite-Size DMRG for the Ising Model</li>
-</h3>
-The algorithm of the finite-size DMRG is:
-<br>
-<ol>
-    <li class="step">Carry out the steps of the infinite system algorithm until the superblock reaches a predetermined size \( L \). The size of the system block should now be \( l = L/2 \). Blocks should be stored for all sizes, from \( l = 1 \) to \( l = L/2 \).</li>
-    <li class="step">[Start of sweep] Grow the system block to size \( l + 1 \). Retrieve a block of size \( L - l - 2 \) from storage and reflect it to get an environment block. Grow the environment block to size \( L - l - 1 \).</li>
-    <li class="step">Carry out steps 3 - 7 of the infinite system algorithm.</li>
-    <li class="step">Store the truncated block as the new block.</li>
-    <li class="step">Set \( l = l + 1 \) and repeat steps 2 - 4 until \( l = L/2 - 2 \). At this point, set \( l = 1 \) and retrieve a block of size 1 to be the new system block.</li>
-    <li class="step">[End of sweep] Repeat steps 2 - 5 until \( l = L/2 \). This concludes a sweep.</li>
-    <li class="step">Repeatedly sweep over the system (steps 2 - 6) until certain conditions are satisfied.</li>
-</ol>
-As an isslustration, see the following figure:
-<br>
-<br>
-<center> 
-    <img width="400" align="top" src="finitedmrg.jpg">
-</center>
-<br>
-<br>
-Construct a finite super block, add twos sites and 
-sweep them form the left two the right. Repeatly sweep until 
-certain conditions are satisfied.
-<h3>
-    <li>DMRG in Matrix Product State (MPS) and Matrix Product Operator (MPO) Language</li>
-</h3>
-The great success behind DMRG is MPS and MPO. The DMRG algorithm 
-is actually the variational in the MPS space. Since the state
-of the quantum system is $$|\Psi\rangle=\sum_{s_1,\cdots,s_N}\Psi_{s_1s_2\cdots s_N}\bigotimes_{i=1}^N|s_i\rangle,$$
-where \(\Psi_{s_1\cdots s_N}\) is a rank-\(N\) tensor and can therefore 
-be decomposed by singular value decomposition (SVD).
-The quantum state is therefore
-$$|\Psi\rangle=\sum_{s_1,\cdots,s_N}A_1^{s_1}A_2^{s_2}\cdots A_3^{s_N}\bigotimes_{i=1}^N|s_i\rangle$$
-where \(A_i^{s_i}\) are matrices. The quantum state can be described by 
-matrix product, this state is called MPS. By the same argument,
-we can decompose the quantum operators by SVD as well. The 
-quantum operators are written as $$\hat{O}=Q_1^{s_1}Q_2^{s_2}\cdots Q_3^{s_N},$$
-where \(Q_i^{s_i}\) are matrices.
+
+Due to the dynamic nature of the system, phase transitions can be observed in the SIS model.
+Like the Hamiltonian
+The dynamic of the model on \(N\) sites can be described by the infinitesimal Markov generator \(\hat{W}\) and the master equation $$\partial_t|P(t)\rangle=\hat{W}|P(t)\rangle.$$
+The infinitesimal Markov generator is constructed in the next section.\\
 <ul>
-<h3>
-<li>The Finite-Size variational Method and the DMRG</li>
-</h3>
-Finding the ground state in the finite-size system is
-$$E_0=\inf_{|\Psi\rangle}\frac{\langle\Psi|\hat{H}|\Psi\rangle}{\langle\Psi|\Psi\rangle}.$$
-We can definitely obtain the ground state energy and its eigenstate (ground state)
-by solving the optimazation problem $$\min_{|\Psi\rangle}\frac{\langle\Psi|\hat{H}|\Psi\rangle}{\langle\Psi|\Psi\rangle}.$$
-The most intuitive way to solve this is diagonalizing the Hamiltonian.
-However, this is impossible for huge systems.
-Since we know that the quantum states and the Hamiltonian
-can be written as MPS and MPO. We can perform the optimization
-tensor by tensor. 
-Consider the effective Hamiltonian \(\hat{H}_{eff}\) with respect to \(A\), \(\langle\Psi|\hat{H}|\Psi\rangle\)
-without \(A^\dag\) and \(A\).
-The local optimization problem is
-$$\min_{A}(A^\dag\hat{H}_{eff}A-\lambda (A^\dag \hat{N} A-1)),$$
-where \(\lambda\) is the Lagrangian multiplier to constraint
-that \(\langle\Psi|\Psi\rangle=1\).
-It is natural to consider the gradient with respect to the tensor
- \(A^\dag\) to perform the optimization, that is, 
-$$\nabla_{A^\dag}(A^\dag\hat{H}_{eff}A-\lambda (A^\dag \hat{N} A-1))=0,$$
-which leads to a generalized eigenvalue problem naturally
-$$\hat{H}_{eff}A=\lambda \hat{N} A.$$
-Now we discuss why the finite-size DMRG is equivalent to performing the variational
-method in MPS space. This notion is similar to the conjugate gradient method, gradient descendent method, and the 
-tangent space method. We consider the optimization
-in a subspace of the complete parameter space to make sure 
-that the computational complexity will not be to large. We can approximately
-obtain the solution by iterations.
-<br>
-<br>
-The finite-size DMRG is almost equivalent to the variational method
-explained above, the only difference is that the super blocks in
- the finite-size DMRG having two sites and
- the super block in the variational method having only one site.
- The algorithm of the finite-size DMRG is:
- <br>
- <ol>
-    <li class="step">Generate MPSs and MPOs: Create the Matrix Product States (MPSs) and Matrix Product Operators (MPOs) for the system.</li>
-    <li class="step">[Start of Right Sweep] Optimization: Optimize the matrices by diagonalizing the chosen matrices within the indexed tensor of the effective Hamiltonian.</li>
-    <li class="step">Normalization: Perform Singular Value Decomposition (SVD) to normalize the matrices on the left-hand side, integrating the left matrices into the subsequent tensor.</li>
-    <li class="step">[End of Right Sweep] Iteration: Use the newly obtained matrices as the starting point for the next tensor. Repeat steps 2 and 3 until the right boundary of the system is reached.</li>
-    <li class="step">[Start of Left Sweep] Optimization: Optimize the matrices by diagonalizing the chosen matrices within the indexed tensor of the effective Hamiltonian.</li>
-    <li class="step"> Normalization: Perform SVD to normalize the matrices on the left-hand side, integrating the left matrices into the subsequent tensor.</li>
-    <li class="step">[End of Left Sweep] Iteration: Use the newly obtained matrices as the starting point for the next tensor. Repeat steps 5 and 6 until the left boundary of the system is reached.</li>
-    <li class="step">Iterative Sweeping: Repeat the entire sweeping process (steps 2 through 7) until convergence criteria are met.</li>
-</ol>
-<br>
-<br>
-<center> 
-    <img width="400" align="top" src="tn.jpg">
-</center>
-<br>
-<br>
-Suppose that we have 50 sites in the system.
-The MPO has 50 sites also, it can be expressed as 
-$$\hat{H}=\hat{L}\hat{M}\cdots\hat{M}\hat{R},\;\hat{M}=\begin{pmatrix}
-\mathbb{I}&\sigma^z&-h\sigma^x\\
-0&0&-J\sigma^z\\
-0&0&\mathbb{I}
-\end{pmatrix},\;\hat{L}=\begin{pmatrix}
-1\\
-0\\
-0\end{pmatrix}^T\hat{M},\;\hat{R}=\hat{M}\begin{pmatrix}0\\
-0\\
-1\end{pmatrix}.$$
-
-<br>
-<br>
- Take \(\chi=16\), the MPS will have the size as follows:
-<center>
-<h2>Size Information</h2>
-<table class="outer-table">
-    <tr>
-        <td>
-            <table border="1" cellspacing="0" cellpadding="5">
-                <thead>
-                    <tr>
-                        <th>Index</th>
-                        <th>Size Information</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr><td>1</td><td>1x2x2 double</td></tr>
-                    <tr><td>2</td><td>2x2x4 double</td></tr>
-                    <tr><td>3</td><td>4x2x8 double</td></tr>
-                    <tr><td>4</td><td>8x2x16 double</td></tr>
-                    <tr><td>5</td><td>16x2x16 double</td></tr>
-                    <tr><td>6</td><td>16x2x16 double</td></tr>
-                    <tr><td>7</td><td>16x2x16 double</td></tr>
-                    <tr><td>8</td><td>16x2x16 double</td></tr>
-                    <tr><td>9</td><td>16x2x16 double</td></tr>
-                    <tr><td>10</td><td>16x2x16 double</td></tr>
-                </tbody>
-            </table>
-        </td>
-        <td>
-            <table border="1" cellspacing="0" cellpadding="5">
-                <thead>
-                    <tr>
-                        <th>Index</th>
-                        <th>Size Information</th>
-                    </tr>
-                </thead>
-                <tr><td>11</td><td>16x2x16 double</td></tr>
-<tr><td>12</td><td>16x2x16 double</td></tr>
-<tr><td>13</td><td>16x2x16 double</td></tr>
-<tr><td>14</td><td>16x2x16 double</td></tr>
-<tr><td>15</td><td>16x2x16 double</td></tr>
-<tr><td>16</td><td>16x2x16 double</td></tr>
-<tr><td>17</td><td>16x2x16 double</td></tr>
-<tr><td>18</td><td>16x2x16 double</td></tr>
-<tr><td>19</td><td>16x2x16 double</td></tr>
-<tr><td>20</td><td>16x2x16 double</td></tr>
-</tbody>
-</table>
-</td>
-<td>
-    <table border="1" cellspacing="0" cellpadding="5">
-        <thead>
-            <tr>
-                <th>Index</th>
-                <th>Size Information</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr><td>21</td><td>16x2x16 double</td></tr>
-            <tr><td>22</td><td>16x2x16 double</td></tr>
-            <tr><td>23</td><td>16x2x16 double</td></tr>
-            <tr><td>24</td><td>16x2x16 double</td></tr>
-            <tr><td>25</td><td>16x2x16 double</td></tr>
-            <tr><td>26</td><td>16x2x16 double</td></tr>
-            <tr><td>27</td><td>16x2x16 double</td></tr>
-            <tr><td>28</td><td>16x2x16 double</td></tr>
-            <tr><td>29</td><td>16x2x16 double</td></tr>
-            <tr><td>30</td><td>16x2x16 double</td></tr>
-        </tbody>
-    </table>
-</td>
-<td>
-    <table border="1" cellspacing="0" cellpadding="5">
-        <thead>
-            <tr>
-                <th>Index</th>
-                <th>Size Information</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr><td>31</td><td>16x2x16 double</td></tr>
-            <tr><td>32</td><td>16x2x16 double</td></tr>
-            <tr><td>33</td><td>16x2x16 double</td></tr>
-            <tr><td>34</td><td>16x2x16 double</td></tr>
-            <tr><td>35</td><td>16x2x16 double</td></tr>
-            <tr><td>36</td><td>16x2x16 double</td></tr>
-            <tr><td>37</td><td>16x2x16 double</td></tr>
-            <tr><td>38</td><td>16x2x16 double</td></tr>
-            <tr><td>39</td><td>16x2x16 double</td></tr>
-            <tr><td>40</td><td>16x2x16 double</td></tr>
-        </tbody>
-    </table>
-</td>
-<td>
-    <table border="1" cellspacing="0" cellpadding="5">
-        <thead>
-            <tr>
-                <th>Index</th>
-                <th>Size Information</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr><td>41</td><td>16x2x16 double</td></tr>
-            <tr><td>42</td><td>16x2x16 double</td></tr>
-            <tr><td>43</td><td>16x2x16 double</td></tr>
-            <tr><td>44</td><td>16x2x16 double</td></tr>
-            <tr><td>45</td><td>16x2x16 double</td></tr>
-            <tr><td>46</td><td>16x2x16 double</td></tr>
-                    <tr><td>47</td><td>16x2x8 double</td></tr>
-                    <tr><td>48</td><td>8x2x4 double</td></tr>
-                    <tr><td>49</td><td>4x2x2 double</td></tr>
-                    <tr><td>50</td><td>2x2x1 double</td></tr>
-                </tbody>
-            </table>
-        </td>
-    </tr>
-</table>
-</center>
-<br>
-<br>
-\(\hat{L}\) and \(\hat{R}\) are rank-3 tensors with \(\hat{M}\) is rank-4 tensor. The matrices in the MPS are rank-3 tensors except those 
-on the boundary are rank-2 tensors.
-<br>
-The diagram of \(\langle\Psi|\hat{H}|\Psi\rangle\) can be expressed as:
-<br>
-<br>
-<center> 
-    <img width="500" align="top" src="tn_transverse_ising.jpg">
-</center>
-<br>
-<br>
-With 4 sweeps (4\(\times\)2\(\times\)50 iterations), we can have the result as follows:
-<br>
-<br>
-<center> 
-    <img width="500" align="top" src="vmps_transverse_ising_model.jpg">
-</center>
-<br>
-<br>
-The value of \(\chi\) does not change the convergence rate of the algorithm but is highly related to the upper bound of its effectiveness.
-Moreover, the smaller the number of sites is, the more exact the result is. Suppose that we have 
-a twenty-site system, the reslut is as follows:
-<br>
-<br>
-<center> 
-    <img width="500" align="top" src="vmps_transverse_ising_model_twenty.jpg">
-</center>
-<br>
-<br>
-We can see that the error can get to about \(10^{-8}\) with 4 sweeps.
-<br>
-<br>
-Notice that we take \(J=H=1\), which is the critical point, here. The divergence of the correlated length makes we need
-larger bond dimension to get the accurate result. If we chage the parameters to \(J=50\) and \(h=1\), which is far form the critical point,
-then the result is as follows:
-<br>
-<br>
-<center> 
-    <img width="500" align="top" src="vmps_tising_far_from_critical.jpg">
-</center>
-<br>
-<br>
-We can see the the results obtained from larger and smaller bond dimension are not very differenta and the resluts are more accurate.
+    <li>
+        There are two modes of infection an individual can experience: infection from the left and infection from the right, as illustrated in the figures below:
+        <center>
+        <figure>
+            <img src="left_infection.png" alt="Left Infection" style="width: 25%">
+            <img src="right_infection.png" alt="Right Infection" style="width: 25%;">
+            <figcaption>Left: Infection from the left;  Right: Infection from the right.</figcaption>
+        </figure>
+    </center>
+    </li>
+    <li>
+        The infection conditions are defined as follows: an individual is infected if there is an infected neighbor on the right or left. To model this, we introduce two operators for the \(i\)-th site:
+        <ul>
+            <li>
+                The operator \(\hat{n}_i = |I_i\rangle \langle I|\), which satisfies:
+                <div class="math">
+                    \[\hat{n}_i |S_i\rangle = \mathbf{0} \quad \text{and} \quad \hat{n}_i |I_i\rangle = |I_i\rangle.\]
+                </div>
+                This operator effectively acts as the identity on \(|I_i\rangle\) and does nothing otherwise.
+            </li>
+            <li>
+                The operator \(\hat{\omega}_i^{S \to I} = |I_i\rangle \langle S| - |S_i\rangle \langle S|\), which satisfies:
+                <div class="math">
+                    \[\hat{\omega}_i^{S \to I} |S_i\rangle = |I_i\rangle - |S_i\rangle \quad \text{and} \quad \hat{\omega}_i^{S \to I} |I_i\rangle = \mathbf{0}.\]
+                </div>
+                This operator transfers some probability from \(|S_i\rangle\) to \(|I_i\rangle\).
+            </li>
+        </ul>
+        The infection operator is thus given by:
+        <div class="math">
+            \[\beta \sum_{i=1}^{N-1} \left( \underbrace{\hat{n}_i \hat{\omega}_{i+1}^{S \to I}}_{\text{Left infection}} + \underbrace{\hat{\omega}_i^{S \to I} \hat{n}_{i+1}}_{\text{Right infection}} \right),\]
+        </div>
+        where \(\beta\) represents the infection rate.
+    </li>
+    <li>
+        Recovery occurs spontaneously and is modeled using the operator \(\hat{\omega}_i^{I \to S} = |S_i\rangle \langle I| - |I_i\rangle \langle S|\), which transfers probability from \(|I_i\rangle\) to \(|S_i\rangle\). The recovery generator is given by:
+        <div class="math">
+            \[\gamma \sum_{i=1}^N \hat{\omega}_i^{I \to S},\]
+        </div>
+        where \(\gamma\) is the recovery rate.
+    </li>
+    <li>
+        Since the SIS model's behavior depends only on the ratio of the infection rate to the recovery rate, we can rescale the time by setting \(t \to \gamma t\). The infinitesimal Markov generator then becomes:
+        <div class="math">
+            \[\hat{W} = \lambda \sum_{i=1}^{N-1} \left( \underbrace{\hat{n}_i \hat{\omega}_{i+1}^{S \to I}}_{\text{Left infection}} + \underbrace{\hat{\omega}_i^{S \to I} \hat{n}_{i+1}}_{\text{Right infection}} \right) + \sum_{i=1}^N \underbrace{\hat{\omega}_i^{I \to S}}_{\text{Recovery}},\]
+        </div>
+        where \(\lambda = \beta / \gamma\). The Markov generator \(\hat{W}\) encapsulates all the dynamics of the model and provides a basis for analyzing the system.
+    </li>
 </ul>
-<h3>
-<li>The TN Approach fot the SIS Model</li>
-</h3>
-<br>
-<br>
-The Hamiltonian of the SIS model is 
-$$\hat{W}=\lambda\sum_{i=1}^{N-1}(\hat{n}_i\hat{w}_{i+1}^{0\xrightarrow{}1}
-+\hat{w}_i^{0\xrightarrow{}1}\hat{n}_{i+1})+\sum_{i=1}^{N-1}\hat{w}_i^{1\xrightarrow{}0}
-+\hat{W}_{driv}(\alpha),$$
-where \(\hat{n}=|1\rangle\langle1|\), \(\hat{w}^{0\xrightarrow{}1}=|1\rangle\langle 0|-|0\rangle\langle 0|\)
-, \(\hat{w}^{1\xrightarrow{}0}=|0\rangle\langle 1|-|1\rangle\langle 1|.\)
-<br>
-The MPO is 
-$$\hat{H}=\hat{L}\hat{M}\cdots\hat{M}\hat{R},\;\hat{M}=\begin{pmatrix}
-\mathbb{I}&0&0&0\\
-\lambda\hat{w}^{0\xrightarrow{}1}&0&0&0\\
-\lambda\hat{n}&0&0&0\\
-\hat{w}^{1\xrightarrow{}0}&\hat{n}&\hat{w}^{0\xrightarrow{}1}&\mathbb{I}
-\end{pmatrix},\;\hat{L}=\begin{pmatrix}
-0\\
-0\\
-0\\
-1\end{pmatrix}^T\hat{M},\;\hat{R}=\hat{M}\begin{pmatrix}1\\
-0\\
-0\\
-0\end{pmatrix}.$$
-<br>
-<br>
-<center> 
-    <img width="500" align="top" src="vmps_sis.jpg">
-</center>
-<br>
-<br>
-<center> 
-    <img width="500" align="top" src="vmps_sis_critical.jpg">
-</center>
-<br>
-<br>
-<center> 
-    <img width="500" align="top" src="vmps_sis_larger.jpg">
-</center>
-<br>
-<br>
-As an accurate enough \(\lambda=0\) is enough, we also get
-the eigenstate, that is, the NESS. However, we can not employ it
-directly since it is in MPS form. To utilize it, we need to construct 
-some operators to project them to certain quantities.
-<br>
-If we want to compute the expected value of number of gaps with length \(k\),
-we can construct an operator
-$$\hat{L}_k\hat{M}_k\cdots\hat{M}_k\hat{R}_k,$$
-where \(\hat{M}_k=\begin{pmatrix}\mathbb{I}&\hat{n}&0&\cdots&&0\\
- 0&0&\hat{v}&&&0\\
- &&&\ddots&&\vdots\\
- \vdots&&&&\hat{v}&0\\
- &&&&&\hat{n}\\
- 0&&&\cdots&0&\mathbb{I}
-\end{pmatrix},\;\hat{L}_k=\begin{pmatrix}1&0&\cdots&0\end{pmatrix}\hat{M}_k,\;\hat{R}_k=\hat{M}_k\begin{pmatrix}0\\
-\vdots\\0\\1\end{pmatrix}\).
-<h3><li>Application in Ecology</li></h3>
-Consider a one-dimensional lattice with \(L\) sites, where each site can be in one of four states: empty, occupied by a prey, occupied by a predator, or occupied by both a prey and a predator. The dynamics of the model are governed by the following algorithm:
-<ol>
-    <li class="step">
-        Initialize the lattice with a uniform distribution of preys and predators, ensuring that no site is initially occupied by both a prey and a predator.
-    </li>
-    <li class="step">
-        <strong>Prey Reproduction:</strong> Implement this step with probability \(r\). At each time step, for every site occupied by a prey, the prey can reproduce by adding an offspring to a neighboring site that is either empty or occupied by a predator (i.e., a site without a prey).
-    </li>
-    <li class="step">
-        <strong>Predator Predation and Reproduction:</strong> Implement these step with probability \(1-r\). At each time step, if a site is occupied by both a prey and a predator, the predator consumes the prey. Subsequently, the predator may reproduce by adding an offspring to a neighboring site that is either empty or occupied by a prey (i.e., a site without a predator).
-    </li>
-    <li class="step">
-        <strong>Predator Death:</strong> Implement these step with probability \(1-r\). At each time step, if a site is occupied by a predator only (with no prey present), the predator dies due to starvation.
-    </li>
-</ol>
-The parameter of this model is \(r\), the critical point of this model is \(r\approx 0.177\). When
- \(r < 0.177 \), the system is in the absorbing phase and the predators will ultimately extinct. When
- \(r > 0.177 \), the system is in the active phase and the predators will keep competing.
- <br>
- <br>
- <center> 
-    <img width="500" align="top" src="prey_predator_mc_absorbing.jpg">
-    <img width="500" align="top" src="prey_predator_mc_active.jpg">
-    <br>
-    <figcaption><h4>Left: The absorbing phase of the prey-predator model (Extinction) Right: The active phase of the prey-predator model (Competition)</h4></figcaption>
-</center>
-<ul>
-    <h4><li>The TN Approach</li></h4>
-    $$\begin{align*}
-    \hat{W}=&\sum_{i=1}^{N-1}\bigg((\hat{n}_i^1\hat{w}^{01}_{i+1}+\hat{w}^{01}_i\hat{n}^1_{i+1})
-    +(\hat{n}_i^2\hat{w}^{13}_{i+1}
-    +\hat{w}^{13}_i\hat{n}^2_{i+1})+(\hat{n}_i^1\hat{w}^{23}_{i+1}
-    +\hat{w}^{23}_i\hat{n}^1_{i+1})
-    +(\hat{n}_i^1\hat{w}^{01}_{i+1}+\hat{w}^{01}_i\hat{n}^1_{i+1})\\
-    &+(\hat{n}_i^3\hat{w}^{01}_{i+1}+\hat{w}^{01}_i\hat{n}^3_{i+1})
-    +(\hat{n}_i^3\hat{w}^{13}_{i+1}
-    +\hat{w}^{13}_i\hat{n}^3_{i+1})+(\hat{n}_i^3\hat{w}^{23}_{i+1}
-    +\hat{w}^{23}_i\hat{n}^3_{i+1})
-    +(\hat{n}_i^3\hat{w}^{01}_{i+1}+\hat{w}^{01}_i\hat{n}^3_{i+1})\bigg)\\
-    &+\sum_{i=2}^{N-1}\bigg((\hat{n}_{i-1}^1\hat{w}^{03}_i\hat{n}_{i+1}^2
-    +\hat{n}^2_{i-1}\hat{w}^{03}_i\hat{n}^1_{i+1})+(\hat{n}_{i-1}^3\hat{w}^{03}_i\hat{n}_{i+1}^2
-    +\hat{n}^3_{i-1}\hat{w}^{03}_i\hat{n}^1_{i+1})
-    +(\hat{n}_{i-1}^1\hat{w}^{03}_i\hat{n}_{i+1}^3
-    +\hat{n}^2_{i-1}\hat{w}^{03}_i\hat{n}^3_{i+1})\\
-    &+(\hat{n}_{i-1}^3\hat{w}^{03}_i\hat{n}_{i+1}^3
-    +\hat{n}^3_{i-1}\hat{w}^{03}_i\hat{n}^3_{i+1})\bigg)+(1-r)\sum_{i=1}^{N-1}\bigg(\hat{n}_i^3\hat{w}^{03}_{i+1}+\hat{w}^{03}_i\hat{n}^3_{i+1}\bigg)
-    +\sum_{i=1}^{N}\bigg(\hat{w}^{20}_{i}+\hat{w}^{32}_i\bigg)
-    \end{align*}$$
-</ul>
-<h3><li>References</li></h3>
-<br>
+<p>This is the tensor formulation of the SIS model.</p>    
+</div>
 
+    <div id="methodology" class="section">
+        <h2>Methodology</h2>
+        <p>
+            The ground state and its energy of the transverse Ising model can be obtained using the standard VMPS method. The following describes how VMPS can be applied to solve the SIS model.
+        </p>
+    
+        <p>
+            The master equation governing the SIS model is:
+        </p>
+        <div class="math">
+            \[\partial_t |P(t)\rangle = \hat{W} |P(t)\rangle.\]
+        </div>
+        <p>
+            This can be rewritten in the exponential matrix form as:
+        </p>
+        <div class="math">
+            \[|P(t)\rangle = e^{t \hat{W}} |P(0)\rangle,\]
+        </div>
+        <p>
+            where \(|P(0)\rangle\) represents the initial state of the system.
+        </p>
+        <div id="diagonalizability" class="section">
+        <h2>Diagonalizability</h2>
+        <p>
+            We do not know if \(\hat{W}\) is diagonalizable or not now. To solve this problem, rewrite \(\hat{W}\) in its Jordan form:
+        </p>
+        <div class="math">
+            \[\hat{W} = \Lambda J \Lambda^{-1},\]
+        </div>
+        <p>
+            where \(J = \text{Diag}(J_1, \cdots, J_k)\). As a consequence, \(|P(t)\rangle\) can be rewritten as:
+        </p>
+        <div class="math">
+            \[
+            e^{t \hat{W}} |P(0)\rangle = e^{\Lambda t J \Lambda^{-1}} |P(0)\rangle
+            = \Lambda e^{t J} \Lambda^{-1} |P(0)\rangle
+            \]
+        </div>
+        <p>
+            Consider the condition \(t \to \infty\). If \(\hat{W}\) is non-diagonalizable, then there exists a \(J_l\) that is non-diagonal, meaning there is at least one non-diagonal term equal to \(1\). As a consequence, \(\ket{P(t)}\) will diverge. This is not the case for the SIS model. Hence, \(\hat{W}\) should be diagonalizable. That is to say, \(\hat{W}\) satisfies:
+        </p>
+        <div class="math">
+            \[\hat{W} = \Lambda D \Lambda^{-1},\]
+        </div>
+        <p>
+            where \(D\) is diagonal and \(D_{ii}\) are the eigenvalues of \(\hat{W}\).
+        </p>
+        </div>
+        <div id="spectrum" class="section">
+        <h2>Spectrum</h2>
+        <p>
+            After discussing the diagonalizability of \(\hat{W}\), we want to discuss its spectrum. Since \(\hat{W} = \Lambda D \Lambda^{-1}\), we have:
+        </p>
+        <div class="math">
+            \[
+            e^{t \hat{W}} |P(0)\rangle = \Lambda
+            \begin{pmatrix}
+                e^{t D_{11}} & & & \\
+                & e^{t D_{22}} & & \\
+                & & \ddots & \\
+                & & & e^{t D_{kk}}
+            \end{pmatrix}
+            \Lambda^{-1} |P(0)\rangle.
+            \]
+        </div>
+        <p>
+            Consider the condition \(t \to \infty\). One can see that if \(D_{ii} > 0\), then \(|P(t)\rangle\) will diverge. Therefore, \(D_{ii} \leq 0\). Additionally, as \(t \to \infty\), \(e^{t D_{ii}} \to 0\) if \(D_{ii} < 0\) (\(D_{ii} \neq 0\)). The only term that will not go to zero is \(e^{t \cdot 0} = 1\), which is the eigenvalue corresponding to the NESS (Nonequilibrium Steady State).
+        </p>
+        <div id="matrix-product-state" class="section">
+        <h2>Matrix Product State (MPS)</h2>
+        <p>
+            Matrix Product States (MPS) is a powerful mathematical framework used in quantum physics and related fields to represent and efficiently compute properties of many-body quantum systems. Originating from the study of one-dimensional quantum systems, MPS provides a way to describe quantum states using a tensor network, where the state of the system is encoded in a series of matrices rather than an exponentially large vector. This compact representation makes it possible to handle large systems with a manageable amount of computational resources. MPS are particularly useful for studying ground states and dynamics of quantum systems, and they form the basis for various numerical methods, including the DMRG and the VMPS method.
+        </p>
+        </div>
+        <div id="algorithms" class="section">
+        <h2>Algorithms</h2>
+        <p>
+            To find the NESS, we need to identify the leading eigenstate corresponding to the eigenvalue \(0\). This can be accomplished using the Arnoldi algorithm to diagonalize the matrices and determine the leading eigenvalue at each step. This approach is analogous to applying the VMPS method combined with the Lanczos algorithm, which is used for diagonalizing matrices to compute the ground state energy of quantum models like the transverse Ising model. Just as the ground state energy reveals the ground state itself, identifying the leading eigenvalue provides us with the corresponding eigenstate, which in the case of NESS, is the state associated with the eigenvalue \(0\).
+        </p>
+    <center>
+        <figure>
+            <figcaption>
+                <span style="color: blue;">The tensor that we want to optimize (blue nodes)</span><br>
+                <img src="vmps_alg.png" alt="VMPS Algorithm" style="width: 25%;">
+                <br>
+                <span style="color: red;">Local diagonalization by the appropriate algorithms (red box)</span>
+            </figcaption>
+        </figure>
+    </center>
+        <p>
+            For more details of the explicit algorithms, see <a href="https://example.com" target="_blank">Catarina et al. (2023)</a>.
+        </p>
+        </div>
+    <div id="accuracy" class="section">
+        <h2>Accuracy</h2>
+        <p>
+            We utilize the Variational Matrix Product States (VMPS) method to compute the ground state energy of the transverse Ising model and the leading eigenvalue of the SIS model, both analyzed on a 50-site system.
+        </p>
+        <div id="transverse-ising-model-accuracy" class="section">
+        <h2>Transverse Ising Model</h2>
+        <figure>
+            <img src="vmps_ising_disordered.jpg" alt="Disordered Phase" style="width: 30%; margin-right: 1%;">
+            <img src="vmps_ising_critical.jpg" alt="Critical Point" style="width: 30%; margin-right: 1%;">
+            <img src="vmps_ising_disordered.jpg" alt="Ordered Phase" style="width: 30%;">
+            <figcaption>
+                Error in the ground state energy for the transverse Ising model computed using VMPS: (a) in the disordered phase, (b) at the critical point, and (c) in the ordered phase.
+            </figcaption>
+        </figure>
+    
+        <p>
+            In the case of the transverse Ising model, we assess the accuracy of the VMPS method by analyzing the deviation of the computed ground state energy from the reference values. The results are presented for three distinct phases:
+        </p>
+        <ul>
+            <li><strong>Disordered Phase:</strong> Error analysis when the system is in the disordered phase, characterized by high transverse field strength.</li>
+            <li><strong>Critical Point:</strong> Error analysis at the critical point, where the phase transition occurs.</li>
+            <li><strong>Ordered Phase:</strong> Error analysis in the ordered phase, characterized by low transverse field strength.</li>
+        </ul>
+        <div id="sis-model-accuracy" class="section">
+        <h2>SIS Model</h2>
+        <figure>
+            <img src="vmps_sis_absorbing.jpg" alt="Disordered Phase" style="width: 30%; margin-right: 1%;">
+            <img src="vmps_sis_critic.jpg" alt="Critical Point" style="width: 30%; margin-right: 1%;">
+            <img src="vmps_sis_endemic.jpg" alt="Ordered Phase" style="width: 30%;">
+            <figcaption>
+                Error in the leading eigenvalue for the SIS model computed using VMPS: (a) in the absorbing phase, (b) at the critical point, and (c) in the active phase.
+            </figcaption>
+        </figure>
+    
+        <p>
+            For the SIS model, the accuracy of the VMPS method is evaluated by examining the deviation of the leading eigenvalue from the exact values. The results are shown for the following phases:
+        </p>
+        <ul>
+            <li><strong>Absorbing Phase:</strong> Error analysis when the system is in the absorbing phase, where the infection dynamics lead to no further spread.</li>
+            <li><strong>Critical Point:</strong> Error analysis at the critical point, which marks the transition between absorbing and active phases.</li>
+            <li><strong>Active Phase:</strong> Error analysis in the active phase, characterized by ongoing infection spread and high activity.</li>
+        </ul>
+        </div>
+        <div id="large-deviation-computation" class="section">
+        <h2>Large Deviation Computation</h2>
+        <p>
+            The large deviation (LD) principle is a theoretical framework used in probability theory and statistical mechanics to understand the behavior of rare events. It provides a way to quantify the probability of deviations of a stochastic process or random variable from its expected behavior.
+        </p>
+        <p>
+            In essence, the LD describes how probabilities of events that are far from the typical or average outcome decrease exponentially with the size of the deviation. More formally, it involves finding a rate function that characterizes this exponential decay.
+        </p>
+        <p>
+            Mathematically, for a random variable \(X_n\) and a large deviation sequence, the LD asserts that for large \(n\), the probability that \(X_n\) deviates significantly from its expected value behaves like \(e^{-nI(x)}\), where \(I(x)\) is the rate function associated with the deviation \(x\). This principle is beneficial in fields like statistical mechanics and stochastic dynamics since it helps in understanding the likelihood of rare but significant deviations in large systems. For more details of the LD principle, see <a href="https://www.example.com/dembo2009large" target="_blank">Dembo and Zeitouni (2009)</a> and <a href="https://www.example.com/touchette2009large" target="_blank">Touchette (2009)</a>.
+        </p>
+        <p>
+            The core object we are interested in LD is the scaled cumulant generating function (SCGF) usually denoted by \(\Theta\). In the SIS model, it is nothing but the leading eigenvalue of the Laplace transformation of \(\hat{W}\). Therefore, we can utilize VMPS to compute SCGF.
+        </p>
+        <center>
+        <figure>
+            <img src="vmps_sis_critical_ld.jpg" alt="Rescaled Cumulant Generating Function" style="width: 30%;">
+            <figcaption>The rescaled cumulant generating function</figcaption>
+        </figure>
+        </center>
+        </div>
+        <div id="advantages" class="section">
+        <h1>Advantages</h1>
+        <p>
+            Since we can obtain the leading eigenstate (in MPS form), we can obtain the distributions of some physical quantities as well. This property provides some advantages in doing simulations.
+        </p>
+        </div>
+        <div id="rare-event-simulation" class="section">
+        <h2>Rare Event Simulation</h2>
+        <p>
+            Once the NESS is established, it provides a comprehensive framework for calculating the distributions of various physical quantities within the system. This includes but is not limited to, critical measurements such as the gap length, which can be derived from the statistical properties of the NESS. By understanding the NESS, we gain valuable insights into how these quantities behave and interact under non-equilibrium conditions, allowing for a deeper analysis of the system's physical characteristics.
+        </p>
+        <center>
+        <figure>
+            <img src="distribution.jpg" alt="Distribution of the Gap Length" style="width: 30%;">
+            <figcaption>Distribution of the gap length of NESS.</figcaption>
+        </figure>
+        </center>
+        </div>
+        <div id="conclusion" class="section">
+        <h2>Conclusion</h2>
+        <ul>
+            <li><strong>Target Eigenstate:</strong> By transforming the Hamiltonians of quantum models into their corresponding Markov generators, one can extract the target eigenstate of a lattice stochastic dynamical system. This conversion facilitates the study of steady-state properties in complex systems by bridging quantum mechanics and stochastic processes.</li>
+            <li><strong>NESS Distribution:</strong> The Variational Matrix Product States (VMPS) method delivers highly accurate distributions for the Non-Equilibrium Steady State (NESS). This technique is particularly effective for simulating rare events, allowing for precise analysis of phenomena that, while infrequent, have significant effects on the system's overall behavior.</li>
+            <li><strong>Convergence Near Criticality:</strong> The rate of convergence for numerical methods or approximations notably diminishes as the system approaches its critical point. This reduction in convergence rate can present challenges in accurately characterizing the system near criticality, where even minor deviations can lead to substantial changes in behavior.</li>
+        </ul>
+        </div>
 
-[1] <a href="https://journals.aps.org/pre/abstract/10.1103/PhysRevE.108.024303">
-    Efficient simulations of epidemic models with tensor networks: Application to the one-dimensional susceptible-infected-susceptible model.
-</a><br>
-[2] 
-<a href="https://arxiv.org/abs/2304.13395">Density-matrix renormalization group: a pedagogical introduction.
-</a>
-    <br>
-[3] <a href="https://link.springer.com/book/10.1007/978-1-4020-8765-3">Non-equilibrium phase transitions.
-    <!-- end .container --></div>
- <hr style="height:0.7px;border:none;color:#333;background-color:#333;">
- <section><p></p></section>
- <footer>
-    <figure>
-    <p style="text-align:center"><img src="NTHU-Photoroom.png" height="100 px" align="middle" style="padding:0px 20px 0 20px" alt="">     
-    <img src="ips_logo-Photoroom.png" height="100" align="middle" style="padding:0px 20px 0 20px" alt="">
-    </figure>
-    </footer>
-</a>
+        <div id="outlooking" class="section">
+        <h2>Outlooking</h2>
+        <ul>
+            <li><strong>How can VMPS be used for two-dimensional stochastic models?</strong> The Variational Matrix Product States (VMPS) method can be extended to two-dimensional stochastic models by leveraging its ability to represent complex quantum states through tensor networks. This extension involves adapting the VMPS framework to account for the additional spatial dimensions, enabling accurate simulation and analysis of two-dimensional lattice systems.</li>
+            <li><strong>Can a time-dependent VMPS handle varying infection rates?</strong> Yes, a time-dependent VMPS can be employed to address varying infection rates by incorporating time-dependent parameters into the tensor network structure. This approach allows for the modeling of dynamic changes in infection rates over time, thereby providing a flexible framework for studying time-evolving stochastic processes.</li>
+            <li><strong>Can VMPS be applied to stochastic systems with non-trivial NESS, such as predator-prey models?</strong> Indeed, VMPS can be applied to stochastic systems with complex Non-Equilibrium Steady States (NESS), including predator-prey models. By using VMPS, one can accurately capture and analyze the intricate behaviors of such systems, where the NESS may exhibit rich and non-trivial structures due to the interplay between different species or components.</li>
+        </ul>
+        </div>
 </body>
 </html>
