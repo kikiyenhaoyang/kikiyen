@@ -229,7 +229,7 @@ The infinitesimal Markov generator is constructed in the next section.\\
         <figure>
             <img src="left_infection.png" alt="Left Infection" style="width: 25%">
             <img src="right_infection.png" alt="Right Infection" style="width: 25%;">
-            <figcaption>Left: Infection from the left;  Right: Infection from the right.</figcaption>
+            <figcaption><h4>Left: Infection from the left;  Right: Infection from the right.</h4></figcaption>
         </figure>
     </center>
     </li>
@@ -262,7 +262,7 @@ The infinitesimal Markov generator is constructed in the next section.\\
         <div class="math">
             \[\gamma \sum_{i=1}^N \hat{\omega}_i^{I \to S},\]
         </div>
-        where \(\gamma\) is the recovery rate.
+        where \(\gamma\) is the recovery rate. <a href="https://arxiv.org/abs/2102.11708" target="_blank">Wout Merbis (2021)</a>
     </li>
     <li>
         Since the SIS model's behavior depends only on the ratio of the infection rate to the recovery rate, we can rescale the time by setting \(t \to \gamma t\). The infinitesimal Markov generator then becomes:
@@ -314,7 +314,7 @@ The infinitesimal Markov generator is constructed in the next section.\\
             \]
         </div>
         <p>
-            Consider the condition \(t \to \infty\). If \(\hat{W}\) is non-diagonalizable, then there exists a \(J_l\) that is non-diagonal, meaning there is at least one non-diagonal term equal to \(1\). As a consequence, \(\ket{P(t)}\) will diverge. This is not the case for the SIS model. Hence, \(\hat{W}\) should be diagonalizable. That is to say, \(\hat{W}\) satisfies:
+            Consider the condition \(t \to \infty\). If \(\hat{W}\) is non-diagonalizable, then there exists a \(J_l\) that is non-diagonal, meaning there is at least one non-diagonal term equal to \(1\). As a consequence, \(|P(t)\rangle\) will diverge. This is not the case for the SIS model. Hence, \(\hat{W}\) should be diagonalizable. That is to say, \(\hat{W}\) satisfies:
         </p>
         <div class="math">
             \[\hat{W} = \Lambda D \Lambda^{-1},\]
@@ -365,7 +365,7 @@ The infinitesimal Markov generator is constructed in the next section.\\
         </figure>
     </center>
         <p>
-            For more details of the explicit algorithms, see <a href="https://example.com" target="_blank">Catarina et al. (2023)</a>.
+            For more details of the explicit algorithms, see <a href="https://link.springer.com/article/10.1140/epjb/s10051-023-00575-2" target="_blank">Catarina et al. (2023)</a>.
         </p>
         </div>
     <div id="accuracy" class="section">
@@ -380,7 +380,7 @@ The infinitesimal Markov generator is constructed in the next section.\\
             <img src="vmps_ising_critical.jpg" alt="Critical Point" style="width: 30%; margin-right: 1%;">
             <img src="vmps_ising_disordered.jpg" alt="Ordered Phase" style="width: 30%;">
             <figcaption>
-                Error in the ground state energy for the transverse Ising model computed using VMPS: (a) in the disordered phase, (b) at the critical point, and (c) in the ordered phase.
+            <h4>Error in the ground state energy for the transverse Ising model computed using VMPS: (a) in the disordered phase, (b) at the critical point, and (c) in the ordered phase.</h4>
             </figcaption>
         </figure>
     
@@ -399,7 +399,7 @@ The infinitesimal Markov generator is constructed in the next section.\\
             <img src="vmps_sis_critic.jpg" alt="Critical Point" style="width: 30%; margin-right: 1%;">
             <img src="vmps_sis_endemic.jpg" alt="Ordered Phase" style="width: 30%;">
             <figcaption>
-                Error in the leading eigenvalue for the SIS model computed using VMPS: (a) in the absorbing phase, (b) at the critical point, and (c) in the active phase.
+            <h4>Error in the leading eigenvalue for the SIS model computed using VMPS: (a) in the absorbing phase, (b) at the critical point, and (c) in the active phase.</h4>
             </figcaption>
         </figure>
     
@@ -421,7 +421,7 @@ The infinitesimal Markov generator is constructed in the next section.\\
             In essence, the LD describes how probabilities of events that are far from the typical or average outcome decrease exponentially with the size of the deviation. More formally, it involves finding a rate function that characterizes this exponential decay.
         </p>
         <p>
-            Mathematically, for a random variable \(X_n\) and a large deviation sequence, the LD asserts that for large \(n\), the probability that \(X_n\) deviates significantly from its expected value behaves like \(e^{-nI(x)}\), where \(I(x)\) is the rate function associated with the deviation \(x\). This principle is beneficial in fields like statistical mechanics and stochastic dynamics since it helps in understanding the likelihood of rare but significant deviations in large systems. For more details of the LD principle, see <a href="https://www.example.com/dembo2009large" target="_blank">Dembo and Zeitouni (2009)</a> and <a href="https://www.example.com/touchette2009large" target="_blank">Touchette (2009)</a>.
+            Mathematically, for a random variable \(X_n\) and a large deviation sequence, the LD asserts that for large \(n\), the probability that \(X_n\) deviates significantly from its expected value behaves like \(e^{-nI(x)}\), where \(I(x)\) is the rate function associated with the deviation \(x\). This principle is beneficial in fields like statistical mechanics and stochastic dynamics since it helps in understanding the likelihood of rare but significant deviations in large systems. For more details of the LD principle, see <a href="https://link.springer.com/content/pdf/10.1007/978-3-642-03311-7.pdf" target="_blank">Dembo and Zeitouni (2009)</a> and <a href="https://www.sciencedirect.com/science/article/pii/S0370157309001410?casa_token=hZNNCxtH-5UAAAAA:qzunS6LLRWU22Ddq4H6PPAtdnVdvbMdF8xYUxLPgY0Cf5t64A2rYb4wkLUpQWfluI3opSdYgdw" target="_blank">Touchette (2009)</a>.
         </p>
         <p>
             The core object we are interested in LD is the scaled cumulant generating function (SCGF) usually denoted by \(\Theta\). In the SIS model, it is nothing but the leading eigenvalue of the Laplace transformation of \(\hat{W}\). Therefore, we can utilize VMPS to compute SCGF.
@@ -429,7 +429,7 @@ The infinitesimal Markov generator is constructed in the next section.\\
         <center>
         <figure>
             <img src="vmps_sis_critical_ld.jpg" alt="Rescaled Cumulant Generating Function" style="width: 30%;">
-            <figcaption>The rescaled cumulant generating function</figcaption>
+            <figcaption><h4>The rescaled cumulant generating function</h4></figcaption>
         </figure>
         </center>
         </div>
@@ -447,7 +447,7 @@ The infinitesimal Markov generator is constructed in the next section.\\
         <center>
         <figure>
             <img src="distribution.jpg" alt="Distribution of the Gap Length" style="width: 30%;">
-            <figcaption>Distribution of the gap length of NESS.</figcaption>
+            <figcaption><h4>Distribution of the gap length of NESS.</h4></figcaption>
         </figure>
         </center>
         </div>
