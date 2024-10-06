@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>PFnQM</title>
-    <style type="text/css">
-        body{ 
+    <title>Non-Linear Dynamics and Chaos</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+  <style type="text/css">
+    body{
             font-family: Arial, Helvetica, sans-serif;
             }
-        th{font-family:normal ;}
-        i{font-family:normal ;}
-        #A{
+    th{font-family:normal ;}
+    i{font-family:normal ;}
+#A{
   background-image:  url('');
   background-repeat:  no-repeat;
   background-attachment: fixed;
@@ -19,7 +22,7 @@
 .container {
 	margin: 0 auto; /* the auto value on the sides, coupled with the width, centers the layout */
 }
-    </style>
+</style>
 </head>
 
 <body bgcolor=#d9dcc0>
@@ -83,14 +86,15 @@
 </section>
 <div class="container">
 <h1>
-   Ongoing Research
+    Pattern Formation and Dynamics in Quantum Systems
 </h1>
 
 <ul>
+ 
+    <h3>I do this research in 2023~present. PI: Prof. Yi-Ping Huang, NTHU</h3>
 
-    <li>Pattern Formation and Dynamics in Quantum System (PI: Prof. Yi-Ping Huang, NTHU)</li>
- </h3>
     <u1>
+        <h2>Abstract and Motivation</h2>
     This research focuses on bridging the gap between quantum dynamics and non-linear phenomena to reveal pattern formation mechanisms in quantum systems.
 Employing the quantum trajectories method and phase representation, I investigate pattern formation in both two-site and many-site quantum systems. 
 Anticipated outcomes involve characterizing patterns in phase space, comprehending non-linear effects, and assessing the influence of wave function patterns on quantum statistics. 
@@ -112,7 +116,10 @@ In essence, this study can contribute to a more profound understanding of the in
     </center>
     <br>
     <br>
-    In this paper, it's generalize this phenomenon to quantum systems in phase space. The paper provides the quantum master equation under classical limit which also can lead to Turing instability.
+    <h2>Literature Review</h2>
+    In the reference <a href="https://www.nature.com/articles/s41598-022-19010-0">
+        Turing instability in quantum activator–inhibitor systems
+    </a>, it's generalize this phenomenon to quantum systems in phase space. The paper provides the quantum master equation under classical limit which also can lead to Turing instability.
     I use similar numerical method to simulate the evolution in phase space to make it clear.
     When the Turing instability happens, the evolution in phase space would be like the following animate.
     <br>
@@ -129,7 +136,44 @@ In essence, this study can contribute to a more profound understanding of the in
     nonlinear effect under classical limit in the phase space.
     <br>
     <br>
-</ul>
+    <h2>Research Method</h2>
+    In general, the master equation of the pattern formation system can be written as 
+    <br>
+    <br>
+    <center>
+        \(\displaystyle\frac{\partial X}{\partial t}=a\nabla^2 X+f(X,Y),\)
+        <br>
+        <br>
+        \(\displaystyle\frac{\partial Y}{\partial t}=b\nabla^2 Y+g(X,Y).\)
+    </center>
+    <br>
+    While the reference identified a framework that shares a similar mathematical structure with pattern formation in quantum systems, it fell short in providing a clear concept of position space, which is essential for deriving the patterns observed in these systems. To address this gap, we now shift our focus to a quantum many-body system, adopting the foundational ideas presented in the study titled <a href="https://www.nature.com/articles/s41598-022-19010-0">Turing instability in quantum activator–inhibitor systems</a>.
+
+    In this enhanced framework, each site within the quantum system is meticulously aligned with a specific position in the pattern formation process. This alignment allows us to conceptualize how patterns emerge in a spatial context. At each site, we introduce two distinct species of particles, which interact with one another in ways that generate complex and dynamic behaviors. These interactions are not merely incidental; they can be systematically described through a reaction-like term embedded in the governing equations of the quantum many-body system.
+    
+    This approach enables us to explore the rich interplay between the spatial arrangement of particles and their collective dynamics, shedding light on the underlying mechanisms that drive pattern formation. By considering the specific interactions between the two species at each site, we can better understand how spatial patterns evolve and manifest within the quantum framework. Such insights may not only clarify the phenomenon of pattern formation itself but also contribute to broader applications in quantum physics and related fields.
+    <br>
+    <br>
+    <h2>Expected Results</h2>
+    When we analyze the interactions between these two species, we can derive terms that represent their reactive behaviors. This interaction 
+    can manifest as effective forces that influence the evolution of the wave function of the system. In addition to these reactive terms, 
+    we must also consider the tunneling effects that arise due to quantum mechanics. Tunneling allows particles to move between adjacent sites,
+     resulting in a diffusion-like term in the governing equations. This behavior resembles classical diffusion but is fundamentally rooted in 
+     quantum mechanics.
+    <br>
+    <br>
+    In the context of pattern formation, we hypothesize that if the two quantum species exhibit similar tunneling characteristics, we 
+    can anticipate that the many-body wave function will also display structured patterns. Such patterns may reflect the underlying symmetries
+     and interactions within the system, leading to a variety of emergent behaviors.
+    <br>
+    <br>
+    To gain insights into the nature of these patterns, we can observe and compute various physical quantities associated with the system. 
+    This might include measuring the density distributions, correlation functions, or other observables that reveal the collective behavior 
+    of the particles. By analyzing these quantities, we can deepen our understanding of how pattern formation occurs in quantum systems, 
+    shedding light on the fundamental processes at play in many-body quantum mechanics. Ultimately, this exploration can enhance our
+     comprehension of the complexities and subtleties of quantum pattern formation, opening new avenues for research and application 
+     in fields such as condensed matter physics and quantum information science.
+    </ul>
 
    <!-- end .container --></div>
  <hr style="height:0.7px;border:none;color:#333;background-color:#333;">
