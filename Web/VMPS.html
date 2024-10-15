@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>vmps</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  
+ <style type="text/css">
+    body{ 
+            font-family: Arial, Helvetica, sans-serif;
+            }
+    th{font-family:normal ;}
+    i{font-family:normal ;}
+    #A{
+  background-image:  url('');
+  background-repeat:  no-repeat;
+  background-attachment: fixed;
+  background-size: 110%;
+  background-position:
+    center
+}
+.container {
+	margin: 0 auto; /* the auto value on the sides, coupled with the width, centers the layout */
+}
+
+</style>
+</head>
+<body bgcolor=#d9dcc0>
+    <section id="A"> 
+    <table align="RIGHT" border="5" cellspacing="5">
+        <tbody>
+            <tr>
+                <th>
+                    <a href="index.html">
+                        <img width="100" align="top" src="yen.png">
+                    </a>
+                    <br>
+                    HYY Home
+                </th>
+            </tr>
+        </tbody>
+    </table>
+
+    <h1>
+        <img width="190" align="top" src="yen.png">
+        <br>
+        <i>Hao-Yang Yen</i>
+    </h1>
+    
+    <hr>
+    <center>
+        <table border="10" cellspacing="5">
+            <tbody>
+                <tr>
+                    <th>
+                        <a href="experience.html">
+                            <img width="50" align="top" src="exp.png">
+                        </a>
+                        <br>
+                        Experience
+                    </th>
+                    <th>
+                        <a href="learning.html">
+                        <img width="50" align="top" src="l.png">
+                        </a>
+                        <br>
+                        Learning
+                    </th>
+                    <th style="color:white;background-color: black;">
+                        <a href="research.html">
+                        <img width="50" align="top" src="flipped_r.png">
+                        </a>
+                        <br>
+                        Research
+                    </th>
+                    <th>
+                        <a href="Explore.html">
+                            <img width="50" align="top" src="e.png">
+                            </a>
+                        <br>
+                        Explore
+                    </th>
+                </tr>
+            </tbody>
+        </table>
+    </center>
+<hr>
+</section>
+<div class="container">
+    <h1>Leveraging Variational Matrix Product States for the Analysis of Stochastic Dynamical Systems</h1>
+    <p><strong>Authors:</strong> Hao-Yang Yen, Anfray Valentin, Yi-Ping Huang, Hong-Yan Shih</p>    <div class="table-of-contents">
+        <h2>Table of Contents</h2>
+        <ul>
+            <li><a href="#introduction">Introduction</a></li>
+            <li><a href="#models">Models</a>
+                <ul>
+                    <li><a href="#transverse-ising-model">Transverse Ising Model</a></li>
+                    <li><a href="#sis-model">SIS Model</a></li>
+                </ul>
+            </li>
+            <li><a href="#methodology">Methodology</a>
+                <ul>
+                    <li><a href="#diagonalizability">Diagonalizability</a></li>
+                    <li><a href="#spectrum">Spectrum</a></li>
+                    <li><a href="#matrix-product-state">Matrix Product State (MPS)</a></li>
+                    <li><a href="#algorithms">Algorithms</a></li>
+                </ul>
+            </li>
+            <li><a href="#accuracy">Accuracy</a>
+                <ul>
+                    <li><a href="#transverse-ising-model-accuracy">Transverse Ising Model</a></li>
+                    <li><a href="#sis-model-accuracy">SIS Model</a></li>
+                </ul>
+            </li>
+            <li><a href="#large-deviation-computation">Large Deviation Computation</a></li>
+            <li><a href="#advantages">Advantages</a>
+                <ul>
+                    <li><a href="#rare-event-simulation">Rare Event Simulation</a></li>
+                </ul>
+            </li>
+            <li><a href="#conclusion">Conclusion</a></li>
+            <li><a href="#outlooking">Outlooking</a></li>
+        </ul>
+    </div>
+
+    <div id="introduction" class="section">
+        <h2>Introduction</h2>
+        Variational matrix product state (VMPS) is a powerful algorithm that can compute the states and energy of huge quantum many-body systems very accurately.
+Recently, physicists found that this approach can also be applied to classical stochastic systems. Like we can employ VMPS to find the ground state and the energy of many-body quantum systems, we seek to apply VMPS to find the non-equilibrium
+steady state (NESS) and its eigenvalue of huge stochastic lattice models.
+We first study the differences between utilizing VMPS for quantum lattice models and classical stochastic lattice models. We take the quantum transverse Ising model and the SIS model \cite{merbis2023efficient} as examples of quantum lattice models and classical stochastic lattice models, respectively. Then, naturally, we need to ask how accurate utilizing VMPS is for classical stochastic models and how is the convergence behaviors. Lastly, we discuss the advantages of leveraging VMPS in these contexts and what something new it can provide us.    </div>
+
+    <div id="models" class="section">
+        <h2>Models</h2>
+
+        <div id="transverse-ising-model" class="section">
+            <h3>Transverse Ising Model</h3>
+            The transverse Ising model plays a crucial role in quantum computing and statistical mechanics. Unlike the classical Ising model, which lacks phase transitions and critical phenomena, the quantum transverse Ising model exhibits both phase transitions and critical behavior due to its quantum nature.
+
+            The Hamiltonian for the quantum transverse Ising model with \( N \) sites is given by:
+            \[
+            \hat{H} = J \sum_{i=1}^{N-1} \sigma_i^z \otimes \sigma_{i+1}^z + h \sum_{i=1}^N \sigma_i^x,
+            \]
+            where \(\sigma^\alpha_j\) represents the Pauli matrices at site \( j \), \( J \) is the interaction strength between adjacent sites, and \( h \) denotes the strength of the transverse field. The Hilbert space of the \( i \)-th site is
+            \[
+            \mathcal{H}_i = \text{Span}\{|\uparrow\rangle_i, |\downarrow\rangle_i\},
+            \]
+            and the total Hilbert space is
+            \[
+            \mathcal{H} = \bigotimes_{i=1}^N \mathcal{H}_i.
+            \]
+            
+            The parameters \( J \) and \( h \) determine the phases of the quantum transverse Ising model. The system is in the ordered phase when \( J/h > 1 \) and in the disordered phase when \( J/h < 1 \). The critical point, where the phase transition occurs, is at \( J/h = 1 \).
+                    </div>
+
+        <div id="sis-model" class="section">
+            <h3>SIS Model</h3>
+            The SIS model is a fundamental model in mathematical epidemiology. Despite being a classical model, its dynamics can exhibit phase transitions. The binary nature of the SIS model bears resemblance to the Ising model.
+
+In the SIS model, the state of a site is represented by a vector
+\[
+|P(T)\rangle_i = \begin{pmatrix}
+    P_S(t) \\
+    P_I(t)
+\end{pmatrix}_i = P_S(t)|S\rangle + P_I(t)|I\rangle,
+\]
+where \( P_S(t) \), \( P_I(t) \) denote the probabilities of the site being in state \( S \) (susceptible) and state \( I \) (infected), respectively and \(|S\rangle=\begin{pmatrix}
+    1\\
+    0
+\end{pmatrix}\), \(|I\rangle=\begin{pmatrix}
+    0\\
+    1
+\end{pmatrix}\). Consequently, the state of the entire system with \( N \) sites is described by the tensor product of the individual site vectors:
+\[
+|P(t)\rangle = \bigotimes_{i=1}^N |P(t)\rangle_i.
+\]
+
+
+Due to the dynamic nature of the system, phase transitions can be observed in the SIS model.
+Like the Hamiltonian
+The dynamic of the model on \(N\) sites can be described by the infinitesimal Markov generator \(\hat{W}\) and the master equation $$\partial_t|P(t)\rangle=\hat{W}|P(t)\rangle.$$
+The infinitesimal Markov generator is constructed in the next section.\\
+<ul>
+    <li>
+        There are two modes of infection an individual can experience: infection from the left and infection from the right, as illustrated in the figures below:
+        <center>
+        <figure>
+            <img src="left_infection.png" alt="Left Infection" style="width: 25%">
+            <img src="right_infection.png" alt="Right Infection" style="width: 25%;">
+            <figcaption><h4>Left: Infection from the left;  Right: Infection from the right.</h4></figcaption>
+        </figure>
+    </center>
+    </li>
+    <li>
+        The infection conditions are defined as follows: an individual is infected if there is an infected neighbor on the right or left. To model this, we introduce two operators for the \(i\)-th site:
+        <ul>
+            <li>
+                The operator \(\hat{n}_i = |I_i\rangle \langle I|\), which satisfies:
+                <div class="math">
+                    \[\hat{n}_i |S_i\rangle = \mathbf{0} \quad \text{and} \quad \hat{n}_i |I_i\rangle = |I_i\rangle.\]
+                </div>
+                This operator effectively acts as the identity on \(|I_i\rangle\) and does nothing otherwise.
+            </li>
+            <li>
+                The operator \(\hat{\omega}_i^{S \to I} = |I_i\rangle \langle S| - |S_i\rangle \langle S|\), which satisfies:
+                <div class="math">
+                    \[\hat{\omega}_i^{S \to I} |S_i\rangle = |I_i\rangle - |S_i\rangle \quad \text{and} \quad \hat{\omega}_i^{S \to I} |I_i\rangle = \mathbf{0}.\]
+                </div>
+                This operator transfers some probability from \(|S_i\rangle\) to \(|I_i\rangle\).
+            </li>
+        </ul>
+        The infection operator is thus given by:
+        <div class="math">
+            \[\beta \sum_{i=1}^{N-1} \left( \underbrace{\hat{n}_i \hat{\omega}_{i+1}^{S \to I}}_{\text{Left infection}} + \underbrace{\hat{\omega}_i^{S \to I} \hat{n}_{i+1}}_{\text{Right infection}} \right),\]
+        </div>
+        where \(\beta\) represents the infection rate.
+    </li>
+    <li>
+        Recovery occurs spontaneously and is modeled using the operator \(\hat{\omega}_i^{I \to S} = |S_i\rangle \langle I| - |I_i\rangle \langle S|\), which transfers probability from \(|I_i\rangle\) to \(|S_i\rangle\). The recovery generator is given by:
+        <div class="math">
+            \[\gamma \sum_{i=1}^N \hat{\omega}_i^{I \to S},\]
+        </div>
+        where \(\gamma\) is the recovery rate. <a href="https://arxiv.org/abs/2102.11708" target="_blank">Wout Merbis (2021)</a>
+    </li>
+    <li>
+        Since the SIS model's behavior depends only on the ratio of the infection rate to the recovery rate, we can rescale the time by setting \(t \to \gamma t\). The infinitesimal Markov generator then becomes:
+        <div class="math">
+            \[\hat{W} = \lambda \sum_{i=1}^{N-1} \left( \underbrace{\hat{n}_i \hat{\omega}_{i+1}^{S \to I}}_{\text{Left infection}} + \underbrace{\hat{\omega}_i^{S \to I} \hat{n}_{i+1}}_{\text{Right infection}} \right) + \sum_{i=1}^N \underbrace{\hat{\omega}_i^{I \to S}}_{\text{Recovery}},\]
+        </div>
+        where \(\lambda = \beta / \gamma\). The Markov generator \(\hat{W}\) encapsulates all the dynamics of the model and provides a basis for analyzing the system.
+    </li>
+</ul>
+<p>This is the tensor formulation of the SIS model.</p>    
+</div>
+
+    <div id="methodology" class="section">
+        <h2>Methodology</h2>
+        <p>
+            The ground state and its energy of the transverse Ising model can be obtained using the standard VMPS method. The following describes how VMPS can be applied to solve the SIS model.
+        </p>
+    
+        <p>
+            The master equation governing the SIS model is:
+        </p>
+        <div class="math">
+            \[\partial_t |P(t)\rangle = \hat{W} |P(t)\rangle.\]
+        </div>
+        <p>
+            This can be rewritten in the exponential matrix form as:
+        </p>
+        <div class="math">
+            \[|P(t)\rangle = e^{t \hat{W}} |P(0)\rangle,\]
+        </div>
+        <p>
+            where \(|P(0)\rangle\) represents the initial state of the system.
+        </p>
+        <div id="diagonalizability" class="section">
+        <h2>Diagonalizability</h2>
+        <p>
+            We do not know if \(\hat{W}\) is diagonalizable or not now. To solve this problem, rewrite \(\hat{W}\) in its Jordan form:
+        </p>
+        <div class="math">
+            \[\hat{W} = \Lambda J \Lambda^{-1},\]
+        </div>
+        <p>
+            where \(J = \text{Diag}(J_1, \cdots, J_k)\). As a consequence, \(|P(t)\rangle\) can be rewritten as:
+        </p>
+        <div class="math">
+            \[
+            e^{t \hat{W}} |P(0)\rangle = e^{\Lambda t J \Lambda^{-1}} |P(0)\rangle
+            = \Lambda e^{t J} \Lambda^{-1} |P(0)\rangle
+            \]
+        </div>
+        <p>
+            Consider the condition \(t \to \infty\). If \(\hat{W}\) is non-diagonalizable, then there exists a \(J_l\) that is non-diagonal, meaning there is at least one non-diagonal term equal to \(1\). As a consequence, \(|P(t)\rangle\) will diverge. This is not the case for the SIS model. Hence, \(\hat{W}\) should be diagonalizable. That is to say, \(\hat{W}\) satisfies:
+        </p>
+        <div class="math">
+            \[\hat{W} = \Lambda D \Lambda^{-1},\]
+        </div>
+        <p>
+            where \(D\) is diagonal and \(D_{ii}\) are the eigenvalues of \(\hat{W}\).
+        </p>
+        </div>
+        <div id="spectrum" class="section">
+        <h2>Spectrum</h2>
+        <p>
+            After discussing the diagonalizability of \(\hat{W}\), we want to discuss its spectrum. Since \(\hat{W} = \Lambda D \Lambda^{-1}\), we have:
+        </p>
+        <div class="math">
+            \[
+            e^{t \hat{W}} |P(0)\rangle = \Lambda
+            \begin{pmatrix}
+                e^{t D_{11}} & & & \\
+                & e^{t D_{22}} & & \\
+                & & \ddots & \\
+                & & & e^{t D_{kk}}
+            \end{pmatrix}
+            \Lambda^{-1} |P(0)\rangle.
+            \]
+        </div>
+        <p>
+            Consider the condition \(t \to \infty\). One can see that if \(D_{ii} > 0\), then \(|P(t)\rangle\) will diverge. Therefore, \(D_{ii} \leq 0\). Additionally, as \(t \to \infty\), \(e^{t D_{ii}} \to 0\) if \(D_{ii} < 0\) (\(D_{ii} \neq 0\)). The only term that will not go to zero is \(e^{t \cdot 0} = 1\), which is the eigenvalue corresponding to the NESS (Nonequilibrium Steady State).
+        </p>
+        <div id="matrix-product-state" class="section">
+        <h2>Matrix Product State (MPS)</h2>
+        <p>
+            Matrix Product States (MPS) is a powerful mathematical framework used in quantum physics and related fields to represent and efficiently compute properties of many-body quantum systems. Originating from the study of one-dimensional quantum systems, MPS provides a way to describe quantum states using a tensor network, where the state of the system is encoded in a series of matrices rather than an exponentially large vector. This compact representation makes it possible to handle large systems with a manageable amount of computational resources. MPS are particularly useful for studying ground states and dynamics of quantum systems, and they form the basis for various numerical methods, including the DMRG and the VMPS method.
+        </p>
+        </div>
+        <div id="algorithms" class="section">
+        <h2>Algorithms</h2>
+        <p>
+            To find the NESS, we need to identify the leading eigenstate corresponding to the eigenvalue \(0\). This can be accomplished using the Arnoldi algorithm to diagonalize the matrices and determine the leading eigenvalue at each step. This approach is analogous to applying the VMPS method combined with the Lanczos algorithm, which is used for diagonalizing matrices to compute the ground state energy of quantum models like the transverse Ising model. Just as the ground state energy reveals the ground state itself, identifying the leading eigenvalue provides us with the corresponding eigenstate, which in the case of NESS, is the state associated with the eigenvalue \(0\).
+        </p>
+    <center>
+        <figure>
+            <figcaption>
+                <span style="color: blue;">The tensor that we want to optimize (blue nodes)</span><br>
+                <img src="vmps_alg.png" alt="VMPS Algorithm" style="width: 25%;">
+                <br>
+                <span style="color: red;">Local diagonalization by the appropriate algorithms (red box)</span>
+            </figcaption>
+        </figure>
+    </center>
+        <p>
+            For more details of the explicit algorithms, see <a href="https://link.springer.com/article/10.1140/epjb/s10051-023-00575-2" target="_blank">Catarina et al. (2023)</a>.
+        </p>
+        </div>
+    <div id="accuracy" class="section">
+        <h2>Accuracy</h2>
+        <p>
+            We utilize the Variational Matrix Product States (VMPS) method to compute the ground state energy of the transverse Ising model and the leading eigenvalue of the SIS model, both analyzed on a 50-site system.
+        </p>
+        <div id="transverse-ising-model-accuracy" class="section">
+        <h2>Transverse Ising Model</h2>
+        <figure>
+            <img src="vmps_ising_disordered.jpg" alt="Disordered Phase" style="width: 30%; margin-right: 1%;">
+            <img src="vmps_ising_critical.jpg" alt="Critical Point" style="width: 30%; margin-right: 1%;">
+            <img src="vmps_ising_disordered.jpg" alt="Ordered Phase" style="width: 30%;">
+            <figcaption>
+            <h4>Error in the ground state energy for the transverse Ising model computed using VMPS: (a) in the disordered phase, (b) at the critical point, and (c) in the ordered phase.</h4>
+            </figcaption>
+        </figure>
+    
+        <p>
+            In the case of the transverse Ising model, we assess the accuracy of the VMPS method by analyzing the deviation of the computed ground state energy from the reference values. The results are presented for three distinct phases:
+        </p>
+        <ul>
+            <li><strong>Disordered Phase:</strong> Error analysis when the system is in the disordered phase, characterized by high transverse field strength.</li>
+            <li><strong>Critical Point:</strong> Error analysis at the critical point, where the phase transition occurs.</li>
+            <li><strong>Ordered Phase:</strong> Error analysis in the ordered phase, characterized by low transverse field strength.</li>
+        </ul>
+        <div id="sis-model-accuracy" class="section">
+        <h2>SIS Model</h2>
+        <figure>
+            <img src="vmps_sis_absorbing.jpg" alt="Disordered Phase" style="width: 30%; margin-right: 1%;">
+            <img src="vmps_sis_critic.jpg" alt="Critical Point" style="width: 30%; margin-right: 1%;">
+            <img src="vmps_sis_endemic.jpg" alt="Ordered Phase" style="width: 30%;">
+            <figcaption>
+            <h4>Error in the leading eigenvalue for the SIS model computed using VMPS: (a) in the absorbing phase, (b) at the critical point, and (c) in the active phase.</h4>
+            </figcaption>
+        </figure>
+    
+        <p>
+            For the SIS model, the accuracy of the VMPS method is evaluated by examining the deviation of the leading eigenvalue from the exact values. The results are shown for the following phases:
+        </p>
+        <ul>
+            <li><strong>Absorbing Phase:</strong> Error analysis when the system is in the absorbing phase, where the infection dynamics lead to no further spread.</li>
+            <li><strong>Critical Point:</strong> Error analysis at the critical point, which marks the transition between absorbing and active phases.</li>
+            <li><strong>Active Phase:</strong> Error analysis in the active phase, characterized by ongoing infection spread and high activity.</li>
+        </ul>
+        </div>
+        <div id="large-deviation-computation" class="section">
+        <h2>Large Deviation Computation</h2>
+        <p>
+            The large deviation (LD) principle is a theoretical framework used in probability theory and statistical mechanics to understand the behavior of rare events. It provides a way to quantify the probability of deviations of a stochastic process or random variable from its expected behavior.
+        </p>
+        <p>
+            In essence, the LD describes how probabilities of events that are far from the typical or average outcome decrease exponentially with the size of the deviation. More formally, it involves finding a rate function that characterizes this exponential decay.
+        </p>
+        <p>
+            Mathematically, for a random variable \(X_n\) and a large deviation sequence, the LD asserts that for large \(n\), the probability that \(X_n\) deviates significantly from its expected value behaves like \(e^{-nI(x)}\), where \(I(x)\) is the rate function associated with the deviation \(x\). This principle is beneficial in fields like statistical mechanics and stochastic dynamics since it helps in understanding the likelihood of rare but significant deviations in large systems. For more details of the LD principle, see <a href="https://link.springer.com/content/pdf/10.1007/978-3-642-03311-7.pdf" target="_blank">Dembo and Zeitouni (2009)</a> and <a href="https://www.sciencedirect.com/science/article/pii/S0370157309001410?casa_token=hZNNCxtH-5UAAAAA:qzunS6LLRWU22Ddq4H6PPAtdnVdvbMdF8xYUxLPgY0Cf5t64A2rYb4wkLUpQWfluI3opSdYgdw" target="_blank">Touchette (2009)</a>.
+        </p>
+        <p>
+            The core object we are interested in LD is the scaled cumulant generating function (SCGF) usually denoted by \(\Theta\). In the SIS model, it is nothing but the leading eigenvalue of the Laplace transformation of \(\hat{W}\). Therefore, we can utilize VMPS to compute SCGF.
+        </p>
+        <center>
+        <figure>
+            <img src="vmps_sis_critical_ld.jpg" alt="Rescaled Cumulant Generating Function" style="width: 30%;">
+            <figcaption><h4>The rescaled cumulant generating function</h4></figcaption>
+        </figure>
+        </center>
+        </div>
+        <div id="advantages" class="section">
+        <h1>Advantages</h1>
+        <p>
+            Since we can obtain the leading eigenstate (in MPS form), we can obtain the distributions of some physical quantities as well. This property provides some advantages in doing simulations.
+        </p>
+        </div>
+        <div id="rare-event-simulation" class="section">
+        <h2>Rare Event Simulation</h2>
+        <p>
+            Once the NESS is established, it provides a comprehensive framework for calculating the distributions of various physical quantities within the system. This includes but is not limited to, critical measurements such as the gap length, which can be derived from the statistical properties of the NESS. By understanding the NESS, we gain valuable insights into how these quantities behave and interact under non-equilibrium conditions, allowing for a deeper analysis of the system's physical characteristics.
+        </p>
+        <center>
+        <figure>
+            <img src="distribution.jpg" alt="Distribution of the Gap Length" style="width: 30%;">
+            <figcaption><h4>Distribution of the gap length of NESS.</h4></figcaption>
+        </figure>
+        </center>
+        </div>
+        <div id="conclusion" class="section">
+        <h2>Conclusion</h2>
+        <ul>
+            <li><strong>Target Eigenstate:</strong> By transforming the Hamiltonians of quantum models into their corresponding Markov generators, one can extract the target eigenstate of a lattice stochastic dynamical system. This conversion facilitates the study of steady-state properties in complex systems by bridging quantum mechanics and stochastic processes.</li>
+            <li><strong>NESS Distribution:</strong> The Variational Matrix Product States (VMPS) method delivers highly accurate distributions for the Non-Equilibrium Steady State (NESS). This technique is particularly effective for simulating rare events, allowing for precise analysis of phenomena that, while infrequent, have significant effects on the system's overall behavior.</li>
+            <li><strong>Convergence Near Criticality:</strong> The rate of convergence for numerical methods or approximations notably diminishes as the system approaches its critical point. This reduction in convergence rate can present challenges in accurately characterizing the system near criticality, where even minor deviations can lead to substantial changes in behavior.</li>
+        </ul>
+        </div>
+
+        <div id="outlooking" class="section">
+        <h2>Outlooking</h2>
+        <ul>
+            <li><strong>How can VMPS be used for two-dimensional stochastic models?</strong> The Variational Matrix Product States (VMPS) method can be extended to two-dimensional stochastic models by leveraging its ability to represent complex quantum states through tensor networks. This extension involves adapting the VMPS framework to account for the additional spatial dimensions, enabling accurate simulation and analysis of two-dimensional lattice systems.</li>
+            <li><strong>Can a time-dependent VMPS handle varying infection rates?</strong> Yes, a time-dependent VMPS can be employed to address varying infection rates by incorporating time-dependent parameters into the tensor network structure. This approach allows for the modeling of dynamic changes in infection rates over time, thereby providing a flexible framework for studying time-evolving stochastic processes.</li>
+            <li><strong>Can VMPS be applied to stochastic systems with non-trivial NESS, such as predator-prey models?</strong> Indeed, VMPS can be applied to stochastic systems with complex Non-Equilibrium Steady States (NESS), including predator-prey models. By using VMPS, one can accurately capture and analyze the intricate behaviors of such systems, where the NESS may exhibit rich and non-trivial structures due to the interplay between different species or components.</li>
+        </ul>
+        </div>
+</body>
+</html>
