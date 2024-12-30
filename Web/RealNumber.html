@@ -19,6 +19,10 @@
   background-position:
     center
 }
+#wrapper {
+      width: 1000px;
+      margin: 0 auto;
+  }
 .container {
 	margin: 0 auto; /* the auto value on the sides, coupled with the width, centers the layout */
 }
@@ -26,6 +30,7 @@
 </head>
 
 <body bgcolor=#d9dcc0>
+    <div id="wrapper">
     <section id="A">
     <table align="RIGHT" border="5" cellspacing="5">
         <tbody>
@@ -87,14 +92,16 @@
 <hr>
 </section>
 <div class="container">
-    I engaged in discussions with numerous individuals on various threads several days ago. Despite this topic being covered in many mathematics classes across different educational levels, there remains a significant disbelief among many. In fact, one of the most rigorous proofs regarding this issue relies on the fundamental definition of real numbers.
-    <br>
-    According to the definition of real numbers, they are constructed from converging sequences of rational numbers. If we accept that the difference between \(0.999...\) and \(1\) is infinitesimally small, we must also acknowledge that there are no other real numbers lying between them. Thus, the sequence converging to \(0.999...\) also converges to \(1\), and conversely, which leads us to conclude that these two values are indeed equal.
-    <br>
-    However, with the advancement of modern analysis, we now have access to broader number systems, such as hyperreal numbers. In the context of hyperreal numbers, infinitesimal values are permissible; hence, it follows that \(0.\bar{9} \neq 1\) in this framework. This concept proves to be a valuable tool in modern analysis, highlighting that sometimes the answer to a mathematical question is not unique.
-    <br>
-    This illustrates the beauty of mathematics. Although it is built upon a multitude of notations, definitions, and axioms, making it appear abstract and somewhat unnatural, it provides profound insights into our understanding of the world around us. Mathematics, in its complexity, enables us to grasp concepts that may initially seem counterintuitive, showcasing its remarkable ability to reflect the intricacies of reality.
 
+Several days ago, I participated in discussions with a variety of individuals on different threads. The topic at hand, although commonly addressed in mathematics classes at various educational levels, continues to provoke significant skepticism among many people. This enduring disbelief is fascinating, especially given that one of the most rigorous proofs concerning this issue is deeply rooted in the foundational definition of real numbers.  
+<br>
+The definition of real numbers is built upon the idea of converging sequences of rational numbers. Real numbers are essentially the limits of these sequences, and this construction is central to their mathematical framework. When we consider the difference between \(0.999...\) (repeating) and \(1\), the result is infinitesimally small. However, according to the properties of real numbers, there are no other numbers that exist between them. This implies that the sequence of rational numbers converging to \(0.999...\) must also converge to \(1\). Conversely, \(1\) can be represented by the same convergent sequence, which firmly establishes that \(0.999...\) and \(1\) are not just close, but in fact, equal within the real number system.  
+<br>
+Despite the clarity offered by this proof, the concept remains counterintuitive to many. This is where modern mathematical tools offer additional perspective. With the development of advanced areas like modern analysis, we encounter extended number systems, such as the hyperreal numbers. Hyperreal numbers expand the standard real number system by introducing infinitesimals—quantities that are smaller than any real number but not zero. Within this framework, it becomes possible to treat \(0.999...\) and \(1\) as distinct entities, with an infinitesimal difference separating them. This distinction, while not applicable to the real number system, demonstrates how mathematical answers can depend on the chosen axiomatic framework.  
+<br>
+This duality reflects the inherent beauty of mathematics. On one hand, it is a discipline deeply rooted in precision, built upon layers of notations, definitions, and axioms that may initially feel abstract or unnatural. On the other hand, mathematics offers profound insights that extend beyond intuition, enabling us to understand and model the complexities of reality. It demonstrates that even ideas that seem paradoxical or counterintuitive can reveal profound truths about the structure of the world.  
+<br>
+Ultimately, the exploration of questions like the equality of \(0.999...\) and \(1\) showcases the versatility and depth of mathematical thought. It highlights how the choice of framework influences our conclusions and underscores the power of mathematics to bridge the gap between abstract reasoning and the tangible understanding of our universe.
  <!-- end .container --></div>
  <hr style="height:0.7px;border:none;color:#333;background-color:#333;">
  <section><p></p></section>
@@ -104,5 +111,6 @@
     <img src="ips_logo-Photoroom.png" height="100" align="middle" style="padding:0px 20px 0 20px" alt="">
     </figure>
     </footer>
+</div>
 </body>
 </html>
