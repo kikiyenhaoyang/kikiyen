@@ -137,10 +137,11 @@
 
     /* 輪播 */
     .carousel{ --h: 500px; --dotSize: 10px; position: relative; max-width: 400px; margin: 24px auto; }
-    .carousel-track{ position: relative; height: var(--h); overflow: hidden; border-radius: 10px; background: #000; }
-    .slide{ position: absolute; inset: 0; display: grid; place-items: center; opacity: 0; transition: opacity .4s ease; }
+    .carousel-track{ position: relative; height: var(--h); overflow: hidden; border-radius: 10px; background: #000; overflow: hidden;}
+    .slide{ position: absolute; inset: 0; display: grid; place-items: center; opacity: 0; transition: opacity .4s ease;  margin: 0;}
     .slide.is-active{ opacity: 1; }
     .slide img{ height: 100%; width: auto; max-width: 100%; object-fit: contain; display: block; }
+    figure.slide { margin: 0; }    
     .caption{ position: absolute; left: 0; right: 0; bottom: 0; padding: 8px 12px; background: linear-gradient(to top, rgba(0,0,0,.55), rgba(0,0,0,0)); color: #fff; font-size: .95rem; }
 
     .ctrl{ position: absolute; top: 50%; transform: translateY(-50%); padding: 6px 10px; border-radius: 8px; background: rgba(0,0,0,.45); color:#fff; text-decoration: none; font-size: 22px; line-height: 1; user-select: none; transition: background .2s; }
