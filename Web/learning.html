@@ -1,246 +1,313 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Learning</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+  <meta charset="utf-8" />
+  <title>Learning</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- KaTeX (保留你原本的) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
-  <style type="text/css">
+
+  <style>
+    :root{
+      --bg:#f3f4ea;
+      --fg:#1d1f21;
+      --muted:#565b5f;
+      --primary:#0a66c2;
+      --card:#ffffff;
+      --ring:#89b4fa;
+      --maxw:1000px;
+    }
+    @media (prefers-color-scheme: dark){
+      :root{
+        --bg:#0e1116;
+        --fg:#e6e6e6;
+        --muted:#a0a4aa;
+        --card:#11151c;
+        --primary:#7ab0ff;
+        --ring:#3b82f6;
+      }
+    }
+
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
     body{
-            font-family: Arial, Helvetica, sans-serif;
-            }
-    th{font-family:normal ;}
-    i{font-family:normal ;}
-#A{
-  background-image:  url('');
-  background-repeat:  no-repeat;
-  background-attachment: fixed;
-  background-size: 110%;
-  background-position:
-    center
+      font-family: Arial, Helvetica, sans-serif;
+      color:var(--fg);
+      background:var(--bg);
+      line-height:1.6;
+    }
+
+    /* 共用容器 */
+    .wrapper{max-width:var(--maxw); margin:0 auto; padding:0 16px;}
+
+    /* 跳至主內容（可近用） */
+    .skip-link{
+      position: absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden;
+    }
+    .skip-link:focus{
+      position: fixed; left:16px; top:16px; width:auto; height:auto; background:#000; color:#fff;
+      padding:8px 12px; border-radius:6px; z-index:1000;
+    }
+
+    /* 頁首 */
+    header{
+      position:sticky; top:0; z-index:50; background:var(--bgcc, rgba(255,255,255,0.6));
+      backdrop-filter:saturate(180%) blur(12px);
+      border-bottom:1px solid rgba(0,0,0,0.08);
+    }
+    .brand{
+      display:flex; align-items:center; gap:12px; padding:14px 0;
+    }
+    .brand img{width:64px; height:auto}
+    .brand-title{margin:0; font-size:1.8rem; line-height:1}
+    .brand-sub{margin:0; font-style:italic; color:var(--muted); margin-top:2px}
+
+    /* 右上 Home 按鈕 */
+    .home-link{
+      margin-left:auto; display:inline-flex; align-items:center; gap:8px;
+      padding:8px 12px; border:1px solid rgba(0,0,0,0.15); border-radius:10px; text-decoration:none; color:inherit;
+    }
+    .home-link img{width:28px; height:auto}
+    .home-link:focus{outline:3px solid var(--ring); outline-offset:2px}
+
+    /* 導覽列 */
+    nav.icon-nav{
+      display:flex; flex-wrap:wrap; justify-content:center; gap:28px; padding:10px 0 16px;
+    }
+    .nav-item{
+      text-decoration:none; color:inherit; text-align:center; padding:10px 12px; border-radius:10px;
+      transition: transform .2s, box-shadow .2s, background-color .2s, color .2s;
+      outline-offset:2px;
+    }
+    .nav-item:focus{outline:3px solid var(--ring)}
+    .nav-item:hover{transform:translateY(-3px); box-shadow:0 6px 14px rgba(0,0,0,.15); color:var(--primary)}
+    .nav-item.active{background:#000; color:#fff}
+    .nav-icon{width:50px; height:auto; display:block; margin:0 auto 6px}
+
+    /* 主內容 */
+    main{padding:24px 0}
+    .page-title{text-align:center; font-size:2rem; margin:24px 0 12px; font-weight:bold}
+    .intro-text{max-width:760px; margin:0 auto 28px; text-align:center; color:var(--muted)}
+
+    /* 書籍卡片 */
+   .book-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); /* 自動排版 */
+  gap: 20px;
+  margin: 20px;
 }
-#wrapper {
-      width: 1000px;
-      margin: 0 auto;
-  }
-.container {
-	margin: 0 auto; /* the auto value on the sides, coupled with the width, centers the layout */
+
+.book-solution {
+  text-align: center;
 }
-</style>
+
+.solution-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  padding: 15px;
+  border-radius: 10px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.solution-link:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+}
+
+.book-cover {
+  width: auto;
+  height: 250px;
+  margin: 0 auto 10px;
+  display: block;
+}
+
+.solution-title {
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+.page-title {
+  text-align: center;
+  font-size: 2rem;
+  margin: 40px 0 30px;
+  font-weight: bold;
+}
+.page-title {
+  text-align: center;
+  font-size: 2rem;
+  margin: 40px 0 30px;
+  font-weight: bold;
+}
+
+/* 窄版卡片：每張約 220–260px */
+.book-grid{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 240px)); /* 這行決定卡片變窄 */
+  gap: 16px;
+  justify-content: center;   /* 置中整個網格 */
+  margin: 20px auto;
+  max-width: 1100px;         /* 可依需要調整總寬 */
+}
+
+/* 卡片本體（縮小內距、陰影更輕） */
+.text-card{
+  background:#f8f9fa;
+  border:1px solid #ddd;
+  border-radius:10px;
+  text-align:center;
+  padding:14px;              /* 從 20px 改小一點 */
+  transition: transform .2s, box-shadow .2s;
+}
+.text-card:hover{
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0,0,0,.12);
+}
+
+/* 文字縮些，標題最多兩行，避免太長撐寬 */
+.book-title{
+    color:#111;
+  font-size:1.05rem;         /* 原本 1.2rem → 縮小 */
+  margin:0 0 8px;
+  font-weight:bold;
+  line-height:1.3;
+  display:-webkit-box;
+  -webkit-line-clamp:3;      /* 最多 2 行 */
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+}
+.book-author{
+  font-size:.95rem;
+  color:#555;
+  margin:0 0 4px;
+}
+.book-detail{
+  font-size:.85rem;
+  color:#777;
+  margin:0;
+}
+
+
+    /* 角落標籤 (Coming soon) */
+    .ribbon{
+      position:absolute; top:12px; right:-40px; transform:rotate(45deg);
+      background:#111; color:#fff; padding:6px 50px; font-size:.8rem; letter-spacing:.5px;
+      box-shadow:0 6px 12px rgba(0,0,0,.25);
+    }
+
+    /* 頁尾 */
+    footer{padding:28px 0 36px; border-top:1px solid rgba(0,0,0,0.1); margin-top:36px}
+    .logos{display:flex; justify-content:center; align-items:center; gap:28px}
+    .logos img{height:80px; width:auto}
+
+    /* 響應式微調 */
+    @media (max-width:640px){
+      .brand img{width:56px}
+      .brand-title{font-size:1.4rem}
+      .home-link{display:none} /* 小螢幕可隱藏右上 Home 按鈕（可視需要保留） */
+      .nav-icon{width:44px}
+    }
+  </style>
 </head>
-<body bgcolor=#d9dcc0>
-    <div id="wrapper">
-    <section id="A">
-    <table align="RIGHT" border="5" cellspacing="5">
-        <tbody>
-            <tr>
-                <th>
-                    <a href="index.html">
-                        <img width="100" align="top" src="yen.png">
-                    </a>
-                    <br>
-                    HYY Home
-                </th>
-            </tr>
-        </tbody>
-    </table>
-    
-    <h1>
-        <img width="190" align="top" src="yen.png">
-        <br>
-        <i>Hao-Yang Yen</i>
-    </h1>
-    
-    <hr>
-    <center>
-        <table border="10" cellspacing="5">
-            <tbody>
-                <tr>
-                    <th>
-                        <a href="experience.html">
-                            <img width="50" align="top" src="exp.png">
-                        </a>
-                        <br>
-                        Experience
-                    </th>
-                    <th style="color: white;background-color: black;">
-                        <a href="learning.html">
-                        <img width="50" align="top" src="flipped_l.png">
-                        </a>
-                        <br>
-                        Learning
-                    </th>
-                    <th>
-                        <a href="research.html">
-                        <img width="50" align="top" src="r.png">
-                        </a>
-                        <br>
-                        Research
-                    </th>
-                    <th>
-                        <a href="Explore.html">
-                            <img width="50" align="top" src="e.png">
-                            </a>
-                        <br>
-                        Explore
-                    </th>
-                </tr>
-            </tbody>
-        </table>
-    </center>
-<hr>
-</section>
-<div class="container">
-<h1>
-    Notes
-</h1>
 
-<ul>
-        <a href="Quantum_Mechanics (1).pdf">
-            <h3>
-                <li>
-                    </i>Quantum Mechanics</li> 
-            </h3>
-        </a>
-        <a href="AGnQM.pdf">
-            <h3>
-                <li>Projective Geometry Description
-                    and Applications for Quantum
-                    Entanglement
-                    </i></li> 
-            </h3>
-        </a>
-        <a href="AG_Slide.pdf">
-            <h3>
-                (Slide Version)
-            </h3>
-        </a>
-        <a href="ATnPI.pdf">
-            <h3>
-                <li>Algebraic Topology Aspects of Feynman Path Integral
-                    </i></li> 
-            </h3>
-        </a>
-        <a href="">
-            <h3>
-                <li>Topology and Geometry in Statistical Mechanics</i></li> 
-            </h3>
-        </a>
-        <a href="">
-            <h3>
-                <li>Sympcletic Geometry and Classical Mechanics</i></li> 
-            </h3>
-        </a>
-        <a href="GA.html">
-            <h3>
-                <li>The Genetic Algorithms</i></li> 
-            </h3>
-        </a>
-        
-</ul>
+<body>
+  <a href="#main" class="skip-link">Skip to main content</a>
 
-<h1>
-    Preliminary Study
-</h1>
-Here are some small-scale research projects I've completed. During these projects, I observed some intriguing phenomena that I think warrant further exploration in the future.
-<ul>
-    <details open>
-        <summary style="font-size: larger;"> 
-    <a href="Special Case of 5-Body Central Configuration.pdf">
-        Special Case of 5-Body Central Configuration
-    </a>
-        </summary>
-        <br>
-        This study examines central configurations within the framework of the 5-body problem,
-    with a specific focus on systems where four of the masses lie on a common circle. This
-    investigation does not assume that the four co-circular masses form a central configuration
-    on their own. I explore potential placements of a fifth body that would transform the
-    entire 5-body system into a central configuration. This approach broadens the scope
-    of understanding by considering configurations that deviate from standard symmetry or
-    balance.
-<br>
-    Furthermore, the study delves into specific geometric arrangements of the co-circular
-    four bodies, identifying cases where their particular shapes or distributions inherently
-    prevent the inclusion of a fifth body that could satisfy the central configuration conditions. By combining analytical methods with geometric considerations, this work aims to
-    provide deeper insights into the constraints and possibilities of central configurations in
-    multi-body gravitational systems. These findings contribute to the broader understanding of celestial mechanics and the intricate interplay of forces in systems with nontrivial
-    geometric constraints.
-</details>
-    <br>
-    <details open>
-        <summary style="font-size: larger;"> 
-    <a href="DS.html">
-        Leveraging Neural Network on Detect Phases and Phase Transitions in the Ising Model
-    </a>
-        </summary>
-        <br>
-        The classical Ising model is one of the simplest yet most important models in statistical mechanics, renowned for its phase transition
-         phenomena. In dimensions \(d\geq 2\), the Ising model displays two distinct phases: ordered and disordered, with a 
-         temperature-dependent phase transition described by an order parameter. Exact solutions for the Ising model are challenging, making numerical methods crucial for studying it.
-
-        Machine learning has become a valuable tool in many-body quantum mechanics and theoretical condensed matter physics. My objective is to apply neural networks to tackle the complexities of this model. In this project, I use a Monte Carlo method, to sample the system’s configurations, generating a dataset across different phases of the Ising model. This dataset will then train a neural network to identify and characterize phase properties, enhancing our understanding of phase transitions in the Ising model.
-    </details>
-    <br>
-    <details open>
-        <summary style="font-size: larger;"> 
-    <a href="ED.html">
-        Numerical Simulation of Simplify Stellar Wind Model
-    </a>
-        </summary>
-        <br>
-        The magnetohydrodynamics (MHD) equation model is considered one of the most straightforward frameworks for describing
-         the behavior of plasma, combining the principles of magnetism and fluid dynamics. Although this model offers a foundational
-         understanding, the complex nature of plasma introduces significant challenges that extend beyond the capabilities of the 
-         MHD equations alone. To address these challenges and gain deeper insights into plasma behavior, we construct a 
-         detailed stellar wind model. By examining this model, we can observe and analyze a range of phenomena related to plasma dynamics. 
-         This approach allows us to investigate and better understand some of the more intriguing and complex behaviors exhibited by plasma,
-          offering valuable perspectives on its properties and interactions in various contexts.
-    </details>
-    <br>
-    <details open>
-        <summary style="font-size: larger;"> 
-        <a href="ND.html">
-               Extended SIR Models with Monte Carlo Simulations
-        </a>
-        </summary>
-        <br>
-         To enhance the completeness of the SIS model, additional variables can be included,
-         such as in the SEIR model, which introduces an "exposed" variable (E). However, adding more variables increases the model's complexity,
-          making the differential equations more challenging to solve. To manage this complexity, we use the Monte Carlo method to simulate 
-          the equations. This approach simplifies the simulation of multiple differential equations and provides clear results.
-    </details>
-    <br>
-    <details open>
-        <summary style="font-size: larger;"> 
-        <a href="SM.html">
-               Neural Network and the Renormalization Group
-            </a>
-        </summary>
-        <br>
-        The renormalization group theory is an influential tool used to study phase transitions,
-         providing deep insights into how systems behave at different scales. On the other hand, 
-         neural networks represent a sophisticated theoretical framework within artificial intelligence, 
-         designed to model and understand complex patterns and relationships in data. 
-         Recent developments have highlighted an intriguing connection between these two areas:
-          neural networks can be interpreted as a form of renormalization process.
-        This perspective suggests that the mechanisms underlying neural networks bear a resemblance to the principles of renormalization, 
-        where the process of simplifying and scaling data in neural networks parallels the renormalization techniques 
-        used in phase transition analysis. To explore this connection further, we analyze and discuss various numerical
-         results that illustrate the similarities between neural networks and renormalization processes.
-          This examination sheds light on how concepts from one domain can enrich our understanding of the other.
-    </details>
-    <br>
-    
-</ul>
- <!-- end .container --></div>
- <hr style="height:0.7px;border:none;color:#333;background-color:#333;">
- <section><p></p></section>
- <footer>
-    <figure>
-    <p style="text-align:center"><img src="NTHU-Photoroom.png" height="100 px" align="middle" style="padding:0px 20px 0 20px" alt="">     
-    <img src="ips_logo-Photoroom.png" height="100" align="middle" style="padding:0px 20px 0 20px" alt="">
-    </figure>
-    </footer>
+  <!-- 頁首 -->
+  <header>
+    <div class="wrapper" style="display:flex; align-items:center; gap:12px;">
+      <div class="brand">
+       
+        <div>
+          <img src="yen.png" alt="HYY Logo">
+          <br>
+          <h1 class="brand-title">Hao-Yang Yen</h1>
+          <p class="brand-sub">HYY Home</p>
+        </div>
+      </div>
+      <a class="home-link" href="index.html" aria-label="Go to HYY Home">
+        <img src="yen.png" alt=""> Home
+      </a>
     </div>
+
+    <!-- 導覽列 -->
+    <nav class="icon-nav wrapper" aria-label="Primary">
+      <a href="experience.html" class="nav-item">
+        <img src="exp.png" alt="" class="nav-icon"><span>Experience</span>
+      </a>
+      <a href="learning.html" class="nav-item active">
+        <img src="flipped_l.png" alt="" class="nav-icon"><span>Learning</span>
+      </a>
+      <a href="research.html" class="nav-item">
+        <img src="r.png" alt="" class="nav-icon"><span>Research</span>
+      </a>
+      <a href="Explore.html" class="nav-item" aria-current="page">
+        <img src="e.png" alt="" class="nav-icon"><span>Explore</span>
+      </a>
+    </nav>
+  </header>
+
+  <!-- 主內容 -->
+   </section>
+<div class="container">
+<h2 class="page-title">
+  Exercise Solutions for Advanced Physics Textbooks
+</h2>
+ <p class="intro-text">
+      These are some important Textbooks related to my research and learning journey.
+      I am now keep making solutions to exercises from these books, which I hope will be helpful for students and researchers alike.
+    </p>
+<section class="book-grid">
+
+  <article class="book-solution text-card">
+    <a href="HD_solution.html" class="solution-link">
+      <h2 class="book-title"> Introduction to Hamiltonian Dynamical Systems and 
+        the N-Body Problem</h2>
+      <p class="book-author">K.R. Meyer</p>
+      <p class="book-detail">Problem Solutions (2nd Ed.)</p>
+    </a>
+  </article>
+
+  <article class="book-solution text-card">
+    <a href="Jackson_solution.html" class="solution-link">
+      <h2 class="book-title">Classical Electrodynamics</h2>
+      <p class="book-author">J.D. Jackson</p>
+      <p class="book-detail">Problem Solutions (3rd Ed.)</p>
+    </a>
+  </article>
+
+  <article class="book-solution text-card">
+    <a href="Goldstein_solution.html" class="solution-link">
+      <h2 class="book-title">Classical Mechanics</h2>
+      <p class="book-author">H. Goldstein</p>
+      <p class="book-detail">Problem Solutions (3rd Ed.)</p>
+    </a>
+  </article>
+
+  <article class="book-solution text-card">
+    <a href="Cardy_solution.html" class="solution-link">
+      <h2 class="book-title">Scaling and Renormalization in Statistical Physics</h2>
+      <p class="book-author">John Cardy</p>
+      <p class="book-detail">Problem Solutions</p>
+    </a>
+  </article>
+
+</section>
+
+
+  </main>
+
+  <!-- 頁尾 -->
+  <footer>
+    <div class="wrapper">
+      <div class="logos">
+        <img src="NTHU-Photoroom.png" alt="NTHU Logo">
+        <img src="ips_logo-Photoroom.png" alt="IPS Logo">
+      </div>
+    </div>
+  </footer>
 </body>
 </html>

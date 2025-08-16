@@ -1,548 +1,522 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Research</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+  <meta charset="utf-8" />
+  <title>Research</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- KaTeX (保留你原本的) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
-  <style type="text/css">
-     body{ 
-            font-family: Arial, Helvetica, sans-serif;
-            }
-    th{font-family:normal ;}
-    i{font-family:normal ;}
-#A{
-  background-image:  url('');
-  background-repeat:  no-repeat;
-  background-attachment: fixed;
-  background-size: 110%;
-  background-position:
-    center
-}
-#wrapper {
-      width: 1000px;
-      margin: 0 auto;
+
+  <style>
+    :root{
+      --bg:#f3f4ea;
+      --fg:#1d1f21;
+      --muted:#565b5f;
+      --primary:#0a66c2;
+      --card:#ffffff;
+      --ring:#89b4fa;
+      --maxw:1000px;
+    }
+     /* 頁尾 */
+    footer{padding:28px 0 36px; border-top:1px solid rgba(0,0,0,0.1); margin-top:36px}
+    .logos{display:flex; justify-content:center; align-items:center; gap:28px}
+    .logos img{height:80px; width:auto}
+
+    @media (prefers-color-scheme: dark){
+      :root{
+        --bg:#0e1116;
+        --fg:#e6e6e6;
+        --muted:#a0a4aa;
+        --card:#11151c;
+        --primary:#7ab0ff;
+        --ring:#3b82f6;
+      }
+    }
+
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{
+      font-family: Arial, Helvetica, sans-serif;
+      color:var(--fg);
+      background:var(--bg);
+      line-height:1.6;
+    }
+
+
+    /* 共用容器 */
+    .wrapper{max-width:var(--maxw); margin:0 auto; padding:0 16px;}
+    /* 跳至主內容（可近用） */
+    .skip-link{
+      position: absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden;
+    }
+    .skip-link:focus{
+      position: fixed; left:16px; top:16px; width:auto; height:auto; background:#000; color:#fff;
+      padding:8px 12px; border-radius:6px; z-index:1000;
+    }
+
+    /* 頁首 */
+    header{
+      position:sticky; top:0; z-index:50; background:var(--bgcc, rgba(255,255,255,0.6));
+      backdrop-filter:saturate(180%) blur(12px);
+      border-bottom:1px solid rgba(0,0,0,0.08);
+    }
+    .brand{
+      display:flex; align-items:center; gap:12px; padding:14px 0;
+    }
+    .brand img{width:64px; height:auto}
+    .brand-title{margin:0; font-size:1.8rem; line-height:1}
+    .brand-sub{margin:0; font-style:italic; color:var(--muted); margin-top:2px}
+
+    /* 右上 Home 按鈕 */
+    .home-link{
+      margin-left:auto; display:inline-flex; align-items:center; gap:8px;
+      padding:8px 12px; border:1px solid rgba(0,0,0,0.15); border-radius:10px; text-decoration:none; color:inherit;
+    }
+    .home-link img{width:28px; height:auto}
+    .home-link:focus{outline:3px solid var(--ring); outline-offset:2px}
+
+    /* 導覽列 */
+    nav.icon-nav{
+      display:flex; flex-wrap:wrap; justify-content:center; gap:28px; padding:10px 0 16px;
+    }
+    .nav-item{
+      text-decoration:none; color:inherit; text-align:center; padding:10px 12px; border-radius:10px;
+      transition: transform .2s, box-shadow .2s, background-color .2s, color .2s;
+      outline-offset:2px;
+    }
+    .nav-item:focus{outline:3px solid var(--ring)}
+    .nav-item:hover{transform:translateY(-3px); box-shadow:0 6px 14px rgba(0,0,0,.15); color:var(--primary)}
+    .nav-item.active{background:#000; color:#fff}
+    .nav-icon{width:50px; height:auto; display:block; margin:0 auto 6px}
+
+    /* 主內容 */
+    main{padding:24px 0}
+    .page-title{text-align:center; font-size:2rem; margin:24px 0 12px; font-weight:bold}
+    .intro-text{max-width:760px; margin:0 auto 28px; text-align:center; color:var(--muted)}
+
+    /* 書籍卡片 */
+    .book-grid{
+      display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap:24px; max-width:900px; margin:0 auto;
+    }
+    .book-card{
+      background:var(--card); border:1px solid rgba(0,0,0,0.12); border-radius:12px;
+      padding:12px; text-align:center; position:relative; overflow:hidden;
+      transition: transform .2s, box-shadow .2s, border-color .2s;
+    }
+    .book-card:hover{transform:translateY(-5px); box-shadow:0 12px 24px rgba(0,0,0,.18); border-color:rgba(0,0,0,0.18)}
+    .book-link{display:block; text-decoration:none; color:inherit; outline-offset:3px}
+    .book-link:focus{outline:3px solid var(--ring)}
+    .book-cover{width:250px; max-width:100%; height:auto; display:block; margin:6px auto 12px; border-radius:8px}
+    .solution-title{font-size:1rem; line-height:1.4; margin:0 8px 8px}
+
+    /* 角落標籤 (Coming soon) */
+    .ribbon{
+      position:absolute; top:12px; right:-40px; transform:rotate(45deg);
+      background:#111; color:#fff; padding:6px 50px; font-size:.8rem; letter-spacing:.5px;
+      box-shadow:0 6px 12px rgba(0,0,0,.25);
+    }
+     .carousel {
+    --h: 400px;           /* 高度可調 */
+    --dotSize: 10px;
+    position: relative;
+    max-width: 400px;
+    margin: 24px auto;
   }
-  * {box-sizing:border-box}
+  .carousel-track {
+    position: relative;
+    height: var(--h);
+    overflow: hidden;
+    border-radius: 10px;
+    background: #000;
+  }
+  .slide {
+    position: absolute; inset: 0;
+    display: grid; place-items: center;
+    opacity: 0; transition: opacity .4s ease;
+  }
+  .slide.is-active { opacity: 1; }
+  .slide img {
+    height: 100%; width: auto; max-width: 100%;
+    object-fit: contain; display: block;
+  }
+  .caption {
+    position: absolute; left: 0; right: 0; bottom: 0;
+    padding: 8px 12px;
+    background: linear-gradient(to top, rgba(0,0,0,.55), rgba(0,0,0,0));
+    color: #fff; font-size: .95rem;
+  }
 
-/* Slideshow container */
-.slideshow-container {
-  max-width: 1000px;
-  position: relative;
-  margin: auto;
-}
+  /* 控制按鈕 */
+  .ctrl {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    padding: 6px 10px; border-radius: 8px;
+    background: rgba(0,0,0,.45); color:#fff; text-decoration: none;
+    font-size: 22px; line-height: 1; user-select: none;
+    transition: background .2s;
+  }
+  .ctrl:hover, .ctrl:focus { background: rgba(0,0,0,.7); outline: 3px solid #66a3ff; outline-offset: 2px; }
+  .prev { left: 8px; }
+  .next { right: 8px; }
 
-/* Hide the images by default */
-.mySlides {
-  display: none;
-}
+  /* 點點 */
+  .dots {
+    display: flex; gap: 8px; justify-content: center; align-items: center;
+    margin-top: 10px; flex-wrap: wrap;
+  }
+  .dot {
+    width: var(--dotSize); height: var(--dotSize);
+    border-radius: 50%; background: #cfd3d8; border: 0;
+    cursor: pointer;
+  }
+  .dot:focus { outline: 3px solid #66a3ff; outline-offset: 2px; }
+  .dot.is-active { background: #333; }
 
-/* Next & previous buttons */
-.prev, .next {
-  cursor: pointer;
-  position: absolute;
-  top: 40%;
-  width: 30px;
-  margin-top: 0px;
-  padding: 16px;
-  color: rgb(0, 0, 0);
-  font-weight: bold;
-  font-size: 30px;
-  transition: 0.1s ease;
-  border-radius: 0 3px 3px 0;
-  user-select: none;
-}
-
-/* Position the "next button" to the right */
-.next {
-  right: 23%;
-  border-radius: 1px 0 0 1px;
-}
-
-.prev {
-  left: 20%;
-  border-radius: 1px 0 0 1px;
-}
-
-/* On hover, add a black background color with a little bit see-through */
-.prev:hover, .next:hover {
-  background-color: rgba(0,0,0,0.8);
-}
-
-/* Caption text */
-.text {
-  color:  #000000;
-  font-size: 15px;
-  padding: 30px 30px;
-  position: absolute;
-  bottom: -50px;
-  width: 100%;
-  text-align: center;
-}
-
-/* Number text (1/3 etc) */
-.numbertext {
-  color: #f2f2f2;
-  font-size: 12px;
-  padding: 8px 12px;
-  position: absolute;
-  top: 0;
+  .profile {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  margin: 20px 0;
 }
 
-/* The dots/bullets/indicators */
-.dot {
-  cursor: pointer;
-  height: 15px;
-  width: 15px;
-  margin: 0 2px;
-  background-color: #bbb;
-  border-radius: 50%;
-  display: inline-block;
-  transition: background-color 0.1s ease;
-}
-.dot2 {
-  cursor: pointer;
-  height: 15px;
-  width: 15px;
-  margin: 0 2px;
-  background-color: #bbb;
-  border-radius: 50%;
-  display: inline-block;
-  transition: background-color 0.1s ease;
+.profile-left, .profile-right {
+  flex: 1;
+  min-width: 250px;
 }
 
-.active, .dot:hover {
-  background-color: #717171;
+.profile-left h3 {
+  margin-top: 0;
 }
 
-/* Fading animation */
-.fade {
-  animation-name: fade;
-  animation-duration: 0.5s;
+.social-links {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
-@keyframes fade {
-  from {opacity: .4}
-  to {opacity: 1}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 6px;
+  background: #f0f0f0;
+  text-decoration: none;
+  color: #222;
+  font-weight: 500;
+  transition: transform 0.2s, background 0.2s;
 }
-/* On smaller screens, decrease text size */
-@media only screen and (max-width: 300px) {
-  .prev, .next,.text {font-size: 11px}
+
+.btn i {
+  font-size: 1.1rem;
 }
-.container {
-	margin: 0 auto; /* the auto value on the sides, coupled with the width, centers the layout */
+
+.btn:hover {
+  transform: translateY(-3px);
+  background: #e0e0e0;
 }
-</style>
+
+/* 特別品牌色 */
+.youtube {
+  background: #ff0000;
+  color: white;
+}
+.youtube:hover {
+  background: #cc0000;
+}
+
+.github {
+  background: #333;
+  color: white;
+}
+.github:hover {
+  background: #111;
+}
+
+/* 版面：左文右圖 */
+.grid-2{
+  display:grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 28px;
+  align-items: start;
+}
+
+/* 段落與重點 */
+.lead{ font-size: 1.05rem; color: #444; }
+.key-bullets{ margin: 14px 0 0; padding-left: 18px; }
+.key-bullets li{ margin-bottom: 6px; }
+
+/* 輪播縮小版（覆寫你原本 carousel 的尺寸） */
+.carousel.compact { --h: 400px; }         /* 想再小就改 180/200 */
+.carousel.compact .caption{ font-size: 1rem; }
+
+/* 研究卡片 */
+.card-grid{
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+  color: #111;
+}
+.research-card{
+  background: #fff;
+  border: 1px solid rgba(0,0,0,.1);
+  border-radius: 12px;
+  padding: 16px 16px 14px;
+  transition: transform .2s, box-shadow .2s, border-color .2s;
+}
+.research-card:hover{
+  transform: translateY(-4px);
+  border-color: rgba(0,0,0,.18);
+  box-shadow: 0 10px 20px rgba(0,0,0,.12);
+}
+.kicker{
+  font-size: .8rem; let
+  /* 手機高度微調 */
+  @media (max-width: 640px) {
+    .carousel { --h: 220px; }
+    .caption { font-size: .85rem; }
+  }
+
+  /* 使用者偏好減少動畫 */
+  @media (prefers-reduced-motion: reduce) {
+    .slide { transition: none; }
+  }
+  </style>
 </head>
 
-<body bgcolor=#d9dcc0>
-    <div id="wrapper">
-    <section id="A">
-    <table align="RIGHT" border="5" cellspacing="5">
-        <tbody>
-            <tr>
-                <th>
-                    <a href="index.html">
-                        <img width="100" align="top" src="yen.png">
-                    </a>
-                    <br>
-                    HYY Home
-                </th>
-            </tr>
-        </tbody>
-    </table>
-    
-    <h1> 
-        <img width="190" align="top" src="yen.png">
-        <br>
-        <i>  Hao-Yang Yen</i>
+<body>
+  <a href="#main" class="skip-link">Skip to main content</a>
 
-    </h1>
-    <hr>
-    <center>
-        <table border="10" cellspacing="5">
-            <tbody>
-                <tr>
-                    <th>
-                        <a href="experience.html">
-                            <img width="50" align="top" src="exp.png">
-                        </a>
-                        <br>
-                        Experience
-                    </th>
-                    <th>
-                        <a href="learning.html">
-                        <img width="50" align="top" src="l.png">
-                        </a>
-                        <br>
-                        Learning
-                    </th>
-                    <th style="color:white;background-color: black;">
-                        <a href="research.html">
-                        <img width="50" align="top" src="flipped_r.png">
-                        </a>
-                        <br>
-                        Research
-                    </th>
-                    <th>
-                        <a href="Explore.html">
-                            <img width="50" align="top" src="e.png">
-                            </a>
-                        <br>
-                        Explore
-                    </th>
-                </tr>
-            </tbody>
-        </table>
-    </center>
-<hr>
+  <!-- 頁首 -->
+  <header>
+    <div class="wrapper" style="display:flex; align-items:center; gap:12px;">
+      <div class="brand">
+       
+        <div>
+          <img src="yen.png" alt="HYY Logo">
+          <br>
+          <h1 class="brand-title">Hao-Yang Yen</h1>
+          <p class="brand-sub">HYY Home</p>
+        </div>
+      </div>
+      <a class="home-link" href="index.html" aria-label="Go to HYY Home">
+        <img src="yen.png" alt=""> Home
+      </a>
+    </div>
+
+    <!-- 導覽列 -->
+    <nav class="icon-nav wrapper" aria-label="Primary">
+      <a href="experience.html" class="nav-item">
+        <img src="exp.png" alt="" class="nav-icon"><span>Experience</span>
+      </a>
+      <a href="learning.html" class="nav-item">
+        <img src="l.png" alt="" class="nav-icon"><span>Learning</span>
+      </a>
+      <a href="research.html" class="nav-item active">
+        <img src="flipped_e.png" alt="" class="nav-icon"><span>Research</span>
+      </a>
+      <a href="Explore.html" class="nav-item">
+        <img src="e.png" alt="" class="nav-icon"><span>Explore</span>
+      </a>
+    </nav>
+  </header>
+
+  <!-- 主內容 -->
+<main id="main" class="wrapper">
+<section class="section research-intro">
+  <div class="grid-2">
+    <!-- 左：文字 -->
+    <div>
+      <h2 class="page-title">Research Interests</h2>
+      <p class="lead">
+        My research spans statistical physics, celestial mechanics, and dynamical systems. I study the
+        statistical properties of complex and stochastic dynamical systems (e.g., epidemic and ecological models),
+        and N-body problems in celestial mechanics—stability of planetary systems, symmetry breaking,
+        and phase-transition-like phenomena. I’m also interested in connections between statistical physics
+        and computer/data science.
+      </p>
+
+      <ul class="key-bullets">
+        <li><strong>Stochastic dynamics:</strong> spectra, mixing, universality, rare events</li>
+        <li><strong>Celestial mechanics:</strong> N-body stability, central configurations, symmetry</li>
+        <li><strong>Bridges:</strong> statistical physics × algorithms / data science</li>
+      </ul>
+    </div>
+
+    <!-- 右：輪播（沿用你之前的 carousel 結構） -->
+    <div>
+      <section class="carousel compact" data-carousel="research" aria-roledescription="carousel" aria-label="Research visuals">
+        <div class="carousel-track" role="group">
+          <figure class="slide is-active">
+            <img src="five_gon.gif" alt="Central configuration on a circumscribed circle" loading="lazy">
+            <figcaption class="caption">A central configuration whose center of mass lies at the circumcenter.</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="Lorentz_attractor.gif" alt="Lorenz attractor" loading="lazy">
+            <figcaption class="caption">Lorenz attractor — a classic minimal chaotic climate model.</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="cat.gif" alt="Arnold's cat map" loading="lazy">
+            <figcaption class="caption">Arnold’s cat map: ergodicity, mixing, chaos—at a glance.</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="PATTERN.gif" alt="Reaction–diffusion pattern formation" loading="lazy">
+            <figcaption class="caption">Self-organized pattern formation in driven–dissipative media.</figcaption>
+          </figure>
+
+          <a class="ctrl prev" href="#" aria-label="Previous slide" data-action="prev">&#10094;</a>
+          <a class="ctrl next" href="#" aria-label="Next slide" data-action="next">&#10095;</a>
+        </div>
+
+        <!-- 點點：依 4 張 -->
+        <div class="dots" role="tablist" aria-label="Slide dots">
+          <button class="dot is-active" role="tab" aria-selected="true" data-index="0"></button>
+          <button class="dot" role="tab" aria-selected="false" data-index="1"></button>
+          <button class="dot" role="tab" aria-selected="false" data-index="2"></button>
+          <button class="dot" role="tab" aria-selected="false" data-index="3"></button>
+        </div>
+      </section>
+    </div>
+  </div>
 </section>
-<div class="container">
 
-<h1>
-   Research Interests
-</h1>
-My current research interests lie in the interdisciplinary applications of statistical mechanics, nonlinear phenomena,
- and dynamical systems, which are novel and emerging fields with potential applications in theoretical physics.
-  I am also interested in the connections between statistical mechanics and other subjects, such as computer science and data science,
-   traditionally considered unrelated to physics.
-   <!-- Slideshow container -->
-    <center>
-<br>
-<br>
-<!-- Slideshow container -->
-<div class="slideshow-container">
 
-    <!-- Full-width images with number and caption text -->
-    <div class="mySlides fade">
-      <div class="numbertext"></div>
-      <img height="300" src="five_gon.gif">
-      <div class="text">The unique central configuration with their center of mass at the center of the circumscribed circle.</div>
-    </div>
-  
-    <div class="mySlides fade">
-        <div class="numbertext"></div>
-        <img height="300" src="Lorentz_attractor.gif">
-        <div class="text">Lorentz attractor, the simplest chaotic climate model.</div>
-    </div>
-  
-    <div class="mySlides fade">
-        <div class="numbertext"></div>
-        <img height="300" src="cat.gif">
-        <div class="text">Cat map, an example of eigodicity, mixing, and chaos.</div>
-    </div>
+<section class="section">
+  <h2 class="page-title">Current Research Areas</h2>
 
-    <!-- Next and previous buttons -->
-    <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
-    <a class="next" onclick="plusSlides(1)">&#10095;</a>
-</div>
-<br>
-<br>
-<!-- The dots/circles -->
-<div style="text-align:center">
-    <span class="dot" onclick="currentSlide(1)"></span>
-    <span class="dot" onclick="currentSlide(2)"></span>
-    <span class="dot" onclick="currentSlide(3)"></span>
-</center>
+  <div class="card-grid">
+    <!-- 卡片 1：Tensor networks for stochastic dynamics -->
+    <article class="research-card">
+      <div class="kicker">Stochastic Dynamics</div>
+      <h3 class="card-title">Tensor Networks for Classical Stochastic Systems</h3>
+      <p>
+        We investigate why tensor networks—originally for quantum many-body systems—can model classical 
+        stochastic dynamics. By clarifying the underlying principles beyond 1D cases, we connect quantum and 
+        classical formalisms through operator/spectral viewpoints.
+      </p>
+      <ul class="tags">
+        <li class="pill">Tensor networks</li>
+        <li class="pill">Rare events</li>
+        <li class="pill">Stochastic processes</li>
+        <li class="pill">Many-body</li>
+      </ul>
+    </article>
 
-<h1>
-    Ongoing Research
- </h1>
+    <!-- 卡片 2：Spectra & phase transitions -->
+    <article class="research-card">
+      <div class="kicker">Spectral Theory</div>
+      <h3 class="card-title">Spectra, Phase Transitions & Universality</h3>
+      <p>
+        Stochastic generators (classical analogues of quantum Hamiltonians) expose deep links between spectra and 
+        macroscopic behavior. I study how spectral gaps, eigenvalue distributions, and dynamical phase transitions
+        relate to universality classes in nonequilibrium systems.
+      </p>
+      <ul class="tags">
+        <li class="pill">Generators</li>
+        <li class="pill">Spectral gap</li>
+        <li class="pill">Spectral topology</li>
+        <li class="pill">Phase transition and universality</li>
+      </ul>
+    </article>
 
-<ul>
-    <details open>
-        <summary style="font-size: larger;"> 
-            <a href="TN.html">Tensor Networks in Stochastic Dynamics (PI: Prof. Hong-Yan Shih and Yi-Ping Huang, Academia Sinica, NTHU)</a>
-        </summary>
-    <br>
-    Tensor networks provide a robust theoretical framework for investigating quantum many-body systems. Recently, there
-    has been a growing focus on applying tensor networks to study classical stochastic dynamics. However, the underlying
-    physical principles of this application remain unclear and have primarily been explored in one-dimensional systems. Our
-    objective is to elucidate the fundamental principles governing the use of tensor networks to analyze stochastic processes
-    in classical dynamical systems. This research aims to shed light on the connections between quantum many-body
-    systems and classical dynamical systems, offering insights into key concepts in equilibrium quantum statistical mechanics,
-    such as topological order and symmetry breaking. Additionally, we seek to generalize the tensor network approach to
-    encompass two-dimensional classical dynamical systems.    </details>
-     <br>
-     <details open>
-        <summary style="font-size: larger;"> 
-            <a href="PFnQM.html">Pattern Formation and Dynamics in Quantum Systems (PI: Prof. Yi-Ping Huang, NTHU)</a>
-        </summary>
-    <br>
-    This research focuses on bridging the gap between quantum dynamics and non-linear phenomena to reveal pattern formation mechanisms in quantum systems.
-    Employing the quantum trajectories method and phase representation, I investigate pattern formation in both two-site and many-site quantum systems. 
-    Anticipated outcomes involve characterizing patterns in phase space, comprehending non-linear effects, and assessing the influence of wave function patterns on quantum statistics. 
-    In essence, this study can contribute to a more profound understanding of the interplay between non-linear dynamics, pattern formation, and statistical mechanics in quantum systems.
-    </details>
-</ul>
+    <!-- 卡片 3：Central configurations -->
+    <article class="research-card">
+      <div class="kicker">Celestial Mechanics</div>
+      <h3 class="card-title">Central Configurations & Symmetry Breaking</h3>
+      <p>
+        Central configurations yield self-similar N-body motions (homothetic expansion/contraction or rigid rotation).
+        I explore analogies to symmetry breaking in statistical physics and map phase-diagram-like structures for 
+        symmetric 5-body configurations.
+      </p>
+      <ul class="tags">
+        <li class="pill">Hamiltonian dynamical systems</li>
+        <li class="pill">N-body</li>
+        <li class="pill">Symmetry</li>
+        <li class="pill">Bifurcation</li>
+      </ul>
+    </article>
+  </div>
+</section>
+</main>
 
-<h1>
-Past Research
-</h1>
-<ul>
-    <details open>
-        <summary style="font-size: larger;">
-            <a href="VMPS.html">Leveraging Variational Matrix Product States for the Analysis of Stochastic Dynamical Systems (PI: Prof. Hong-Yan Shih and Yi-Ping Huang, Academia Sinica)</a>
-        </summary>
-        <br>
-        
-                <p style="margin: 0;">This research focuses on utilizing the tensor network approach to find the steady state of evolutionary dynamic system. The one-dimensional SIS model is a simple but classic and useful model that can describe the non-equilibrium phase transitions. Tensor network approach is highly accurate and efficient method for solving many-body quantum system. Recently, physicists found that this approach can also be applied to solving differential equations and analyzing stochastic dynamics. It has been known that the TN approach may be a powerful method that can solve the one-dimensional model effectively. We want to explore the principles behind applying the TN approach to the one-dimensional SIS model and extend it to other stochastic dynamical systems.</p>
-                <br>
-                <center>
-                <object data="Poster.pdf" type="application/pdf" frameborder="0" width="60%" height="850px" style="padding: 20px;">
-                    <embed src="Poster.pdf" width="60%" height="850px"/> 
-                </object>
-            </center>
-    </details>
-</ul>
-<h1>
-    Topics of Interest
-</h1>
- <ul>
-    <details close>
-        <summary style="font-size: larger;">
-            <a href="">The Density Matrix Renormalization Group Approach for the SIS Model in the Rennormalization Group Language</a>
-        </summary>
-        <br>
-        The density matrix renormalization group (DMRG) was originally introduced by Steven White using the language of renormalization group theory,
-     which provides a physical description of the method. However, contemporary applications of DMRG typically utilize matrix product states and 
-     matrix product operators. This approach is also used for simulating the SIS model. Consequently, the application of DMRG in its original 
-     renormalization group framework for the SIS model may not be entirely clear.
-    In contrast, the renormalization group description of the STS model offers valuable insights that can aid in understanding the behavior
-     of the SIS model. By drawing on this description, we can enhance our comprehension of the SIS model's dynamics and properties.
-     <br>
-     <br>
-     References:
-     <br>
-     [1] <a href="https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.69.2863">Density matrix formulation for quantum renormalization groups</a>
-     <br>
-     [2] <a href="https://arxiv.org/abs/1308.3318">Entanglement and tensor network states</a>
-     <br>
-     [3] <a href="https://arxiv.org/abs/2305.06815">Efficient simulations of epidemic models with tensor networks: application to the one-dimensional SIS model</a>
-    </p>
-    </details>
-    <br>
-    <details close>
-        <summary style="font-size: larger;"><a href="">Analyzing Critical Behaviors in Genetic Algorithms Through Tensor Networks</a></summary>
-        <br>
-     It is well-established that genetic algorithms exhibit critical behaviors, which are pivotal for understanding their performance
-      and efficiency. Tensor network approaches offer a powerful and sophisticated theoretical framework for analyzing such critical
-       behaviors within stochastic dynamics. These approaches enable us to capture and interpret the complex interactions and
-        phase transitions that occur in these systems. Given the conceptual parallels between genetic algorithms and biological evolution, it is plausible to apply 
-tensor network methodologies to genetic algorithms. By leveraging tensor networks, we can gain deeper insights
- into the underlying mechanisms of genetic algorithms, elucidate their critical behaviors, and enhance our understanding
- of their operational dynamics. This approach could potentially lead to more effective optimization strategies 
- and improved algorithmic performance.
- <br>
- <br>
- References:
- <br>
-[1] <a href="https://arxiv.org/abs/2305.06815">Efficient simulations of epidemic models with tensor networks: application to the one-dimensional SIS model</a>
-<br>
-[2] <a href="https://www.sciencedirect.com/science/article/pii/S0304397506003057">Phase transitions and symmetry breaking in genetic algorithms with crossover</a>
-    </details>
-<br>
-<details close>
-        <summary style="font-size: larger;">
-        <a href="">Stochastic Analysis of Quantum Trajectories Using Tensor Networks</a>
-        </summary>
-        <br>
-The quantum trajectory method is a numerical technique designed to simulate the behavior of open quantum systems,
- capturing the evolution of these systems over time. Often, this evolutionary process can be modeled as a Markovian process,
-  where the future state of the system depends only on its current state and not on its past history.
-Given that tensor network approaches have demonstrated considerable efficacy in the analysis of stochastic processes, 
-they may offer a powerful tool for exploring quantum trajectories. By applying tensor network methods, we could gain deeper 
-insights into the dynamics of quantum systems, particularly in understanding how individual quantum systems evolve and how non-equilibrium phase 
-transitions occur. The ability of tensor networks to handle high-dimensional data and complex correlations makes them a promising
- candidate for enhancing the simulation and analysis of quantum trajectories and related phenomena.
-<br>
-<br>
-References:
-<br>
-[1] <a href="https://www.researchgate.net/publication/360927073_Tensor_Network_Simulation_Methods_for_Open_Quantum_Lattice_Models">
-    Tensor Network Simulation Methods for Open Quantum Lattice Models</a>
-<br>
-[2] <a href="https://www.sciencedirect.com/science/article/pii/S0304397506003057">
-    Phase transitions and symmetry breaking in genetic algorithms with crossover</a>
-</details>
-<br>
-<details close> 
-    <summary style="font-size: larger;">
-    <a href="">Computing Feynman Path Integral through Tensor Networks</a>
-    </summary>
-    <br>
-The Feynman path integral is a powerful tool for describing quantum dynamical systems. In this approach, 
-the functional integral is often computed using the Monte Carlo method. However, given that tensor network 
-techniques have also proven effective for evaluating high-dimensional integrals, they may offer a valuable numerical alternative 
-for simulating quantum dynamical systems. By leveraging tensor networks, we could potentially enhance the accuracy and efficiency 
-of such simulations.
-<br>
-<br>
-References:
-<br>
-[1] <a href="https://link.springer.com/article/10.1007/BF01406511">
-    A Monte Carlo method for high dimensional integration </a>
-<br>
-[2] <a href="https://www.researchgate.net/publication/233996292_Mean_Field_Simulation_for_Monte_Carlo_Integration_Theory_and_Practice">
-    Mean Field Simulation for Monte Carlo Integration </a>
-<br>
-[3] <a href="https://www.sciencedirect.com/science/article/pii/S0024379509003747?via%3Dihub">
-    TT-cross approximation for multidimensional arrays
-</a>
-</details>
-<br>
-<details close>
-    <summary style="font-size: larger;">(Possible) High Energy Physics and Tensor Networks</summary>
-    <br>
-     Tensor networks probaly can offer a robust framework for tackling various complex problems in high-energy physics,
- providing new insights and computational techniques that complement traditional methods. 
- Since I am not currently a student specializing in high-energy physics, I have not yet provided a detailed proposal. 
- I will develop and present a concrete framework as I gain further knowledge in the field. Here are some possible topics:
-   
-     <ul>
-    <li><h4>Quantum Field Theory (QFT)</h4></li>
-Tensor networks are used to study quantum field theories, including lattice gauge theories. 
-They provide a powerful tool for analyzing complex quantum systems and can help in understanding 
-the dynamics of fields and particles in a non-perturbative regime.
-<br>
-<li><h4>Quantum Gravity and Black Holes</h4></li>
-Tensor networks have been applied to the study of quantum gravity and black holes. 
-For example, the AdS/CFT correspondence, a significant area in theoretical high-energy physics, 
-has connections to tensor network approaches. Tensor networks are used to model the structure of 
-spacetime and understand the information paradox and other aspects of black hole physics.
-<br>
-<li><h4>Many-Body Quantum Systems</h4></li>
-In high-energy physics, tensor networks are employed to analyze many-body quantum systems and their phases.
- They are used to study the entanglement properties and phase transitions of such systems, which can be
-  relevant for understanding quantum chromodynamics (QCD) and other high-energy phenomena.
-  <br>
-  <li><h4>Conformal Field Theory (CFT)</h4></li>
-Tensor networks have applications in conformal field theory, where they are used to study scaling behaviors 
-and critical phenomena. This helps in understanding the symmetry properties and critical exponents of different high-energy systems.
-<br>
-<br>
-  </ul>
- </ul>
- 
- <!-- end .container --></div>
- <hr style="height:0.7px;border:none;color:#333;background-color:#333;">
- <section><p></p></section>
- <footer>
-    <figure>
-    <p style="text-align:center"><img src="NTHU-Photoroom.png" height="100 px" align="middle" style="padding:0px 20px 0 20px" alt="">     
-    <img src="ips_logo-Photoroom.png" height="100" align="middle" style="padding:0px 20px 0 20px" alt="">
-    </figure>
-    </footer>
-    </div>
-</body>
-</div>
+<!-- ========== JS（支援多輪播） ========== -->
 <script>
-    let slideIndex = 0;
-    let slideIndex2 = 0;
-    autoShowSlides1();
-    showSlides(slideIndex);
-    autoShowSlides2();
-    showSlides2(slideIndex2);
-    
-    
-    function plusSlides(n) {
-        showSlides(slideIndex += n);
+(function(){
+  const carousels = document.querySelectorAll('.carousel');
+  const AUTOPLAY_MS = 5000;          // 自動播放間隔
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  carousels.forEach(initCarousel);
+
+  function initCarousel(root){
+    const slides = Array.from(root.querySelectorAll('.slide'));
+    const dots = Array.from(root.querySelectorAll('.dot'));
+    const prev = root.querySelector('[data-action="prev"]');
+    const next = root.querySelector('[data-action="next"]');
+    let index = slides.findIndex(s => s.classList.contains('is-active'));
+    if(index < 0) index = 0;
+    let timerId = null;
+
+    function go(to){
+      index = (to + slides.length) % slides.length;
+      slides.forEach((s,i)=> s.classList.toggle('is-active', i === index));
+      dots.forEach((d,i)=> {
+        d.classList.toggle('is-active', i === index);
+        d.setAttribute('aria-selected', i === index ? 'true' : 'false');
+      });
     }
-    
-    function currentSlide(n) {
-        showSlides(slideIndex = n);
+
+    function nextSlide(){ go(index + 1); }
+    function prevSlide(){ go(index - 1); }
+
+    function startAutoplay(){
+      if(reduceMotion) return;       // 尊重使用者偏好
+      stopAutoplay();
+      timerId = setInterval(nextSlide, AUTOPLAY_MS);
     }
-    
-    function showSlides(n) {
-        let i;
-        let slides = document.getElementsByClassName("mySlides");
-        let dots = document.getElementsByClassName("dot");
-        if (n > slides.length) {slideIndex = 1}    
-        if (n < 1) {slideIndex = slides.length}
-        for (i = 0; i < slides.length; i++) {
-            slides[i].style.display = "none";  
-        }
-        for (i = 0; i < dots.length; i++) {
-            dots[i].className = dots[i].className.replace(" active", "");
-        }
-        slides[slideIndex-1].style.display = "block";  
-        dots[slideIndex-1].className += " active";
+    function stopAutoplay(){
+      if(timerId) clearInterval(timerId);
+      timerId = null;
     }
-    
-    function plusSlides2(n) {
-        showSlides2(slideIndex2 += n);
-    }
-    
-    function currentSlide2(n) {
-        showSlides2(slideIndex2 = n);
-    }
-    
-    function showSlides2(n) {
-        let i;
-        let slides2 = document.getElementsByClassName("mySlides2");
-        let dots2 = document.getElementsByClassName("dot2");
-        if (n > slides2.length) {slideIndex2 = 1}    
-        if (n < 1) {slideIndex2 = slides2.length}
-        for (i = 0; i < slides2.length; i++) {
-            slides2[i].style.display = "none";  
-        }
-        for (i = 0; i < dots2.length; i++) {
-            dots2[i].className = dots2[i].className.replace(" active", "");
-        }
-        slides2[slideIndex2-1].style.display = "block";  
-        dots2[slideIndex2-1].className += " active";
-    }
-    
-    
-    
-    function autoShowSlides1() {
-        let i;
-        let slides1 = document.getElementsByClassName("mySlides");
-        let dots1 = document.getElementsByClassName("dot");
-    
-        // Hide all slides
-        for (i = 0; i < slides1.length; i++) {
-            slides1[i].style.display = "none";
-        }
-    
-        slideIndex++;
-        if (slideIndex > slides1.length) { slideIndex = 1; }
-    
-        // Remove active class from all dots
-        for (i = 0; i < dots1.length; i++) {
-            dots1[i].className = dots1[i].className.replace(" active", "");
-        }
-    
-        // Show the current slide and add active class to the corresponding dots
-        slides1[slideIndex - 1].style.display = "block";
-        dots1[slideIndex - 1].className += " active";
-    
-        setTimeout(autoShowSlides1, 10000); // Change slide every 5 seconds
-    }
-    
-    function autoShowSlides2() {
-        let j;
-        let slides2 = document.getElementsByClassName("mySlides2");
-        let dots2 = document.getElementsByClassName("dot2");
-    
-        // Hide all slides
-        for (j = 0; j < slides2.length; j++) {
-            slides2[j].style.display = "none";
-        }
-    
-        slideIndex2++;
-        if (slideIndex2 > slides2.length) { slideIndex2 = 1; }
-    
-        // Remove active class from all dots
-        for (j = 0; j < dots2.length; j++) {
-            dots2[j].className = dots2[j].className.replace(" active", "");
-        }
-    
-        // Show the current slide and add active class to the corresponding dots
-        slides2[slideIndex2 - 1].style.display = "block";
-        dots2[slideIndex2 - 1].className += " active";
-    
-        setTimeout(autoShowSlides2, 7000); // Change slide every 5 seconds
-    }
-    </script>
+
+    // 事件綁定
+    next.addEventListener('click', e => { e.preventDefault(); nextSlide(); });
+    prev.addEventListener('click', e => { e.preventDefault(); prevSlide(); });
+    dots.forEach(d => d.addEventListener('click', e => {
+      const i = parseInt(d.dataset.index, 10) || 0;
+      go(i);
+    }));
+
+    // 滑鼠暫停自動播放
+    root.addEventListener('mouseenter', stopAutoplay);
+    root.addEventListener('mouseleave', startAutoplay);
+
+    // 鍵盤操作（左右鍵）
+    root.addEventListener('keydown', e => {
+      if(e.key === 'ArrowRight'){ nextSlide(); }
+      else if(e.key === 'ArrowLeft'){ prevSlide(); }
+    });
+    // 讓容器可被聚焦
+    root.tabIndex = 0;
+
+    // 初始化
+    go(index);
+    startAutoplay();
+  }
+})();
+</script>
+  <!-- 頁尾 -->
+  <footer>
+    <div class="wrapper">
+      <div class="logos">
+        <img src="NTHU-Photoroom.png" alt="NTHU Logo">
+        <img src="ips_logo-Photoroom.png" alt="IPS Logo">
+      </div>
+    </div>
+  </footer>
+</body>
+
 </html>

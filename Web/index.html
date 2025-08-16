@@ -1,504 +1,515 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Index</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+  <meta charset="utf-8" />
+  <title>index</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- KaTeX (保留你原本的) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
-  <style type="text/css">
-     body{ 
-            font-family: Arial, Helvetica, sans-serif;
-            }
-    th{font-family:normal ;}
-    i{font-family:normal ;}
-#A{
-  background-image:  url('');
-  background-repeat:  no-repeat;
-  background-attachment: fixed;
-  background-size: 110%;
-  background-position:
-    center
-}
-#wrapper {
-      width: 1000px;
-      margin: 0 auto;
-  }
-  * {box-sizing:border-box}
 
-/* Slideshow container */
-.slideshow-container {
-  max-width: 1000px;
-  position: relative;
-  margin: auto;
-}
+  <style>
+    :root{
+      --bg:#f3f4ea;
+      --fg:#1d1f21;
+      --muted:#565b5f;
+      --primary:#0a66c2;
+      --card:#ffffff;
+      --ring:#89b4fa;
+      --maxw:1000px;
+    }
+    @media (prefers-color-scheme: dark){
+      :root{
+        --bg:#0e1116;
+        --fg:#e6e6e6;
+        --muted:#a0a4aa;
+        --card:#11151c;
+        --primary:#7ab0ff;
+        --ring:#3b82f6;
+      }
+    }
 
-/* Hide the images by default */
-.mySlides {
-  display: none;
-}
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{
+      font-family: Arial, Helvetica, sans-serif;
+      color:var(--fg);
+      background:var(--bg);
+      line-height:1.6;
+    }
 
-/* Next & previous buttons */
-.prev, .next {
-  cursor: pointer;
-  position: absolute;
-  top: 40%;
-  width: 30px;
-  margin-top: 0px;
-  padding: 16px;
-  color: rgb(0, 0, 0);
-  font-weight: bold;
-  font-size: 30px;
-  transition: 0.1s ease;
-  border-radius: 0 3px 3px 0;
-  user-select: none;
-}
+    /* 共用容器 */
+    .wrapper{max-width:var(--maxw); margin:0 auto; padding:0 16px;}
 
-/* Position the "next button" to the right */
-.next {
-  right: 23%;
-  border-radius: 1px 0 0 1px;
-}
+    /* 跳至主內容（可近用） */
+    .skip-link{
+      position: absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden;
+    }
+    .skip-link:focus{
+      position: fixed; left:16px; top:16px; width:auto; height:auto; background:#000; color:#fff;
+      padding:8px 12px; border-radius:6px; z-index:1000;
+    }
 
-.prev {
-  left: 20%;
-  border-radius: 1px 0 0 1px;
-}
+    /* 頁首 */
+    header{
+      position:sticky; top:0; z-index:50; background:var(--bgcc, rgba(255,255,255,0.6));
+      backdrop-filter:saturate(180%) blur(12px);
+      border-bottom:1px solid rgba(0,0,0,0.08);
+    }
+    .brand{
+      display:flex; align-items:center; gap:12px; padding:14px 0;
+    }
+    .brand img{width:64px; height:auto}
+    .brand-title{margin:0; font-size:1.8rem; line-height:1}
+    .brand-sub{margin:0; font-style:italic; color:var(--muted); margin-top:2px}
 
-/* On hover, add a black background color with a little bit see-through */
-.prev:hover, .next:hover {
-  background-color: rgba(0,0,0,0.8);
-}
+    /* 右上 Home 按鈕 */
+    .home-link{
+      margin-left:auto; display:inline-flex; align-items:center; gap:8px;
+      padding:8px 12px; border:1px solid rgba(0,0,0,0.15); border-radius:10px; text-decoration:none; color:inherit;
+    }
+    .home-link img{width:28px; height:auto}
+    .home-link:focus{outline:3px solid var(--ring); outline-offset:2px}
 
-/* Caption text */
-.text {
-  color:  #000000;
-  font-size: 15px;
-  padding: 30px 30px;
-  position: absolute;
-  bottom: -50px;
-  width: 100%;
-  text-align: center;
-}
+    /* 導覽列 */
+    nav.icon-nav{
+      display:flex; flex-wrap:wrap; justify-content:center; gap:28px; padding:10px 0 16px;
+    }
+    .nav-item{
+      text-decoration:none; color:inherit; text-align:center; padding:10px 12px; border-radius:10px;
+      transition: transform .2s, box-shadow .2s, background-color .2s, color .2s;
+      outline-offset:2px;
+    }
+    .nav-item:focus{outline:3px solid var(--ring)}
+    .nav-item:hover{transform:translateY(-3px); box-shadow:0 6px 14px rgba(0,0,0,.15); color:var(--primary)}
+    .nav-item.active{background:#000; color:#fff}
+    .nav-icon{width:50px; height:auto; display:block; margin:0 auto 6px}
 
-/* Number text (1/3 etc) */
-.numbertext {
-  color: #f2f2f2;
-  font-size: 12px;
-  padding: 8px 12px;
-  position: absolute;
-  top: 0;
-}
+    /* 主內容 */
+    main{padding:24px 0}
+    .page-title{text-align:center; font-size:2rem; margin:24px 0 12px; font-weight:bold}
+    .intro-text{max-width:760px; margin:0 auto 28px; text-align:center; color:var(--muted)}
 
-/* The dots/bullets/indicators */
-.dot {
-  cursor: pointer;
-  height: 15px;
-  width: 15px;
-  margin: 0 2px;
-  background-color: #bbb;
-  border-radius: 50%;
-  display: inline-block;
-  transition: background-color 0.1s ease;
-}
-.dot2 {
-  cursor: pointer;
-  height: 15px;
-  width: 15px;
-  margin: 0 2px;
-  background-color: #bbb;
-  border-radius: 50%;
-  display: inline-block;
-  transition: background-color 0.1s ease;
-}
+    /* 書籍卡片 */
+    .book-grid{
+      display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap:24px; max-width:900px; margin:0 auto;
+    }
+    .book-card{
+      background:var(--card); border:1px solid rgba(0,0,0,0.12); border-radius:12px;
+      padding:12px; text-align:center; position:relative; overflow:hidden;
+      transition: transform .2s, box-shadow .2s, border-color .2s;
+    }
+    .book-card:hover{transform:translateY(-5px); box-shadow:0 12px 24px rgba(0,0,0,.18); border-color:rgba(0,0,0,0.18)}
+    .book-link{display:block; text-decoration:none; color:inherit; outline-offset:3px}
+    .book-link:focus{outline:3px solid var(--ring)}
+    .book-cover{width:250px; max-width:100%; height:auto; display:block; margin:6px auto 12px; border-radius:8px}
+    .solution-title{font-size:1rem; line-height:1.4; margin:0 8px 8px}
 
-.active, .dot:hover {
-  background-color: #717171;
-}
+    /* 角落標籤 (Coming soon) */
+    .ribbon{
+      position:absolute; top:12px; right:-40px; transform:rotate(45deg);
+      background:#111; color:#fff; padding:6px 50px; font-size:.8rem; letter-spacing:.5px;
+      box-shadow:0 6px 12px rgba(0,0,0,.25);
+    }
 
-/* Fading animation */
-.fade {
-  animation-name: fade;
-  animation-duration: 0.5s;
-}
+    /* 頁尾 */
+    footer{padding:28px 0 36px; border-top:1px solid rgba(0,0,0,0.1); margin-top:36px}
+    .logos{display:flex; justify-content:center; align-items:center; gap:28px}
+    .logos img{height:80px; width:auto}
 
-@keyframes fade {
-  from {opacity: .4}
-  to {opacity: 1}
-}
-/* On smaller screens, decrease text size */
-@media only screen and (max-width: 300px) {
-  .prev, .next,.text {font-size: 11px}
-}
-.container {
-	margin: 0 auto; /* the auto value on the sides, coupled with the width, centers the layout */
-}
-</style>
+    /* 響應式微調 */
+    @media (max-width:640px){
+      .brand img{width:56px}
+      .brand-title{font-size:1.4rem}
+      .home-link{display:none} /* 小螢幕可隱藏右上 Home 按鈕（可視需要保留） */
+      .nav-icon{width:44px}
+    }
+  </style>
 </head>
 
-<body bgcolor=#d9dcc0>
-    <div id="wrapper">
-        <hr>
-    <h1>
-        <img width="190" align="top" src="yen.png">
-        <br>
-        <i>Hao-Yang Yen</i>
-    </h1>  
-      <hr>
+<body>
+  <a href="#main" class="skip-link">Skip to main content</a>
 
-<table width="70" cellspacing="0">
-        <tbody>
-            <tr>
-                <table style="width: 100%; border-collapse: collapse;">
-                    <tr>
-                        <td style="vertical-align: top; width: 50%;">
-                            <ul style="padding-left: 20px;">
-                                <li><strong>Undergraduate Student</strong></li>
-                                <br>
-                                <ul style="padding-left: 10px;">
-                                    <a href="https://sites.google.com/view/teqm">Prof. Yi-Ping's</a> and  
-                                    <a href="https://www.phys.sinica.edu.tw/~hongyan/index.html">Prof. Hong-Yan’s</a> Groups<br>
-                                
-                                Interdisciplinary Program of Sciences (理學院學士班)<br>
-                                National Tsing Hua University (國立清華大學)<br>
-                                Institute of Physics, Academia Sinica (中央研究院)<br>
-                                <ul style="padding-left: 20px;">
-                            </ul>
-                        </td>
-                        <td style="vertical-align: top; width: 50%;">
-                            <ul style="padding-left: 20px;">
-                                <li><strong>Email:</strong> kikiyen0715@gapp.nthu.edu.tw</li><br>
-                                <li><strong>Youtube:</strong> 
-                                    <a href="https://youtube.com/channel/UCU_LT30IrG6UjtSDE653isw?si=n2cnqT-OD4SuhvCh">
-                                        顏浩洋（Kiki Yen）
-                                    </a>
-                                </li><br>
-                                <li><strong>GitHub:</strong> 
-                                    <a href="https://github.com/kikiyenhaoyang">kikiyen</a>
-                                </li><br>
-                                <li><a href="CV.pdf">CV</a></li>
-                            </ul>
-                        </td>
-                    </tr>
-                </table>
-                
-            </tr>
-        </tbody>
-</table>
-    
-<hr>
-<center>
-    <table border="10" cellspacing="5">
-        <tbody>
-            <tr>
-                <th>
-                    <a href="experience.html">
-                        <img width="110" align="top" src="exp.png">
-                    </a>
-                    <br>
-                    Experience
-                </th>
-                <th>
-                    <a href="learning.html">
-                    <img width="110" align="top" src="l.png">
-                    </a>
-                    <br>
-                    Learning
-                </th>
-                <th>
-                    <a href="research.html">
-                    <img width="110" align="top" src="r.png">
-                    </a>
-                    <br>
-                    Research
-                </th>
-                <th>
-                    <a href="Explore.html">
-                        <img width="110" align="top" src="e.png">
-                        </a>
-                    <br>
-                    Explore
-                </th>
-            </tr>
-        </tbody>
-    </table>
-</center>
-<hr>
-
-<center>
-
-<!-- Slideshow container -->
-<div class="slideshow-container">
-
-    <!-- Full-width images with number and caption text -->
-    <div class="mySlides2 fade">
-      <div class="numbertext"></div>
-      <img height="300" src="ed_2024.jpg">
-      <div class="text">Electrodynamics 2024 winter, Professor and TAs.</div>
-    </div>
-  
-    <div class="mySlides2 fade">
-        <div class="numbertext"></div>
-        <img height="300" src="wen_hua.jpg">
-        <div class="text">Wen-Hua high school anniversary 2024, with my class tutor and Chinese teacher.</div>
-    </div>
-  
-    <div class="mySlides2 fade">
-        <div class="numbertext"></div>
-        <img height="300" src="Tainan.jpg">
-        <div class="text"></div>
+  <!-- 頁首 -->
+  <header>
+    <div class="wrapper" style="display:flex; align-items:center; gap:12px;">
+      <div class="brand">
+       
+        <div>
+          <img src="yen.png" alt="HYY Logo">
+          <br>
+          <h1 class="brand-title">Hao-Yang Yen</h1>
+          <p class="brand-sub">HYY Home</p>
+        </div>
+      </div>
+      <a class="home-link" href="index.html" aria-label="Go to HYY Home">
+        <img src="yen.png" alt=""> Home
+      </a>
     </div>
 
-    <div class="mySlides2 fade">
-        <div class="numbertext"></div>
-        <img height="300" src="taipei.jpg">
-        <div class="text"></div>
+    <!-- 導覽列 -->
+    <nav class="icon-nav wrapper" aria-label="Primary">
+      <a href="experience.html" class="nav-item">
+        <img src="exp.png" alt="" class="nav-icon"><span>Experience</span>
+      </a>
+      <a href="learning.html" class="nav-item">
+        <img src="l.png" alt="" class="nav-icon"><span>Learning</span>
+      </a>
+      <a href="research.html" class="nav-item">
+        <img src="r.png" alt="" class="nav-icon"><span>Research</span>
+      </a>
+      <a href="Explore.html" class="nav-item">
+        <img src="e.png" alt="" class="nav-icon"><span>Explore</span>
+      </a>
+    </nav>
+  </header>
+
+  <!-- 主內容 -->
+  <main id="main" class="wrapper">
+<!-- ========== CSS ========== -->
+<style>
+  .carousel {
+    --h: 400px;           /* 高度可調 */
+    --dotSize: 10px;
+    position: relative;
+    max-width: 300px;
+    margin: 24px auto;
+  }
+  .carousel-track {
+    position: relative;
+    height: var(--h);
+    overflow: hidden;
+    border-radius: 10px;
+    background: #000;
+  }
+  .slide {
+    position: absolute; inset: 0;
+    display: grid; place-items: center;
+    opacity: 0; transition: opacity .4s ease;
+  }
+  .slide.is-active { opacity: 1; }
+  .slide img {
+    height: 100%; width: auto; max-width: 100%;
+    object-fit: contain; display: block;
+  }
+  .caption {
+    position: absolute; left: 0; right: 0; bottom: 0;
+    padding: 8px 12px;
+    background: linear-gradient(to top, rgba(0,0,0,.55), rgba(0,0,0,0));
+    color: #fff; font-size: .95rem;
+  }
+
+  /* 控制按鈕 */
+  .ctrl {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    padding: 6px 10px; border-radius: 8px;
+    background: rgba(0,0,0,.45); color:#fff; text-decoration: none;
+    font-size: 22px; line-height: 1; user-select: none;
+    transition: background .2s;
+  }
+  .ctrl:hover, .ctrl:focus { background: rgba(0,0,0,.7); outline: 3px solid #66a3ff; outline-offset: 2px; }
+  .prev { left: 8px; }
+  .next { right: 8px; }
+
+  /* 點點 */
+  .dots {
+    display: flex; gap: 8px; justify-content: center; align-items: center;
+    margin-top: 10px; flex-wrap: wrap;
+  }
+  .dot {
+    width: var(--dotSize); height: var(--dotSize);
+    border-radius: 50%; background: #cfd3d8; border: 0;
+    cursor: pointer;
+  }
+  .dot:focus { outline: 3px solid #66a3ff; outline-offset: 2px; }
+  .dot.is-active { background: #333; }
+
+  .profile {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  margin: 20px 0;
+}
+
+.profile-left, .profile-right {
+  flex: 1;
+  min-width: 250px;
+}
+
+
+.profile-left h3 {
+  margin-top: 0;
+}
+
+.social-links {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 6px;
+  background: #f0f0f0;
+  text-decoration: none;
+  color: #222;
+  font-weight: 500;
+  transition: transform 0.2s, background 0.2s;
+}
+
+.btn i {
+  font-size: 1.1rem;
+}
+
+.btn:hover {
+  transform: translateY(-3px);
+  background: #e0e0e0;
+}
+
+/* 特別品牌色 */
+.youtube {
+  background: #ff0000;
+  color: white;
+}
+.youtube:hover {
+  background: #cc0000;
+}
+
+.github {
+  background: #333;
+  color: white;
+}
+.github:hover {
+  background: #111;
+}
+
+  /* 手機高度微調 */
+  @media (max-width: 640px) {
+    .carousel { --h: 220px; }
+    .caption { font-size: .85rem; }
+  }
+
+  /* 使用者偏好減少動畫 */
+  @media (prefers-reduced-motion: reduce) {
+    .slide { transition: none; }
+  }
+</style>
+
+<!-- 在 <head> 裡加這行 (Font Awesome) -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<section class="profile">
+  <div class="profile-left">
+    <h3>Student</h3>
+    <p>
+      Interdisciplinary Program of Sciences (理學院學士班)<br>
+      National Tsing Hua University (國立清華大學)<br>
+      Institute of Physics, Academia Sinica (中央研究院)<br>
+      Email: kikiyen0715@gapp.nthu.edu.tw
+    </p>
+  </div>
+
+  <div class="profile-right">
+    <div class="social-links">
+      <a href="https://youtube.com/channel/UCU_LT30IrG6UjtSDE653isw?si=n2cnqT-OD4SuhvCh" class="btn youtube"><i class="fab fa-youtube"></i> YouTube</a>
+      <a href="https://github.com/kikiyenhaoyang" class="btn github"><i class="fab fa-github"></i> GitHub</a>
+      <a href="CV.pdf" class="btn"><i class="fas fa-file-alt"></i> CV</a>
     </div>
+  </div>
+</section>
 
-    <div class="mySlides2 fade">
-        <div class="numbertext"></div>
-        <img height="300" src="hsinchu.jpg">
-        <div class="text"></div>
+
+<!-- ========== HTML：輪播 #1（人事物照片） ========== -->
+<section class="carousel" data-carousel="people" aria-roledescription="carousel" aria-label="Photos: events and places">
+  <div class="carousel-track" role="group">
+    <figure class="slide is-active">
+      <img src="ed_2024.jpg" alt="Electrodynamics 2024 winter, Professor and TAs">
+      <figcaption class="caption">Electrodynamics 2024 winter, Professor and TAs.</figcaption>
+    </figure>
+    <figure class="slide">
+      <img src="wen_hua.jpg" alt="Wen-Hua high school anniversary 2024 with tutor and Chinese teacher">
+      <figcaption class="caption">Wen-Hua high school anniversary 2024, with my class tutor and Chinese teacher.</figcaption>
+    </figure>
+    <figure class="slide">
+      <img src="Tainan.jpg" alt="Tainan city view">
+      <figcaption class="caption">Tainan</figcaption>
+    </figure>
+    <figure class="slide">
+      <img src="taipei.jpg" alt="Taipei city view">
+      <figcaption class="caption">Taipei</figcaption>
+    </figure>
+    <figure class="slide">
+      <img src="hsinchu.jpg" alt="Hsinchu city view">
+      <figcaption class="caption">Hsinchu</figcaption>
+    </figure>
+    <figure class="slide">
+      <img src="notitle.jpg" alt="Photo">
+      <figcaption class="caption"> </figcaption>
+    </figure>
+
+    <a class="ctrl prev" href="#" aria-label="Previous slide" data-action="prev">&#10094;</a>
+    <a class="ctrl next" href="#" aria-label="Next slide" data-action="next">&#10095;</a>
+  </div>
+  <div class="dots" role="tablist" aria-label="Slide dots">
+    <button class="dot is-active" role="tab" aria-selected="true" aria-controls="people-1" data-index="0"></button>
+    <button class="dot" role="tab" aria-selected="false" aria-controls="people-2" data-index="1"></button>
+    <button class="dot" role="tab" aria-selected="false" aria-controls="people-3" data-index="2"></button>
+    <button class="dot" role="tab" aria-selected="false" aria-controls="people-4" data-index="3"></button>
+    <button class="dot" role="tab" aria-selected="false" aria-controls="people-5" data-index="4"></button>
+    <button class="dot" role="tab" aria-selected="false" aria-controls="people-6" data-index="5"></button>
+  </div>
+</section>
+
+<!-- ========== HTML：輪播 #2（Sen Sen） ========== -->
+<section class="carousel" data-carousel="cats" aria-roledescription="carousel" aria-label="Photos: Sen Sen the cat">
+  <div class="carousel-track" role="group">
+    <figure class="slide is-active">
+      <img src="sen_1.jpg" alt="Sen Sen at NTHU">
+      <figcaption class="caption">Sen Sen (?–2024/6/25), my favorite cat at NTHU</figcaption>
+    </figure>
+    <figure class="slide">
+      <img src="sen_2.jpg" alt="Sen Sen sitting">
+      <figcaption class="caption">Sen Sen (?–2024/6/25), my favorite cat at NTHU</figcaption>
+    </figure>
+    <figure class="slide">
+      <img src="sen_3.JPG" alt="Sen Sen outdoors">
+      <figcaption class="caption">Sen Sen (?–2024/6/25), my favorite cat at NTHU</figcaption>
+    </figure>
+    <figure class="slide">
+      <img src="sen_4.JPG" alt="Sen Sen close-up">
+      <figcaption class="caption">Sen Sen (?–2024/6/25), my favorite cat at NTHU</figcaption>
+    </figure>
+    <figure class="slide">
+      <img src="sen_5.JPG" alt="Sen Sen resting">
+      <figcaption class="caption">Sen Sen (?–2024/6/25), my favorite cat at NTHU</figcaption>
+    </figure>
+    <figure class="slide">
+      <img src="sen_6.JPG" alt="Sen Sen on pavement">
+      <figcaption class="caption">Sen Sen (?–2024/6/25), my favorite cat at NTHU</figcaption>
+    </figure>
+    <figure class="slide">
+      <img src="sen_7.jpg" alt="Sen Sen by greenery">
+      <figcaption class="caption">Sen Sen (?–2024/6/25), my favorite cat at NTHU</figcaption>
+    </figure>
+    <figure class="slide">
+      <img src="sen_8.jpg" alt="Sen Sen looking curious">
+      <figcaption class="caption">Sen Sen (?–2024/6/25), my favorite cat at NTHU</figcaption>
+    </figure>
+    <figure class="slide">
+      <img src="sen_9.jpg" alt="Sen Sen with shadow">
+      <figcaption class="caption">Sen Sen (?–2024/6/25), my favorite cat at NTHU</figcaption>
+    </figure>
+    <figure class="slide">
+      <img src="sen_10.jpg" alt="Sen Sen profile">
+      <figcaption class="caption">Sen Sen (?–2024/6/25), my favorite cat at NTHU</figcaption>
+    </figure>
+    <figure class="slide">
+      <img src="sen_11.jpg" alt="Sen Sen relaxed">
+      <figcaption class="caption">Sen Sen (?–2024/6/25), my favorite cat at NTHU</figcaption>
+    </figure>
+
+    <a class="ctrl prev" href="#" aria-label="Previous slide" data-action="prev">&#10094;</a>
+    <a class="ctrl next" href="#" aria-label="Next slide" data-action="next">&#10095;</a>
+  </div>
+  <div class="dots" role="tablist" aria-label="Slide dots">
+    <!-- 11 張就放 11 個點 -->
+    <button class="dot is-active" role="tab" aria-selected="true" data-index="0"></button>
+    <button class="dot" role="tab" aria-selected="false" data-index="1"></button>
+    <button class="dot" role="tab" aria-selected="false" data-index="2"></button>
+    <button class="dot" role="tab" aria-selected="false" data-index="3"></button>
+    <button class="dot" role="tab" aria-selected="false" data-index="4"></button>
+    <button class="dot" role="tab" aria-selected="false" data-index="5"></button>
+    <button class="dot" role="tab" aria-selected="false" data-index="6"></button>
+    <button class="dot" role="tab" aria-selected="false" data-index="7"></button>
+    <button class="dot" role="tab" aria-selected="false" data-index="8"></button>
+    <button class="dot" role="tab" aria-selected="false" data-index="9"></button>
+    <button class="dot" role="tab" aria-selected="false" data-index="10"></button>
+  </div>
+</section>
+
+
+  <!-- 頁尾 -->
+  <footer>
+    <div class="wrapper">
+      <div class="logos">
+        <img src="NTHU-Photoroom.png" alt="NTHU Logo">
+        <img src="ips_logo-Photoroom.png" alt="IPS Logo">
+      </div>
     </div>
+  </footer>
 
-    <div class="mySlides2 fade">
-        <div class="numbertext"></div>
-        <img height="300" src="notitle.jpg">
-        <div class="text"></div>
-    </div>
-
-    <!-- Next and previous buttons -->
-    <a class="prev" onclick="plusSlides2(-1)">&#10094;</a>
-    <a class="next" onclick="plusSlides2(1)">&#10095;</a>
-</div>
-<br>
-<br>
-<!-- The dots/circles for the second slideshow -->
-<div style="text-align:center">
-    <span class="dot2" onclick="currentSlide2(1)"></span>
-    <span class="dot2" onclick="currentSlide2(2)"></span>
-    <span class="dot2" onclick="currentSlide2(3)"></span>
-    <span class="dot2" onclick="currentSlide2(4)"></span>
-    <span class="dot2" onclick="currentSlide2(5)"></span>
-    <span class="dot2" onclick="currentSlide2(6)"></span>
-</div>
-<br>
-<br>
-<!-- Slideshow container -->
-<div class="slideshow-container">
-
-    <!-- Full-width images with number and caption text -->
-    <div class="mySlides fade">
-      <div class="numbertext"></div>
-      <img height="300" src="sen_1.jpg">
-      <div class="text">Sen Sen (?~2024/6/25), my favorite cat at NTHU</div>
-    </div>
-  
-    <div class="mySlides fade">
-        <div class="numbertext"></div>
-        <img height="300" src="sen_2.jpg">
-        <div class="text">Sen Sen (?~2024/6/25), my favorite cat at NTHU</div>
-    </div>
-  
-    <div class="mySlides fade">
-        <div class="numbertext"></div>
-        <img height="300" src="sen_3.JPG">
-        <div class="text">Sen Sen (?~2024/6/25), my favorite cat at NTHU</div>
-    </div>
-
-    <div class="mySlides fade">
-        <div class="numbertext"></div>
-        <img height="300" src="sen_4.JPG">
-        <div class="text">Sen Sen (?~2024/6/25), my favorite cat at NTHU</div>
-    </div>
-
-    <div class="mySlides fade">
-        <div class="numbertext"></div>
-        <img height="300" src="sen_5.JPG">
-        <div class="text">Sen Sen (?~2024/6/25), my favorite cat at NTHU</div>
-    </div>
-
-    <div class="mySlides fade">
-        <div class="numbertext"></div>
-        <img height="300" src="sen_6.JPG">
-        <div class="text">Sen Sen (?~2024/6/25), my favorite cat at NTHU</div>
-    </div>
-
-    <div class="mySlides fade">
-        <div class="numbertext"></div>
-        <img height="300" src="sen_7.jpg">
-        <div class="text">Sen Sen (?~2024/6/25), my favorite cat at NTHU</div>
-    </div>
-
-    <div class="mySlides fade">
-        <div class="numbertext"></div>
-        <img height="300" src="sen_8.jpg">
-        <div class="text">Sen Sen (?~2024/6/25), my favorite cat at NTHU</div>
-    </div>
-
-    <div class="mySlides fade">
-        <div class="numbertext"></div>
-        <img height="300" src="sen_9.jpg">
-        <div class="text">Sen Sen (?~2024/6/25), my favorite cat at NTHU</div>
-    </div>
-
-    <div class="mySlides fade">
-        <div class="numbertext"></div>
-        <img height="300" src="sen_10.jpg">
-        <div class="text">Sen Sen (?~2024/6/25), my favorite cat at NTHU</div>
-    </div>
-
-    <div class="mySlides fade">
-        <div class="numbertext"></div>
-        <img height="300" src="sen_11.jpg">
-        <div class="text">Sen Sen (?~2024/6/25), my favorite cat at NTHU</div>
-    </div>
-
-    <!-- Next and previous buttons -->
-    <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
-    <a class="next" onclick="plusSlides(1)">&#10095;</a>
-</div>
-<br>
-<br>
-<!-- The dots/circles -->
-<div style="text-align:center">
-    <span class="dot" onclick="currentSlide(1)"></span>
-    <span class="dot" onclick="currentSlide(2)"></span>
-    <span class="dot" onclick="currentSlide(3)"></span>
-    <span class="dot" onclick="currentSlide(4)"></span>
-    <span class="dot" onclick="currentSlide(5)"></span>
-    <span class="dot" onclick="currentSlide(6)"></span>
-    <span class="dot" onclick="currentSlide(7)"></span>
-    <span class="dot" onclick="currentSlide(8)"></span>
-    <span class="dot" onclick="currentSlide(9)"></span>
-    <span class="dot" onclick="currentSlide(10)"></span>
-    <span class="dot" onclick="currentSlide(11)"></span>
-</div>
-<br>
-
-
+<!-- ========== JS（支援多輪播） ========== -->
 <script>
-let slideIndex = 0;
-let slideIndex2 = 0;
-autoShowSlides1();
-showSlides(slideIndex);
-autoShowSlides2();
-showSlides2(slideIndex2);
+(function(){
+  const carousels = document.querySelectorAll('.carousel');
+  const AUTOPLAY_MS = 5000;          // 自動播放間隔
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  carousels.forEach(initCarousel);
 
-function plusSlides(n) {
-    showSlides(slideIndex += n);
-}
+  function initCarousel(root){
+    const slides = Array.from(root.querySelectorAll('.slide'));
+    const dots = Array.from(root.querySelectorAll('.dot'));
+    const prev = root.querySelector('[data-action="prev"]');
+    const next = root.querySelector('[data-action="next"]');
+    let index = slides.findIndex(s => s.classList.contains('is-active'));
+    if(index < 0) index = 0;
+    let timerId = null;
 
-function currentSlide(n) {
-    showSlides(slideIndex = n);
-}
-
-function showSlides(n) {
-    let i;
-    let slides = document.getElementsByClassName("mySlides");
-    let dots = document.getElementsByClassName("dot");
-    if (n > slides.length) {slideIndex = 1}    
-    if (n < 1) {slideIndex = slides.length}
-    for (i = 0; i < slides.length; i++) {
-        slides[i].style.display = "none";  
-    }
-    for (i = 0; i < dots.length; i++) {
-        dots[i].className = dots[i].className.replace(" active", "");
-    }
-    slides[slideIndex-1].style.display = "block";  
-    dots[slideIndex-1].className += " active";
-}
-
-function plusSlides2(n) {
-    showSlides2(slideIndex2 += n);
-}
-
-function currentSlide2(n) {
-    showSlides2(slideIndex2 = n);
-}
-
-function showSlides2(n) {
-    let i;
-    let slides2 = document.getElementsByClassName("mySlides2");
-    let dots2 = document.getElementsByClassName("dot2");
-    if (n > slides2.length) {slideIndex2 = 1}    
-    if (n < 1) {slideIndex2 = slides2.length}
-    for (i = 0; i < slides2.length; i++) {
-        slides2[i].style.display = "none";  
-    }
-    for (i = 0; i < dots2.length; i++) {
-        dots2[i].className = dots2[i].className.replace(" active", "");
-    }
-    slides2[slideIndex2-1].style.display = "block";  
-    dots2[slideIndex2-1].className += " active";
-}
-
-
-
-function autoShowSlides1() {
-    let i;
-    let slides1 = document.getElementsByClassName("mySlides");
-    let dots1 = document.getElementsByClassName("dot");
-
-    // Hide all slides
-    for (i = 0; i < slides1.length; i++) {
-        slides1[i].style.display = "none";
+    function go(to){
+      index = (to + slides.length) % slides.length;
+      slides.forEach((s,i)=> s.classList.toggle('is-active', i === index));
+      dots.forEach((d,i)=> {
+        d.classList.toggle('is-active', i === index);
+        d.setAttribute('aria-selected', i === index ? 'true' : 'false');
+      });
     }
 
-    slideIndex++;
-    if (slideIndex > slides1.length) { slideIndex = 1; }
+    function nextSlide(){ go(index + 1); }
+    function prevSlide(){ go(index - 1); }
 
-    // Remove active class from all dots
-    for (i = 0; i < dots1.length; i++) {
-        dots1[i].className = dots1[i].className.replace(" active", "");
+    function startAutoplay(){
+      if(reduceMotion) return;       // 尊重使用者偏好
+      stopAutoplay();
+      timerId = setInterval(nextSlide, AUTOPLAY_MS);
+    }
+    function stopAutoplay(){
+      if(timerId) clearInterval(timerId);
+      timerId = null;
     }
 
-    // Show the current slide and add active class to the corresponding dots
-    slides1[slideIndex - 1].style.display = "block";
-    dots1[slideIndex - 1].className += " active";
+    // 事件綁定
+    next.addEventListener('click', e => { e.preventDefault(); nextSlide(); });
+    prev.addEventListener('click', e => { e.preventDefault(); prevSlide(); });
+    dots.forEach(d => d.addEventListener('click', e => {
+      const i = parseInt(d.dataset.index, 10) || 0;
+      go(i);
+    }));
 
-    setTimeout(autoShowSlides1, 5000); // Change slide every 5 seconds
-}
+    // 滑鼠暫停自動播放
+    root.addEventListener('mouseenter', stopAutoplay);
+    root.addEventListener('mouseleave', startAutoplay);
 
-function autoShowSlides2() {
-    let j;
-    let slides2 = document.getElementsByClassName("mySlides2");
-    let dots2 = document.getElementsByClassName("dot2");
+    // 鍵盤操作（左右鍵）
+    root.addEventListener('keydown', e => {
+      if(e.key === 'ArrowRight'){ nextSlide(); }
+      else if(e.key === 'ArrowLeft'){ prevSlide(); }
+    });
+    // 讓容器可被聚焦
+    root.tabIndex = 0;
 
-    // Hide all slides
-    for (j = 0; j < slides2.length; j++) {
-        slides2[j].style.display = "none";
-    }
-
-    slideIndex2++;
-    if (slideIndex2 > slides2.length) { slideIndex2 = 1; }
-
-    // Remove active class from all dots
-    for (j = 0; j < dots2.length; j++) {
-        dots2[j].className = dots2[j].className.replace(" active", "");
-    }
-
-    // Show the current slide and add active class to the corresponding dots
-    slides2[slideIndex2 - 1].style.display = "block";
-    dots2[slideIndex2 - 1].className += " active";
-
-    setTimeout(autoShowSlides2, 5000); // Change slide every 5 seconds
-}
+    // 初始化
+    go(index);
+    startAutoplay();
+  }
+})();
 </script>
 
-</center>
-<br>
-<hr style="height:0.7px;border:none;color:#333;background-color:#333;">
-<section><p></p></section>
-<footer>
-   <figure>
-   <p style="text-align:center"><img src="NTHU-Photoroom.png" height="100 px" align="middle" style="padding:0px 20px 0 20px" alt="">     
-   <img src="ips_logo-Photoroom.png" height="100" align="middle" style="padding:0px 20px 0 20px" alt="">
-   </figure>
-   </footer>
-   </div>
-    </div>
-    
 </body>
-
 </html>
