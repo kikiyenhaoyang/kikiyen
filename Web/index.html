@@ -152,10 +152,9 @@
     .dot.is-active{ background:#333; }
 
     /* 手機高度微調 */
-    @media (max-width:640px){
-      .carousel{ --h:220px; }
-      .caption{ font-size:.85rem; }
-      .home-link{ display:none; } /* 小螢幕可隱藏右上 Home 按鈕 */
+    @media (max-width: 640px){
+      .carousel{ --h: 220px; }
+      .caption{ font-size: .85rem; }
     }
 
     /* 頁尾 */
@@ -194,8 +193,10 @@
         </a>
       </nav>
 
+      <!-- 右側：手機版漢堡 + Home 按鈕 -->
       <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="primary-nav">☰</button>
       <a class="home-link" href="index.html" aria-label="Go to HYY Home">Home</a>
+
     </div>
   </header>
 
