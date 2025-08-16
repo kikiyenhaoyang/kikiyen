@@ -11,17 +11,34 @@
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
 
   <style>
-    :root{
-      --bg:#f3f4ea; --fg:#1d1f21; --muted:#565b5f; --primary:#0a66c2;
-      --card:#ffffff; --ring:#89b4fa; --maxw:1000px;
+     :root{
+      --bg:#f3f4ea;
+      --fg:#1d1f21;
+      --muted:#565b5f;
+      --primary:#0a66c2;
+      --card:#ffffff;
+      --ring:#89b4fa;
+      --maxw:1000px;
     }
     @media (prefers-color-scheme: dark){
-      :root{ --bg:#0e1116; --fg:#e6e6e6; --muted:#a0a4aa; --card:#11151c; --primary:#7ab0ff; --ring:#3b82f6; }
+      :root{
+        --bg:#0e1116;
+        --fg:#e6e6e6;
+        --muted:#a0a4aa;
+        --card:#11151c;
+        --primary:#7ab0ff;
+        --ring:#3b82f6;
+      }
     }
 
     *{box-sizing:border-box}
     html,body{margin:0;padding:0}
-    body{ font-family: Arial, Helvetica, sans-serif; color:var(--fg); background:var(--bg); line-height:1.6; }
+    body{
+      font-family: Arial, Helvetica, sans-serif;
+      color:var(--fg);
+      background:var(--bg);
+      line-height:1.6;
+    }
     .wrapper{max-width:var(--maxw); margin:0 auto; padding:0 16px;}
 
     /* 跳至主內容（可近用） */
@@ -32,7 +49,7 @@
       position: fixed; left:16px; top:16px; width:auto; height:auto; background:#000; color:#fff;
       padding:8px 12px; border-radius:6px; z-index:1000;
     }
-    
+
     /* ===== Header（精簡 + 手機收合） ===== */
     header{
       position: sticky; top: 0; z-index: 50;
@@ -86,16 +103,20 @@
     }
     .nav-toggle:focus{ outline: 3px solid var(--ring); outline-offset: 2px; }
 
-    /* 桌面：nav 展開、漢堡隱藏 */
-    @media (min-width:768px){
-      .nav-toggle{ display:none; }
-      .icon-nav{ display:flex !important; flex-direction:row; align-items:center; justify-content:center; gap:16px; padding:0; }
+    /* 桌面版：nav 永遠展開，漢堡隱藏 */
+    @media (min-width: 768px){
+      .nav-toggle{ display: none; }
+      .icon-nav{
+        display: flex !important;
+        flex-direction: row; align-items: center; justify-content: center;
+        gap: 16px; padding: 0;
+      }
     }
 
     /* 主內容 */
-    main{ padding:24px 0; }
-    .page-title{ text-align:center; font-size:2rem; margin:24px 0 12px; font-weight:bold; }
-    .intro-text{ max-width:760px; margin:0 auto 28px; text-align:center; color:var(--muted); }
+    main{padding:24px 0}
+    .page-title{text-align:center; font-size:2rem; margin:24px 0 12px; font-weight:bold}
+    .intro-text{max-width:760px; margin:0 auto 28px; text-align:center; color:var(--muted)}
 
     /* Section / Timeline */
     .section{ margin-bottom:40px; }
