@@ -134,22 +134,37 @@
     .github{ background:#333; color:#fff; }
     .github:hover{ background:#111; }
 
-    /* 輪播（全站共用，這頁把寬度調較小） */
-    .carousel{ --h:400px; --dotSize:10px; position:relative; max-width:300px; margin:24px auto; }
-    .carousel-track{ position:relative; height:var(--h); overflow:hidden; border-radius:10px; background:#000; }
-    .slide{ position:absolute; inset:0; display:grid; place-items:center; opacity:0; transition:opacity .4s ease; }
-    .slide.is-active{ opacity:1; }
-    .slide img{ height:100%; width:auto; max-width:100%; object-fit:contain; display:block; }
-    .caption{ position:absolute; left:0; right:0; bottom:0; padding:8px 12px; background:linear-gradient(to top, rgba(0,0,0,.55), rgba(0,0,0,0)); color:#fff; font-size:.95rem; }
 
-    .ctrl{ position:absolute; top:50%; transform:translateY(-50%); padding:6px 10px; border-radius:8px; background:rgba(0,0,0,.45); color:#fff; text-decoration:none; font-size:22px; line-height:1; user-select:none; transition:background .2s; }
-    .ctrl:hover,.ctrl:focus{ background:rgba(0,0,0,.7); outline:3px solid #66a3ff; outline-offset:2px; }
-    .prev{ left:8px; } .next{ right:8px; }
+    /* 輪播 */
+    .carousel{ --h: 500px; --dotSize: 10px; position: relative; max-width: 400px; margin: 24px auto; }
+    .carousel-track{ position: relative; height: var(--h); overflow: hidden; border-radius: 10px; background: #000; }
+    .slide{ position: absolute; inset: 0; display: grid; place-items: center; opacity: 0; transition: opacity .4s ease; }
+    .slide.is-active{ opacity: 1; }
+    .slide img{ height: 100%; width: auto; max-width: 100%; object-fit: contain; display: block; }
+    .caption{ position: absolute; left: 0; right: 0; bottom: 0; padding: 8px 12px; background: linear-gradient(to top, rgba(0,0,0,.55), rgba(0,0,0,0)); color: #fff; font-size: .95rem; }
 
-    .dots{ display:flex; gap:8px; justify-content:center; align-items:center; margin-top:10px; flex-wrap:wrap; }
-    .dot{ width:var(--dotSize); height:var(--dotSize); border-radius:50%; background:#cfd3d8; border:0; cursor:pointer; }
-    .dot:focus{ outline:3px solid #66a3ff; outline-offset:2px; }
-    .dot.is-active{ background:#333; }
+    .ctrl{ position: absolute; top: 50%; transform: translateY(-50%); padding: 6px 10px; border-radius: 8px; background: rgba(0,0,0,.45); color:#fff; text-decoration: none; font-size: 22px; line-height: 1; user-select: none; transition: background .2s; }
+    .ctrl:hover, .ctrl:focus{ background: rgba(0,0,0,.7); outline: 3px solid #66a3ff; outline-offset: 2px; }
+    .prev{ left: 8px; }
+    .next{ right: 8px; }
+
+    .dots{ display: flex; gap: 8px; justify-content: center; align-items: center; margin-top: 10px; flex-wrap: wrap; }
+    .dot{ width: var(--dotSize); height: var(--dotSize); border-radius: 50%; background: #cfd3d8; border: 0; cursor: pointer; }
+    .dot:focus{ outline: 3px solid #66a3ff; outline-offset: 2px; }
+    .dot.is-active{ background: #333; }
+
+    .grid-2{ display:grid; grid-template-columns: 1.1fr 0.9fr; gap: 28px; align-items: start; }
+    .lead{ font-size: 1.05rem; color: #444; }
+    .key-bullets{ margin: 14px 0 0; padding-left: 18px; }
+    .key-bullets li{ margin-bottom: 6px; }
+
+    .carousel.compact{ --h: 400px; }
+    .carousel.compact .caption{ font-size: 1rem; }
+
+    .card-grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; color: #111; }
+    .research-card{ background: #fff; border: 1px solid rgba(0,0,0,.1); border-radius: 12px; padding: 16px 16px 14px; transition: transform .2s, box-shadow .2s, border-color .2s; }
+    .research-card:hover{ transform: translateY(-4px); border-color: rgba(0,0,0,.18); box-shadow: 0 10px 20px rgba(0,0,0,.12); }
+    .kicker{ font-size: .8rem; }
 
     /* 手機高度微調 */
     @media (max-width: 640px){
