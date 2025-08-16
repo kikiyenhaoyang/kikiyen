@@ -31,7 +31,7 @@
     .skip-link{ position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden; }
     .skip-link:focus{ position:fixed; left:16px; top:16px; width:auto; height:auto; background:#000; color:#fff; padding:8px 12px; border-radius:6px; z-index:1000; }
 
-    /* ===== Header（精簡 + 手機收合） ===== */
+ /* ===== Header（精簡 + 手機收合） ===== */
     header{
       position: sticky; top: 0; z-index: 50;
       background: var(--bgcc, rgba(255,255,255,0.6));
@@ -83,7 +83,6 @@
       padding: 6px 8px; border-radius: 6px;
     }
     .nav-toggle:focus{ outline: 3px solid var(--ring); outline-offset: 2px; }
-
 
     /* 桌面：nav 展開、漢堡隱藏 */
     @media (min-width:768px){
@@ -146,7 +145,6 @@
   <header>
     <div class="wrapper">
       <div class="brand">
-        
         <div>
           <img src="yen.png" alt="HYY Logo">
           <h1 class="brand-title">Hao-Yang Yen</h1>
@@ -303,4 +301,51 @@
       function go(to){
         index = (to + slides.length) % slides.length;
         slides.forEach((s,i)=> s.classList.toggle('is-active', i === index));
-        d
+        dots.forEach((d,i)=> {
+          d.classList.toggle('is-active', i === index);
+          d.setAttribute('aria-selected', i === index ? 'true' : 'false');
+        });
+      }
+      const nextSlide = () => go(index + 1);
+      const prevSlide = () => go(index - 1);
+
+      function startAutoplay(){
+        if(reduceMotion) return;
+        stopAutoplay();
+        timerId = setInterval(nextSlide, AUTOPLAY_MS);
+      }
+      function stopAutoplay(){ if(timerId) clearInterval(timerId); timerId = null; }
+
+      next && next.addEventListener('click', e => { e.preventDefault(); nextSlide(); });
+      prev && prev.addEventListener('click', e => { e.preventDefault(); prevSlide(); });
+      dots.forEach(d => d.addEventListener('click', () => {
+        const i = parseInt(d.dataset.index || '0', 10);
+        go(i);
+      }));
+
+      root.addEventListener('mouseenter', stopAutoplay);
+      root.addEventListener('mouseleave', startAutoplay);
+      root.addEventListener('keydown', e => {
+        if(e.key === 'ArrowRight') nextSlide();
+        else if(e.key === 'ArrowLeft') prevSlide();
+      });
+      root.tabIndex = 0;
+
+      go(index);
+      startAutoplay();
+    }
+  })();
+
+  // 手機導覽開關 + a11y
+  (function(){
+    const toggle = document.querySelector('.nav-toggle');
+    const nav = document.querySelector('#primary-nav');
+    if(!toggle || !nav) return;
+    toggle.addEventListener('click', function(){
+      const opened = nav.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', opened ? 'true' : 'false');
+    });
+  })();
+  </script>
+</body>
+</html>

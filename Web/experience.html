@@ -24,11 +24,16 @@
     body{ font-family: Arial, Helvetica, sans-serif; color:var(--fg); background:var(--bg); line-height:1.6; }
     .wrapper{max-width:var(--maxw); margin:0 auto; padding:0 16px;}
 
-    /* Skip to content */
-    .skip-link{ position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden; }
-    .skip-link:focus{ position:fixed; left:16px; top:16px; width:auto; height:auto; background:#000; color:#fff; padding:8px 12px; border-radius:6px; z-index:1000; }
-
-       /* ===== Header（精簡 + 手機收合） ===== */
+    /* 跳至主內容（可近用） */
+    .skip-link{
+      position: absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden;
+    }
+    .skip-link:focus{
+      position: fixed; left:16px; top:16px; width:auto; height:auto; background:#000; color:#fff;
+      padding:8px 12px; border-radius:6px; z-index:1000;
+    }
+    
+    /* ===== Header（精簡 + 手機收合） ===== */
     header{
       position: sticky; top: 0; z-index: 50;
       background: var(--bgcc, rgba(255,255,255,0.6));
