@@ -11,6 +11,101 @@
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
 
   <style>
+/* 頁首 */
+header{
+  position: sticky; top: 0; z-index: 50;
+  background: var(--bgcc, rgba(255,255,255,0.6));
+  backdrop-filter: saturate(180%) blur(12px);
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+}
+header .wrapper{
+  display: flex; align-items: center; gap: 16px;
+  justify-content: space-between; /* 單行排滿 */
+  padding: 6px 16px;              /* 高度更緊湊 */
+}
+
+/* 品牌區縮小並橫向排列 */
+.brand{ display: inline-flex; align-items: center; gap: 10px; }
+.brand img{ width: 80px; height: auto; }
+.brand-title{ margin: 0; font-size: 1.25rem; line-height: 1.1; }
+.brand-sub{ margin: 0; font-size: .8rem; color: var(--muted); }
+
+/* Home 鈕縮小 */
+.home-link{
+  margin-left: 8px;
+  padding: 6px 10px; border-radius: 8px;
+  border: 1px solid rgba(0,0,0,0.15);
+  display: inline-flex; align-items: center; gap: 8px; text-decoration: none; color: inherit;
+}
+.home-link img{ width: 22px; height: auto; }
+
+/* 導覽列：桌面版與品牌同一行，縮小 icon 與間距 */
+.icon-nav{
+  display: flex; align-items: center; gap: 16px; padding: 0; margin: 0;
+  flex: 1 1 auto; justify-content: center; /* 置中，節省兩側空間 */
+}
+.nav-item{
+  text-decoration: none; color: inherit; text-align: center;
+  padding: 4px 6px; border-radius: 8px;
+  transition: transform .2s, box-shadow .2s, background-color .2s, color .2s;
+  font-size: .9rem;
+}
+.nav-item:hover{ transform: translateY(-2px); box-shadow: 0 6px 14px rgba(0,0,0,.12); color: var(--primary); }
+.nav-item.active{ background: #000; color: #fff; }
+.nav-icon{ width: 34px; height: auto; display: block; margin: 0 auto 2px; }
+
+/* 漢堡按鈕（桌面隱藏、手機顯示） */
+.nav-toggle{
+  margin-left: auto;
+  font-size: 1.4rem; line-height: 1;
+  background: none; border: 0; color: inherit; cursor: pointer;
+  padding: 6px 8px; border-radius: 6px;
+}
+.nav-toggle:focus{ outline: 3px solid var(--ring); outline-offset: 2px; }
+
+/* 手機版：預設收合 nav，點漢堡展開為直向 */
+@media (max-width: 767.98px){
+  header .wrapper{ flex-wrap: wrap; row-gap: 8px; }
+  .icon-nav{ 
+    order: 3; width: 100%;
+    display: none; flex-direction: column; gap: 10px; padding: 8px 0 10px;
+  }
+  .icon-nav.open{ display: flex; }
+  .nav-toggle{ display: inline-flex; }
+  .home-link{ order: 2; }
+}
+/* 預設隱藏導覽列（手機版） */
+.icon-nav {
+  display: none;
+  flex-direction: column; /* 手機版直排 */
+  gap: 12px;
+  padding: 12px 0;
+}
+
+/* 當加上 open class 時展開 */
+.icon-nav.open {
+  display: flex;
+}
+
+/* 切換按鈕 */
+.nav-toggle {
+  margin-left: auto;
+  font-size: 1.6rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--fg);
+}
+
+/* 桌面版直接展開 */
+@media (min-width: 768px) {
+  .nav-toggle { display: none; }
+  .icon-nav { 
+    display: flex !important; 
+    flex-direction: row;
+  }
+}
+
     :root{
       --bg:#f3f4ea;
       --fg:#1d1f21;
@@ -20,6 +115,11 @@
       --ring:#89b4fa;
       --maxw:1000px;
     }
+     /* 頁尾 */
+    footer{padding:28px 0 36px; border-top:1px solid rgba(0,0,0,0.1); margin-top:36px}
+    .logos{display:flex; justify-content:center; align-items:center; gap:28px}
+    .logos img{height:80px; width:auto}
+
     @media (prefers-color-scheme: dark){
       :root{
         --bg:#0e1116;
@@ -40,9 +140,9 @@
       line-height:1.6;
     }
 
+
     /* 共用容器 */
     .wrapper{max-width:var(--maxw); margin:0 auto; padding:0 16px;}
-
     /* 跳至主內容（可近用） */
     .skip-link{
       position: absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden;
@@ -51,27 +151,6 @@
       position: fixed; left:16px; top:16px; width:auto; height:auto; background:#000; color:#fff;
       padding:8px 12px; border-radius:6px; z-index:1000;
     }
-
-    /* 頁首 */
-    header{
-      position:sticky; top:0; z-index:50; background:var(--bgcc, rgba(255,255,255,0.6));
-      backdrop-filter:saturate(180%) blur(12px);
-      border-bottom:1px solid rgba(0,0,0,0.08);
-    }
-    .brand{
-      display:flex; align-items:center; gap:12px; padding:14px 0;
-    }
-    .brand img{width:64px; height:auto}
-    .brand-title{margin:0; font-size:1.8rem; line-height:1}
-    .brand-sub{margin:0; font-style:italic; color:var(--muted); margin-top:2px}
-
-    /* 右上 Home 按鈕 */
-    .home-link{
-      margin-left:auto; display:inline-flex; align-items:center; gap:8px;
-      padding:8px 12px; border:1px solid rgba(0,0,0,0.15); border-radius:10px; text-decoration:none; color:inherit;
-    }
-    .home-link img{width:28px; height:auto}
-    .home-link:focus{outline:3px solid var(--ring); outline-offset:2px}
 
     /* 導覽列 */
     nav.icon-nav{
@@ -114,44 +193,198 @@
       background:#111; color:#fff; padding:6px 50px; font-size:.8rem; letter-spacing:.5px;
       box-shadow:0 6px 12px rgba(0,0,0,.25);
     }
+     .carousel {
+    --h: 400px;           /* 高度可調 */
+    --dotSize: 10px;
+    position: relative;
+    max-width: 400px;
+    margin: 24px auto;
+  }
+  .carousel-track {
+    position: relative;
+    height: var(--h);
+    overflow: hidden;
+    border-radius: 10px;
+    background: #000;
+  }
+  .slide {
+    position: absolute; inset: 0;
+    display: grid; place-items: center;
+    opacity: 0; transition: opacity .4s ease;
+  }
+  .slide.is-active { opacity: 1; }
+  .slide img {
+    height: 100%; width: auto; max-width: 100%;
+    object-fit: contain; display: block;
+  }
+  .caption {
+    position: absolute; left: 0; right: 0; bottom: 0;
+    padding: 8px 12px;
+    background: linear-gradient(to top, rgba(0,0,0,.55), rgba(0,0,0,0));
+    color: #fff; font-size: .95rem;
+  }
 
-    /* 頁尾 */
-    footer{padding:28px 0 36px; border-top:1px solid rgba(0,0,0,0.1); margin-top:36px}
-    .logos{display:flex; justify-content:center; align-items:center; gap:28px}
-    .logos img{height:80px; width:auto}
+  /* 控制按鈕 */
+  .ctrl {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    padding: 6px 10px; border-radius: 8px;
+    background: rgba(0,0,0,.45); color:#fff; text-decoration: none;
+    font-size: 22px; line-height: 1; user-select: none;
+    transition: background .2s;
+  }
+  .ctrl:hover, .ctrl:focus { background: rgba(0,0,0,.7); outline: 3px solid #66a3ff; outline-offset: 2px; }
+  .prev { left: 8px; }
+  .next { right: 8px; }
 
-    /* 響應式微調 */
-    @media (max-width:640px){
-      .brand img{width:56px}
-      .brand-title{font-size:1.4rem}
-      .home-link{display:none} /* 小螢幕可隱藏右上 Home 按鈕（可視需要保留） */
-      .nav-icon{width:44px}
-    }
+  /* 點點 */
+  .dots {
+    display: flex; gap: 8px; justify-content: center; align-items: center;
+    margin-top: 10px; flex-wrap: wrap;
+  }
+  .dot {
+    width: var(--dotSize); height: var(--dotSize);
+    border-radius: 50%; background: #cfd3d8; border: 0;
+    cursor: pointer;
+  }
+  .dot:focus { outline: 3px solid #66a3ff; outline-offset: 2px; }
+  .dot.is-active { background: #333; }
+
+  .profile {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  margin: 20px 0;
+}
+
+.profile-left, .profile-right {
+  flex: 1;
+  min-width: 250px;
+}
+
+.profile-left h3 {
+  margin-top: 0;
+}
+
+.social-links {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 6px;
+  background: #f0f0f0;
+  text-decoration: none;
+  color: #222;
+  font-weight: 500;
+  transition: transform 0.2s, background 0.2s;
+}
+
+.btn i {
+  font-size: 1.1rem;
+}
+
+.btn:hover {
+  transform: translateY(-3px);
+  background: #e0e0e0;
+}
+
+/* 特別品牌色 */
+.youtube {
+  background: #ff0000;
+  color: white;
+}
+.youtube:hover {
+  background: #cc0000;
+}
+
+.github {
+  background: #333;
+  color: white;
+}
+.github:hover {
+  background: #111;
+}
+
+/* 版面：左文右圖 */
+.grid-2{
+  display:grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 28px;
+  align-items: start;
+}
+
+/* 段落與重點 */
+.lead{ font-size: 1.05rem; color: #444; }
+.key-bullets{ margin: 14px 0 0; padding-left: 18px; }
+.key-bullets li{ margin-bottom: 6px; }
+
+/* 輪播縮小版（覆寫你原本 carousel 的尺寸） */
+.carousel.compact { --h: 400px; }         /* 想再小就改 180/200 */
+.carousel.compact .caption{ font-size: 1rem; }
+
+/* 研究卡片 */
+.card-grid{
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+  color: #111;
+}
+.research-card{
+  background: #fff;
+  border: 1px solid rgba(0,0,0,.1);
+  border-radius: 12px;
+  padding: 16px 16px 14px;
+  transition: transform .2s, box-shadow .2s, border-color .2s;
+}
+.research-card:hover{
+  transform: translateY(-4px);
+  border-color: rgba(0,0,0,.18);
+  box-shadow: 0 10px 20px rgba(0,0,0,.12);
+}
+.kicker{
+  font-size: .8rem; let
+  /* 手機高度微調 */
+  @media (max-width: 640px) {
+    .carousel { --h: 220px; }
+    .caption { font-size: .85rem; }
+  }}
+   /* ===== 精簡桌面版 Header + 手機收合 ===== */
+
+
+/* 桌面版：隱藏漢堡、nav 永遠展開且單行 */
+@media (min-width: 768px){
+  .nav-toggle{ display: none; }
+  .icon-nav{ display: flex !important; flex-direction: row; }
+}
+
+/* 額外把主內容上方間距調小一點（如果需要） */
+main{ padding-top: 18px; }
+
   </style>
 </head>
 
 <body>
   <a href="#main" class="skip-link">Skip to main content</a>
 
-  <!-- 頁首 -->
-  <header>
-    <div class="wrapper" style="display:flex; align-items:center; gap:12px;">
-      <div class="brand">
-       
-        <div>
-          <img src="yen.png" alt="HYY Logo">
-          <br>
-          <h1 class="brand-title">Hao-Yang Yen</h1>
-          <p class="brand-sub">HYY Home</p>
-        </div>
+ <!-- 頁首 -->
+   <header>
+  <div class="wrapper">
+    <div class="brand">
+      
+      <div>
+        <img src="yen.png" alt="HYY Logo">
+        <h1 class="brand-title">Hao-Yang Yen</h1>
+        <p class="brand-sub">HYY Home</p>
       </div>
-      <a class="home-link" href="index.html" aria-label="Go to HYY Home">
-        <img src="yen.png" alt=""> Home
-      </a>
     </div>
 
-    <!-- 導覽列 -->
-    <nav class="icon-nav wrapper" aria-label="Primary">
+    <!-- 導覽列：與品牌同一行（桌面），手機可收合 -->
+    <nav class="icon-nav" aria-label="Primary">
       <a href="experience.html" class="nav-item">
         <img src="exp.png" alt="" class="nav-icon"><span>Experience</span>
       </a>
@@ -161,11 +394,20 @@
       <a href="research.html" class="nav-item">
         <img src="r.png" alt="" class="nav-icon"><span>Research</span>
       </a>
-      <a href="Explore.html" class="nav-item active" aria-current="page">
+      <a href="Explore.html" class="nav-item active">
         <img src="flipped_e.png" alt="" class="nav-icon"><span>Explore</span>
       </a>
     </nav>
-  </header>
+
+    <!-- 右側：手機版漢堡 + Home 按鈕 -->
+    <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="primary-nav">☰</button>
+
+    <a class="home-link" href="index.html" aria-label="Go to HYY Home">
+       Home
+    </a>
+  </div>
+</header>
+
 
   <!-- 主內容 -->
   <main id="main" class="wrapper">
