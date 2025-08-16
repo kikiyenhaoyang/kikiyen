@@ -5,677 +5,273 @@
   <title>index</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <!-- KaTeX (保留你原本的) -->
+  <!-- KaTeX -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
 
+  <!-- Font Awesome（給社群按鈕用） -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
   <style>
-/* 頁首 */
-header{
-  position: sticky; top: 0; z-index: 50;
-  background: var(--bgcc, rgba(255,255,255,0.6));
-  backdrop-filter: saturate(180%) blur(12px);
-  border-bottom: 1px solid rgba(0,0,0,0.08);
-}
-header .wrapper{
-  display: flex; align-items: center; gap: 16px;
-  justify-content: space-between; /* 單行排滿 */
-  padding: 6px 16px;              /* 高度更緊湊 */
-}
-
-/* 品牌區縮小並橫向排列 */
-.brand{ display: inline-flex; align-items: center; gap: 10px; }
-.brand img{ width: 80px; height: auto; }
-.brand-title{ margin: 0; font-size: 1.25rem; line-height: 1.1; }
-.brand-sub{ margin: 0; font-size: .8rem; color: var(--muted); }
-
-/* Home 鈕縮小 */
-.home-link{
-  margin-left: 8px;
-  padding: 6px 10px; border-radius: 8px;
-  border: 1px solid rgba(0,0,0,0.15);
-  display: inline-flex; align-items: center; gap: 8px; text-decoration: none; color: inherit;
-}
-.home-link img{ width: 22px; height: auto; }
-
-/* 導覽列：桌面版與品牌同一行，縮小 icon 與間距 */
-.icon-nav{
-  display: flex; align-items: center; gap: 16px; padding: 0; margin: 0;
-  flex: 1 1 auto; justify-content: center; /* 置中，節省兩側空間 */
-}
-.nav-item{
-  text-decoration: none; color: inherit; text-align: center;
-  padding: 4px 6px; border-radius: 8px;
-  transition: transform .2s, box-shadow .2s, background-color .2s, color .2s;
-  font-size: .9rem;
-}
-.nav-item:hover{ transform: translateY(-2px); box-shadow: 0 6px 14px rgba(0,0,0,.12); color: var(--primary); }
-.nav-item.active{ background: #000; color: #fff; }
-.nav-icon{ width: 34px; height: auto; display: block; margin: 0 auto 2px; }
-
-/* 漢堡按鈕（桌面隱藏、手機顯示） */
-.nav-toggle{
-  margin-left: auto;
-  font-size: 1.4rem; line-height: 1;
-  background: none; border: 0; color: inherit; cursor: pointer;
-  padding: 6px 8px; border-radius: 6px;
-}
-.nav-toggle:focus{ outline: 3px solid var(--ring); outline-offset: 2px; }
-
-/* 手機版：預設收合 nav，點漢堡展開為直向 */
-@media (max-width: 767.98px){
-  header .wrapper{ flex-wrap: wrap; row-gap: 8px; }
-  .icon-nav{ 
-    order: 3; width: 100%;
-    display: none; flex-direction: column; gap: 10px; padding: 8px 0 10px;
-  }
-  .icon-nav.open{ display: flex; }
-  .nav-toggle{ display: inline-flex; }
-  .home-link{ order: 2; }
-}
-/* 預設隱藏導覽列（手機版） */
-.icon-nav {
-  display: none;
-  flex-direction: column; /* 手機版直排 */
-  gap: 12px;
-  padding: 12px 0;
-}
-
-/* 當加上 open class 時展開 */
-.icon-nav.open {
-  display: flex;
-}
-
-/* 切換按鈕 */
-.nav-toggle {
-  margin-left: auto;
-  font-size: 1.6rem;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: var(--fg);
-}
-
-/* 桌面版直接展開 */
-@media (min-width: 768px) {
-  .nav-toggle { display: none; }
-  .icon-nav { 
-    display: flex !important; 
-    flex-direction: row;
-  }
-}
-
     :root{
-      --bg:#f3f4ea;
-      --fg:#1d1f21;
-      --muted:#565b5f;
-      --primary:#0a66c2;
-      --card:#ffffff;
-      --ring:#89b4fa;
-      --maxw:1000px;
+      --bg:#f3f4ea; --fg:#1d1f21; --muted:#565b5f; --primary:#0a66c2;
+      --card:#ffffff; --ring:#89b4fa; --maxw:1000px;
     }
-     /* 頁尾 */
-    footer{padding:28px 0 36px; border-top:1px solid rgba(0,0,0,0.1); margin-top:36px}
-    .logos{display:flex; justify-content:center; align-items:center; gap:28px}
-    .logos img{height:80px; width:auto}
-
     @media (prefers-color-scheme: dark){
-      :root{
-        --bg:#0e1116;
-        --fg:#e6e6e6;
-        --muted:#a0a4aa;
-        --card:#11151c;
-        --primary:#7ab0ff;
-        --ring:#3b82f6;
-      }
+      :root{ --bg:#0e1116; --fg:#e6e6e6; --muted:#a0a4aa; --card:#11151c; --primary:#7ab0ff; --ring:#3b82f6; }
     }
 
     *{box-sizing:border-box}
     html,body{margin:0;padding:0}
-    body{
-      font-family: Arial, Helvetica, sans-serif;
-      color:var(--fg);
-      background:var(--bg);
-      line-height:1.6;
-    }
-
-
-    /* 共用容器 */
+    body{ font-family: Arial, Helvetica, sans-serif; color:var(--fg); background:var(--bg); line-height:1.6; }
     .wrapper{max-width:var(--maxw); margin:0 auto; padding:0 16px;}
-    /* 跳至主內容（可近用） */
-    .skip-link{
-      position: absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden;
+
+    /* Skip to main content */
+    .skip-link{ position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden; }
+    .skip-link:focus{ position:fixed; left:16px; top:16px; width:auto; height:auto; background:#000; color:#fff; padding:8px 12px; border-radius:6px; z-index:1000; }
+
+    /* ===== Header（精簡 + 手機收合） ===== */
+    header{
+      position: sticky; top: 0; z-index: 50;
+      background: var(--bgcc, rgba(255,255,255,0.6));
+      backdrop-filter: saturate(180%) blur(12px);
+      border-bottom: 1px solid rgba(0,0,0,0.08);
     }
-    .skip-link:focus{
-      position: fixed; left:16px; top:16px; width:auto; height:auto; background:#000; color:#fff;
-      padding:8px 12px; border-radius:6px; z-index:1000;
+    header .wrapper{
+      display: flex; align-items: center; gap: 16px;
+      justify-content: space-between;
+      padding: 6px 16px;
+    }
+    .brand{ display: inline-flex; align-items: center; gap: 10px; }
+    .brand img{ width: 80px; height: auto; }
+    .brand-title{ margin: 0; font-size: 1.25rem; line-height: 1.1; }
+    .brand-sub{ margin: 0; font-size: .8rem; color: var(--muted); }
+
+    .home-link{
+      margin-left: 8px;
+      padding: 6px 10px; border-radius: 8px;
+      border: 1px solid rgba(0,0,0,0.15);
+      display: inline-flex; align-items: center; gap: 8px; text-decoration: none; color: inherit;
     }
 
-    /* 導覽列 */
-    nav.icon-nav{
-      display:flex; flex-wrap:wrap; justify-content:center; gap:28px; padding:10px 0 16px;
+    /* 導覽列：手機預設收合 */
+    .icon-nav{
+      display: none;           /* mobile default: hidden */
+      flex-direction: column;  /* mobile vertical */
+      gap: 28px;
+      padding: 10px 0 16px;
+      margin: 0;
+      flex: 1 1 auto;
     }
+    .icon-nav.open{ display: flex; }
+
     .nav-item{
       text-decoration:none; color:inherit; text-align:center; padding:10px 12px; border-radius:10px;
       transition: transform .2s, box-shadow .2s, background-color .2s, color .2s;
       outline-offset:2px;
     }
     .nav-item:focus{outline:3px solid var(--ring)}
-    .nav-item:hover{transform:translateY(-3px); box-shadow:0 6px 14px rgba(0,0,0,.15); color:var(--primary)}
-    .nav-item.active{background:#000; color:#fff}
-    .nav-icon{width:50px; height:auto; display:block; margin:0 auto 6px}
+    .nav-item:hover{ transform: translateY(-2px); box-shadow: 0 6px 14px rgba(0,0,0,.12); color: var(--primary); }
+    .nav-item.active{ background: #000; color: #fff; }
+    .nav-icon{ width: 50px; height: auto; display: block; margin: 0 auto 2px; }
+
+    .nav-toggle{
+      margin-left: auto;
+      font-size: 1.4rem; line-height: 1;
+      background: none; border: 0; color: inherit; cursor: pointer;
+      padding: 6px 8px; border-radius: 6px;
+    }
+    .nav-toggle:focus{ outline: 3px solid var(--ring); outline-offset: 2px; }
+
+
+    /* 桌面：nav 展開、漢堡隱藏 */
+    @media (min-width:768px){
+      .nav-toggle{ display:none; }
+      .icon-nav{ display:flex !important; flex-direction:row; align-items:center; justify-content:center; gap:16px; padding:0; }
+    }
 
     /* 主內容 */
-    main{padding:24px 0}
+    main{ padding:18px 0; }
     .page-title{text-align:center; font-size:2rem; margin:24px 0 12px; font-weight:bold}
     .intro-text{max-width:760px; margin:0 auto 28px; text-align:center; color:var(--muted)}
 
-    /* 書籍卡片 */
-    .book-grid{
-      display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap:24px; max-width:900px; margin:0 auto;
+    /* Profile / 社群按鈕 */
+    .profile{ display:flex; flex-wrap:wrap; gap:30px; margin:20px 0; }
+    .profile-left,.profile-right{ flex:1; min-width:250px; }
+    .profile-left h3{ margin-top:0; }
+    .social-links{ display:flex; flex-direction:column; gap:12px; }
+    .btn{ display:inline-flex; align-items:center; gap:8px; padding:10px 14px; border-radius:6px; background:#f0f0f0; text-decoration:none; color:#222; font-weight:500; transition: transform .2s, background .2s; }
+    .btn:hover{ transform: translateY(-3px); background:#e0e0e0; }
+    .youtube{ background:#ff0000; color:#fff; }
+    .youtube:hover{ background:#cc0000; }
+    .github{ background:#333; color:#fff; }
+    .github:hover{ background:#111; }
+
+    /* 輪播（全站共用，這頁把寬度調較小） */
+    .carousel{ --h:400px; --dotSize:10px; position:relative; max-width:300px; margin:24px auto; }
+    .carousel-track{ position:relative; height:var(--h); overflow:hidden; border-radius:10px; background:#000; }
+    .slide{ position:absolute; inset:0; display:grid; place-items:center; opacity:0; transition:opacity .4s ease; }
+    .slide.is-active{ opacity:1; }
+    .slide img{ height:100%; width:auto; max-width:100%; object-fit:contain; display:block; }
+    .caption{ position:absolute; left:0; right:0; bottom:0; padding:8px 12px; background:linear-gradient(to top, rgba(0,0,0,.55), rgba(0,0,0,0)); color:#fff; font-size:.95rem; }
+
+    .ctrl{ position:absolute; top:50%; transform:translateY(-50%); padding:6px 10px; border-radius:8px; background:rgba(0,0,0,.45); color:#fff; text-decoration:none; font-size:22px; line-height:1; user-select:none; transition:background .2s; }
+    .ctrl:hover,.ctrl:focus{ background:rgba(0,0,0,.7); outline:3px solid #66a3ff; outline-offset:2px; }
+    .prev{ left:8px; } .next{ right:8px; }
+
+    .dots{ display:flex; gap:8px; justify-content:center; align-items:center; margin-top:10px; flex-wrap:wrap; }
+    .dot{ width:var(--dotSize); height:var(--dotSize); border-radius:50%; background:#cfd3d8; border:0; cursor:pointer; }
+    .dot:focus{ outline:3px solid #66a3ff; outline-offset:2px; }
+    .dot.is-active{ background:#333; }
+
+    /* 手機高度微調 */
+    @media (max-width:640px){
+      .carousel{ --h:220px; }
+      .caption{ font-size:.85rem; }
+      .home-link{ display:none; } /* 小螢幕可隱藏右上 Home 按鈕 */
     }
-    .book-card{
-      background:var(--card); border:1px solid rgba(0,0,0,0.12); border-radius:12px;
-      padding:12px; text-align:center; position:relative; overflow:hidden;
-      transition: transform .2s, box-shadow .2s, border-color .2s;
-    }
-    .book-card:hover{transform:translateY(-5px); box-shadow:0 12px 24px rgba(0,0,0,.18); border-color:rgba(0,0,0,0.18)}
-    .book-link{display:block; text-decoration:none; color:inherit; outline-offset:3px}
-    .book-link:focus{outline:3px solid var(--ring)}
-    .book-cover{width:250px; max-width:100%; height:auto; display:block; margin:6px auto 12px; border-radius:8px}
-    .solution-title{font-size:1rem; line-height:1.4; margin:0 8px 8px}
 
-    /* 角落標籤 (Coming soon) */
-    .ribbon{
-      position:absolute; top:12px; right:-40px; transform:rotate(45deg);
-      background:#111; color:#fff; padding:6px 50px; font-size:.8rem; letter-spacing:.5px;
-      box-shadow:0 6px 12px rgba(0,0,0,.25);
-    }
-     .carousel {
-    --h: 400px;           /* 高度可調 */
-    --dotSize: 10px;
-    position: relative;
-    max-width: 400px;
-    margin: 24px auto;
-  }
-  .carousel-track {
-    position: relative;
-    height: var(--h);
-    overflow: hidden;
-    border-radius: 10px;
-    background: #000;
-  }
-  .slide {
-    position: absolute; inset: 0;
-    display: grid; place-items: center;
-    opacity: 0; transition: opacity .4s ease;
-  }
-  .slide.is-active { opacity: 1; }
-  .slide img {
-    height: 100%; width: auto; max-width: 100%;
-    object-fit: contain; display: block;
-  }
-  .caption {
-    position: absolute; left: 0; right: 0; bottom: 0;
-    padding: 8px 12px;
-    background: linear-gradient(to top, rgba(0,0,0,.55), rgba(0,0,0,0));
-    color: #fff; font-size: .95rem;
-  }
-
-  /* 控制按鈕 */
-  .ctrl {
-    position: absolute; top: 50%; transform: translateY(-50%);
-    padding: 6px 10px; border-radius: 8px;
-    background: rgba(0,0,0,.45); color:#fff; text-decoration: none;
-    font-size: 22px; line-height: 1; user-select: none;
-    transition: background .2s;
-  }
-  .ctrl:hover, .ctrl:focus { background: rgba(0,0,0,.7); outline: 3px solid #66a3ff; outline-offset: 2px; }
-  .prev { left: 8px; }
-  .next { right: 8px; }
-
-  /* 點點 */
-  .dots {
-    display: flex; gap: 8px; justify-content: center; align-items: center;
-    margin-top: 10px; flex-wrap: wrap;
-  }
-  .dot {
-    width: var(--dotSize); height: var(--dotSize);
-    border-radius: 50%; background: #cfd3d8; border: 0;
-    cursor: pointer;
-  }
-  .dot:focus { outline: 3px solid #66a3ff; outline-offset: 2px; }
-  .dot.is-active { background: #333; }
-
-  .profile {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 30px;
-  margin: 20px 0;
-}
-
-.profile-left, .profile-right {
-  flex: 1;
-  min-width: 250px;
-}
-
-.profile-left h3 {
-  margin-top: 0;
-}
-
-.social-links {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 14px;
-  border-radius: 6px;
-  background: #f0f0f0;
-  text-decoration: none;
-  color: #222;
-  font-weight: 500;
-  transition: transform 0.2s, background 0.2s;
-}
-
-.btn i {
-  font-size: 1.1rem;
-}
-
-.btn:hover {
-  transform: translateY(-3px);
-  background: #e0e0e0;
-}
-
-/* 特別品牌色 */
-.youtube {
-  background: #ff0000;
-  color: white;
-}
-.youtube:hover {
-  background: #cc0000;
-}
-
-.github {
-  background: #333;
-  color: white;
-}
-.github:hover {
-  background: #111;
-}
-
-/* 版面：左文右圖 */
-.grid-2{
-  display:grid;
-  grid-template-columns: 1.1fr 0.9fr;
-  gap: 28px;
-  align-items: start;
-}
-
-/* 段落與重點 */
-.lead{ font-size: 1.05rem; color: #444; }
-.key-bullets{ margin: 14px 0 0; padding-left: 18px; }
-.key-bullets li{ margin-bottom: 6px; }
-
-/* 輪播縮小版（覆寫你原本 carousel 的尺寸） */
-.carousel.compact { --h: 400px; }         /* 想再小就改 180/200 */
-.carousel.compact .caption{ font-size: 1rem; }
-
-/* 卡片 */
-.card-grid{
-  display:grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 20px;
-  color: #111;
-}
-.research-card{
-  background: #fff;
-  border: 1px solid rgba(0,0,0,.1);
-  border-radius: 12px;
-  padding: 16px 16px 14px;
-  transition: transform .2s, box-shadow .2s, border-color .2s;
-}
-.research-card:hover{
-  transform: translateY(-4px);
-  border-color: rgba(0,0,0,.18);
-  box-shadow: 0 10px 20px rgba(0,0,0,.12);
-}
-.kicker{
-  font-size: .8rem; let
-  /* 手機高度微調 */
-  @media (max-width: 640px) {
-    .carousel { --h: 220px; }
-    .caption { font-size: .85rem; }
-  }}
-   /* ===== 精簡桌面版 Header + 手機收合 ===== */
-
-
-/* 桌面版：隱藏漢堡、nav 永遠展開且單行 */
-@media (min-width: 768px){
-  .nav-toggle{ display: none; }
-  .icon-nav{ display: flex !important; flex-direction: row; }
-}
-
-/* 額外把主內容上方間距調小一點（如果需要） */
-main{ padding-top: 18px; }
-
+    /* 頁尾 */
+    footer{padding:28px 0 36px; border-top:1px solid rgba(0,0,0,0.1); margin-top:36px}
+    .logos{display:flex; justify-content:center; align-items:center; gap:28px}
+    .logos img{height:80px; width:auto}
   </style>
 </head>
 
 <body>
   <a href="#main" class="skip-link">Skip to main content</a>
 
-  <!-- 頁首 -->
-   <header>
-  <div class="wrapper">
-    <div class="brand">
-      
-      <div>
-        <img src="yen.png" alt="HYY Logo">
-        <h1 class="brand-title">Hao-Yang Yen</h1>
-        <p class="brand-sub">HYY Home</p>
+  <!-- Header -->
+  <header>
+    <div class="wrapper">
+      <div class="brand">
+        
+        <div>
+          <img src="yen.png" alt="HYY Logo">
+          <h1 class="brand-title">Hao-Yang Yen</h1>
+        </div>
       </div>
+
+      <!-- 導覽列（首頁不加 active，其他頁再各自加） -->
+      <nav id="primary-nav" class="icon-nav" aria-label="Primary">
+        <a href="experience.html" class="nav-item">
+          <img src="exp.png" alt="" class="nav-icon"><span>Experience</span>
+        </a>
+        <a href="learning.html" class="nav-item">
+          <img src="l.png" alt="" class="nav-icon"><span>Learning</span>
+        </a>
+        <a href="research.html" class="nav-item">
+          <img src="r.png" alt="" class="nav-icon"><span>Research</span>
+        </a>
+        <a href="Explore.html" class="nav-item">
+          <img src="e.png" alt="" class="nav-icon"><span>Explore</span>
+        </a>
+      </nav>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="primary-nav">☰</button>
+      <a class="home-link" href="index.html" aria-label="Go to HYY Home">Home</a>
     </div>
+  </header>
 
-    <!-- 導覽列：與品牌同一行（桌面），手機可收合 -->
-    <nav class="icon-nav" aria-label="Primary">
-      <a href="experience.html" class="nav-item">
-        <img src="exp.png" alt="" class="nav-icon"><span>Experience</span>
-      </a>
-      <a href="learning.html" class="nav-item">
-        <img src="l.png" alt="" class="nav-icon"><span>Learning</span>
-      </a>
-      <a href="research.html" class="nav-item">
-        <img src="r.png" alt="" class="nav-icon"><span>Research</span>
-      </a>
-      <a href="Explore.html" class="nav-item">
-        <img src="e.png" alt="" class="nav-icon"><span>Explore</span>
-      </a>
-    </nav>
-
-    <!-- 右側：手機版漢堡 + Home 按鈕 -->
-    <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="primary-nav">☰</button>
-
-    <a class="home-link" href="index.html" aria-label="Go to HYY Home">
-       Home
-    </a>
-  </div>
-</header>
-
-  <!-- 主內容 -->
+  <!-- Main -->
   <main id="main" class="wrapper">
-<!-- ========== CSS ========== -->
-<style>
-  .carousel {
-    --h: 400px;           /* 高度可調 */
-    --dotSize: 10px;
-    position: relative;
-    max-width: 300px;
-    margin: 24px auto;
-  }
-  .carousel-track {
-    position: relative;
-    height: var(--h);
-    overflow: hidden;
-    border-radius: 10px;
-    background: #000;
-  }
-  .slide {
-    position: absolute; inset: 0;
-    display: grid; place-items: center;
-    opacity: 0; transition: opacity .4s ease;
-  }
-  .slide.is-active { opacity: 1; }
-  .slide img {
-    height: 100%; width: auto; max-width: 100%;
-    object-fit: contain; display: block;
-  }
-  .caption {
-    position: absolute; left: 0; right: 0; bottom: 0;
-    padding: 8px 12px;
-    background: linear-gradient(to top, rgba(0,0,0,.55), rgba(0,0,0,0));
-    color: #fff; font-size: .95rem;
-  }
+    <section class="profile">
+      <div class="profile-left">
+        <h3>Student</h3>
+        <p>
+          Interdisciplinary Program of Sciences (理學院學士班)<br>
+          National Tsing Hua University (國立清華大學)<br>
+          Institute of Physics, Academia Sinica (中央研究院)<br>
+          Email: kikiyen0715@gapp.nthu.edu.tw
+        </p>
+      </div>
 
-  /* 控制按鈕 */
-  .ctrl {
-    position: absolute; top: 50%; transform: translateY(-50%);
-    padding: 6px 10px; border-radius: 8px;
-    background: rgba(0,0,0,.45); color:#fff; text-decoration: none;
-    font-size: 22px; line-height: 1; user-select: none;
-    transition: background .2s;
-  }
-  .ctrl:hover, .ctrl:focus { background: rgba(0,0,0,.7); outline: 3px solid #66a3ff; outline-offset: 2px; }
-  .prev { left: 8px; }
-  .next { right: 8px; }
+      <div class="profile-right">
+        <div class="social-links">
+          <a href="https://youtube.com/channel/UCU_LT30IrG6UjtSDE653isw?si=n2cnqT-OD4SuhvCh" class="btn youtube"><i class="fab fa-youtube"></i> YouTube</a>
+          <a href="https://github.com/kikiyenhaoyang" class="btn github"><i class="fab fa-github"></i> GitHub</a>
+          <a href="CV.pdf" class="btn"><i class="fas fa-file-alt"></i> CV</a>
+        </div>
+      </div>
+    </section>
 
-  /* 點點 */
-  .dots {
-    display: flex; gap: 8px; justify-content: center; align-items: center;
-    margin-top: 10px; flex-wrap: wrap;
-  }
-  .dot {
-    width: var(--dotSize); height: var(--dotSize);
-    border-radius: 50%; background: #cfd3d8; border: 0;
-    cursor: pointer;
-  }
-  .dot:focus { outline: 3px solid #66a3ff; outline-offset: 2px; }
-  .dot.is-active { background: #333; }
+    <!-- Carousel #1 -->
+    <section class="carousel" data-carousel="people" aria-roledescription="carousel" aria-label="Photos: events and places">
+      <div class="carousel-track" role="group">
+        <figure class="slide is-active">
+          <img src="ed_2024.jpg" alt="Electrodynamics 2024 winter, Professor and TAs">
+          <figcaption class="caption">Electrodynamics 2024 winter, Professor and TAs.</figcaption>
+        </figure>
+        <figure class="slide">
+          <img src="wen_hua.jpg" alt="Wen-Hua high school anniversary 2024 with tutor and Chinese teacher">
+          <figcaption class="caption">Wen-Hua high school anniversary 2024, with my class tutor and Chinese teacher.</figcaption>
+        </figure>
+        <figure class="slide">
+          <img src="Tainan.jpg" alt="Tainan city view">
+          <figcaption class="caption">Tainan</figcaption>
+        </figure>
+        <figure class="slide">
+          <img src="taipei.jpg" alt="Taipei city view">
+          <figcaption class="caption">Taipei</figcaption>
+        </figure>
+        <figure class="slide">
+          <img src="hsinchu.jpg" alt="Hsinchu city view">
+          <figcaption class="caption">Hsinchu</figcaption>
+        </figure>
+        <figure class="slide">
+          <img src="notitle.jpg" alt="Photo">
+          <figcaption class="caption"> </figcaption>
+        </figure>
 
-  .profile {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 30px;
-  margin: 20px 0;
-}
+        <a class="ctrl prev" href="#" aria-label="Previous slide" data-action="prev">&#10094;</a>
+        <a class="ctrl next" href="#" aria-label="Next slide" data-action="next">&#10095;</a>
+      </div>
+      <div class="dots" role="tablist" aria-label="Slide dots">
+        <button class="dot is-active" role="tab" aria-selected="true" data-index="0"></button>
+        <button class="dot" role="tab" aria-selected="false" data-index="1"></button>
+        <button class="dot" role="tab" aria-selected="false" data-index="2"></button>
+        <button class="dot" role="tab" aria-selected="false" data-index="3"></button>
+        <button class="dot" role="tab" aria-selected="false" data-index="4"></button>
+        <button class="dot" role="tab" aria-selected="false" data-index="5"></button>
+      </div>
+    </section>
 
-.profile-left, .profile-right {
-  flex: 1;
-  min-width: 250px;
-}
+    <!-- Carousel #2 -->
+    <section class="carousel" data-carousel="cats" aria-roledescription="carousel" aria-label="Photos: Sen Sen the cat">
+      <div class="carousel-track" role="group">
+        <figure class="slide is-active"><img src="sen_1.jpg" alt="Sen Sen at NTHU"><figcaption class="caption">Sen Sen (?–2024/6/25), my favorite cat at NTHU</figcaption></figure>
+        <figure class="slide"><img src="sen_2.jpg" alt="Sen Sen sitting"><figcaption class="caption">Sen Sen (?–2024/6/25), my favorite cat at NTHU</figcaption></figure>
+        <figure class="slide"><img src="sen_3.JPG" alt="Sen Sen outdoors"><figcaption class="caption">Sen Sen (?–2024/6/25), my favorite cat at NTHU</figcaption></figure>
+        <figure class="slide"><img src="sen_4.JPG" alt="Sen Sen close-up"><figcaption class="caption">Sen Sen (?–2024/6/25), my favorite cat at NTHU</figcaption></figure>
+        <figure class="slide"><img src="sen_5.JPG" alt="Sen Sen resting"><figcaption class="caption">Sen Sen (?–2024/6/25), my favorite cat at NTHU</figcaption></figure>
+        <figure class="slide"><img src="sen_6.JPG" alt="Sen Sen on pavement"><figcaption class="caption">Sen Sen (?–2024/6/25), my favorite cat at NTHU</figcaption></figure>
+        <figure class="slide"><img src="sen_7.jpg" alt="Sen Sen by greenery"><figcaption class="caption">Sen Sen (?–2024/6/25), my favorite cat at NTHU</figcaption></figure>
+        <figure class="slide"><img src="sen_8.jpg" alt="Sen Sen looking curious"><figcaption class="caption">Sen Sen (?–2024/6/25), my favorite cat at NTHU</figcaption></figure>
+        <figure class="slide"><img src="sen_9.jpg" alt="Sen Sen with shadow"><figcaption class="caption">Sen Sen (?–2024/6/25), my favorite cat at NTHU</figcaption></figure>
+        <figure class="slide"><img src="sen_10.jpg" alt="Sen Sen profile"><figcaption class="caption">Sen Sen (?–2024/6/25), my favorite cat at NTHU</figcaption></figure>
+        <figure class="slide"><img src="sen_11.jpg" alt="Sen Sen relaxed"><figcaption class="caption">Sen Sen (?–2024/6/25), my favorite cat at NTHU</figcaption></figure>
 
+        <a class="ctrl prev" href="#" aria-label="Previous slide" data-action="prev">&#10094;</a>
+        <a class="ctrl next" href="#" aria-label="Next slide" data-action="next">&#10095;</a>
+      </div>
+      <div class="dots" role="tablist" aria-label="Slide dots">
+        <button class="dot is-active" role="tab" aria-selected="true" data-index="0"></button>
+        <button class="dot" role="tab" aria-selected="false" data-index="1"></button>
+        <button class="dot" role="tab" aria-selected="false" data-index="2"></button>
+        <button class="dot" role="tab" aria-selected="false" data-index="3"></button>
+        <button class="dot" role="tab" aria-selected="false" data-index="4"></button>
+        <button class="dot" role="tab" aria-selected="false" data-index="5"></button>
+        <button class="dot" role="tab" aria-selected="false" data-index="6"></button>
+        <button class="dot" role="tab" aria-selected="false" data-index="7"></button>
+        <button class="dot" role="tab" aria-selected="false" data-index="8"></button>
+        <button class="dot" role="tab" aria-selected="false" data-index="9"></button>
+        <button class="dot" role="tab" aria-selected="false" data-index="10"></button>
+      </div>
+    </section>
+  </main>
 
-.profile-left h3 {
-  margin-top: 0;
-}
-
-.social-links {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 14px;
-  border-radius: 6px;
-  background: #f0f0f0;
-  text-decoration: none;
-  color: #222;
-  font-weight: 500;
-  transition: transform 0.2s, background 0.2s;
-}
-
-.btn i {
-  font-size: 1.1rem;
-}
-
-.btn:hover {
-  transform: translateY(-3px);
-  background: #e0e0e0;
-}
-
-/* 特別品牌色 */
-.youtube {
-  background: #ff0000;
-  color: white;
-}
-.youtube:hover {
-  background: #cc0000;
-}
-
-.github {
-  background: #333;
-  color: white;
-}
-.github:hover {
-  background: #111;
-}
-
-  /* 手機高度微調 */
-  @media (max-width: 640px) {
-    .carousel { --h: 220px; }
-    .caption { font-size: .85rem; }
-  }
-
-  /* 使用者偏好減少動畫 */
-  @media (prefers-reduced-motion: reduce) {
-    .slide { transition: none; }
-  }
-</style>
-
-<!-- 在 <head> 裡加這行 (Font Awesome) -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
-<section class="profile">
-  <div class="profile-left">
-    <h3>Student</h3>
-    <p>
-      Interdisciplinary Program of Sciences (理學院學士班)<br>
-      National Tsing Hua University (國立清華大學)<br>
-      Institute of Physics, Academia Sinica (中央研究院)<br>
-      Email: kikiyen0715@gapp.nthu.edu.tw
-    </p>
-  </div>
-
-  <div class="profile-right">
-    <div class="social-links">
-      <a href="https://youtube.com/channel/UCU_LT30IrG6UjtSDE653isw?si=n2cnqT-OD4SuhvCh" class="btn youtube"><i class="fab fa-youtube"></i> YouTube</a>
-      <a href="https://github.com/kikiyenhaoyang" class="btn github"><i class="fab fa-github"></i> GitHub</a>
-      <a href="CV.pdf" class="btn"><i class="fas fa-file-alt"></i> CV</a>
-    </div>
-  </div>
-</section>
-
-
-<!-- ========== HTML：輪播 #1（人事物照片） ========== -->
-<section class="carousel" data-carousel="people" aria-roledescription="carousel" aria-label="Photos: events and places">
-  <div class="carousel-track" role="group">
-    <figure class="slide is-active">
-      <img src="ed_2024.jpg" alt="Electrodynamics 2024 winter, Professor and TAs">
-      <figcaption class="caption">Electrodynamics 2024 winter, Professor and TAs.</figcaption>
-    </figure>
-    <figure class="slide">
-      <img src="wen_hua.jpg" alt="Wen-Hua high school anniversary 2024 with tutor and Chinese teacher">
-      <figcaption class="caption">Wen-Hua high school anniversary 2024, with my class tutor and Chinese teacher.</figcaption>
-    </figure>
-    <figure class="slide">
-      <img src="Tainan.jpg" alt="Tainan city view">
-      <figcaption class="caption">Tainan</figcaption>
-    </figure>
-    <figure class="slide">
-      <img src="taipei.jpg" alt="Taipei city view">
-      <figcaption class="caption">Taipei</figcaption>
-    </figure>
-    <figure class="slide">
-      <img src="hsinchu.jpg" alt="Hsinchu city view">
-      <figcaption class="caption">Hsinchu</figcaption>
-    </figure>
-    <figure class="slide">
-      <img src="notitle.jpg" alt="Photo">
-      <figcaption class="caption"> </figcaption>
-    </figure>
-
-    <a class="ctrl prev" href="#" aria-label="Previous slide" data-action="prev">&#10094;</a>
-    <a class="ctrl next" href="#" aria-label="Next slide" data-action="next">&#10095;</a>
-  </div>
-  <div class="dots" role="tablist" aria-label="Slide dots">
-    <button class="dot is-active" role="tab" aria-selected="true" aria-controls="people-1" data-index="0"></button>
-    <button class="dot" role="tab" aria-selected="false" aria-controls="people-2" data-index="1"></button>
-    <button class="dot" role="tab" aria-selected="false" aria-controls="people-3" data-index="2"></button>
-    <button class="dot" role="tab" aria-selected="false" aria-controls="people-4" data-index="3"></button>
-    <button class="dot" role="tab" aria-selected="false" aria-controls="people-5" data-index="4"></button>
-    <button class="dot" role="tab" aria-selected="false" aria-controls="people-6" data-index="5"></button>
-  </div>
-</section>
-
-<!-- ========== HTML：輪播 #2（Sen Sen） ========== -->
-<section class="carousel" data-carousel="cats" aria-roledescription="carousel" aria-label="Photos: Sen Sen the cat">
-  <div class="carousel-track" role="group">
-    <figure class="slide is-active">
-      <img src="sen_1.jpg" alt="Sen Sen at NTHU">
-      <figcaption class="caption">Sen Sen (?–2024/6/25), my favorite cat at NTHU</figcaption>
-    </figure>
-    <figure class="slide">
-      <img src="sen_2.jpg" alt="Sen Sen sitting">
-      <figcaption class="caption">Sen Sen (?–2024/6/25), my favorite cat at NTHU</figcaption>
-    </figure>
-    <figure class="slide">
-      <img src="sen_3.JPG" alt="Sen Sen outdoors">
-      <figcaption class="caption">Sen Sen (?–2024/6/25), my favorite cat at NTHU</figcaption>
-    </figure>
-    <figure class="slide">
-      <img src="sen_4.JPG" alt="Sen Sen close-up">
-      <figcaption class="caption">Sen Sen (?–2024/6/25), my favorite cat at NTHU</figcaption>
-    </figure>
-    <figure class="slide">
-      <img src="sen_5.JPG" alt="Sen Sen resting">
-      <figcaption class="caption">Sen Sen (?–2024/6/25), my favorite cat at NTHU</figcaption>
-    </figure>
-    <figure class="slide">
-      <img src="sen_6.JPG" alt="Sen Sen on pavement">
-      <figcaption class="caption">Sen Sen (?–2024/6/25), my favorite cat at NTHU</figcaption>
-    </figure>
-    <figure class="slide">
-      <img src="sen_7.jpg" alt="Sen Sen by greenery">
-      <figcaption class="caption">Sen Sen (?–2024/6/25), my favorite cat at NTHU</figcaption>
-    </figure>
-    <figure class="slide">
-      <img src="sen_8.jpg" alt="Sen Sen looking curious">
-      <figcaption class="caption">Sen Sen (?–2024/6/25), my favorite cat at NTHU</figcaption>
-    </figure>
-    <figure class="slide">
-      <img src="sen_9.jpg" alt="Sen Sen with shadow">
-      <figcaption class="caption">Sen Sen (?–2024/6/25), my favorite cat at NTHU</figcaption>
-    </figure>
-    <figure class="slide">
-      <img src="sen_10.jpg" alt="Sen Sen profile">
-      <figcaption class="caption">Sen Sen (?–2024/6/25), my favorite cat at NTHU</figcaption>
-    </figure>
-    <figure class="slide">
-      <img src="sen_11.jpg" alt="Sen Sen relaxed">
-      <figcaption class="caption">Sen Sen (?–2024/6/25), my favorite cat at NTHU</figcaption>
-    </figure>
-
-    <a class="ctrl prev" href="#" aria-label="Previous slide" data-action="prev">&#10094;</a>
-    <a class="ctrl next" href="#" aria-label="Next slide" data-action="next">&#10095;</a>
-  </div>
-  <div class="dots" role="tablist" aria-label="Slide dots">
-    <!-- 11 張就放 11 個點 -->
-    <button class="dot is-active" role="tab" aria-selected="true" data-index="0"></button>
-    <button class="dot" role="tab" aria-selected="false" data-index="1"></button>
-    <button class="dot" role="tab" aria-selected="false" data-index="2"></button>
-    <button class="dot" role="tab" aria-selected="false" data-index="3"></button>
-    <button class="dot" role="tab" aria-selected="false" data-index="4"></button>
-    <button class="dot" role="tab" aria-selected="false" data-index="5"></button>
-    <button class="dot" role="tab" aria-selected="false" data-index="6"></button>
-    <button class="dot" role="tab" aria-selected="false" data-index="7"></button>
-    <button class="dot" role="tab" aria-selected="false" data-index="8"></button>
-    <button class="dot" role="tab" aria-selected="false" data-index="9"></button>
-    <button class="dot" role="tab" aria-selected="false" data-index="10"></button>
-  </div>
-</section>
-
-
-  <!-- 頁尾 -->
+  <!-- Footer -->
   <footer>
     <div class="wrapper">
       <div class="logos">
@@ -685,72 +281,26 @@ main{ padding-top: 18px; }
     </div>
   </footer>
 
-<!-- ========== JS（支援多輪播） ========== -->
-<script>
-(function(){
-  const carousels = document.querySelectorAll('.carousel');
-  const AUTOPLAY_MS = 5000;          // 自動播放間隔
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  <!-- JS：輪播 + 手機導覽開關 -->
+  <script>
+  (function(){
+    // 多輪播
+    const carousels = document.querySelectorAll('.carousel');
+    const AUTOPLAY_MS = 5000;
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  carousels.forEach(initCarousel);
+    carousels.forEach(initCarousel);
 
-  function initCarousel(root){
-    const slides = Array.from(root.querySelectorAll('.slide'));
-    const dots = Array.from(root.querySelectorAll('.dot'));
-    const prev = root.querySelector('[data-action="prev"]');
-    const next = root.querySelector('[data-action="next"]');
-    let index = slides.findIndex(s => s.classList.contains('is-active'));
-    if(index < 0) index = 0;
-    let timerId = null;
+    function initCarousel(root){
+      const slides = Array.from(root.querySelectorAll('.slide'));
+      const dots = Array.from(root.querySelectorAll('.dot'));
+      const prev = root.querySelector('[data-action="prev"]');
+      const next = root.querySelector('[data-action="next"]');
+      let index = slides.findIndex(s => s.classList.contains('is-active'));
+      if(index < 0) index = 0;
+      let timerId = null;
 
-    function go(to){
-      index = (to + slides.length) % slides.length;
-      slides.forEach((s,i)=> s.classList.toggle('is-active', i === index));
-      dots.forEach((d,i)=> {
-        d.classList.toggle('is-active', i === index);
-        d.setAttribute('aria-selected', i === index ? 'true' : 'false');
-      });
-    }
-
-    function nextSlide(){ go(index + 1); }
-    function prevSlide(){ go(index - 1); }
-
-    function startAutoplay(){
-      if(reduceMotion) return;       // 尊重使用者偏好
-      stopAutoplay();
-      timerId = setInterval(nextSlide, AUTOPLAY_MS);
-    }
-    function stopAutoplay(){
-      if(timerId) clearInterval(timerId);
-      timerId = null;
-    }
-
-    // 事件綁定
-    next.addEventListener('click', e => { e.preventDefault(); nextSlide(); });
-    prev.addEventListener('click', e => { e.preventDefault(); prevSlide(); });
-    dots.forEach(d => d.addEventListener('click', e => {
-      const i = parseInt(d.dataset.index, 10) || 0;
-      go(i);
-    }));
-
-    // 滑鼠暫停自動播放
-    root.addEventListener('mouseenter', stopAutoplay);
-    root.addEventListener('mouseleave', startAutoplay);
-
-    // 鍵盤操作（左右鍵）
-    root.addEventListener('keydown', e => {
-      if(e.key === 'ArrowRight'){ nextSlide(); }
-      else if(e.key === 'ArrowLeft'){ prevSlide(); }
-    });
-    // 讓容器可被聚焦
-    root.tabIndex = 0;
-
-    // 初始化
-    go(index);
-    startAutoplay();
-  }
-})();
-</script>
-
-</body>
-</html>
+      function go(to){
+        index = (to + slides.length) % slides.length;
+        slides.forEach((s,i)=> s.classList.toggle('is-active', i === index));
+        d

@@ -5,364 +5,201 @@
   <title>Experience</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <!-- KaTeX (保留你原本的) -->
+  <!-- KaTeX -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
 
   <style>
-/* 頁首 */
-header{
-  position: sticky; top: 0; z-index: 50;
-  background: var(--bgcc, rgba(255,255,255,0.6));
-  backdrop-filter: saturate(180%) blur(12px);
-  border-bottom: 1px solid rgba(0,0,0,0.08);
-}
-header .wrapper{
-  display: flex; align-items: center; gap: 16px;
-  justify-content: space-between; /* 單行排滿 */
-  padding: 6px 16px;              /* 高度更緊湊 */
-}
-
-/* 品牌區縮小並橫向排列 */
-.brand{ display: inline-flex; align-items: center; gap: 10px; }
-.brand img{ width: 80px; height: auto; }
-.brand-title{ margin: 0; font-size: 1.25rem; line-height: 1.1; }
-.brand-sub{ margin: 0; font-size: .8rem; color: var(--muted); }
-
-/* Home 鈕縮小 */
-.home-link{
-  margin-left: 8px;
-  padding: 6px 10px; border-radius: 8px;
-  border: 1px solid rgba(0,0,0,0.15);
-  display: inline-flex; align-items: center; gap: 8px; text-decoration: none; color: inherit;
-}
-.home-link img{ width: 22px; height: auto; }
-
-/* 導覽列：桌面版與品牌同一行，縮小 icon 與間距 */
-.icon-nav{
-  display: flex; align-items: center; gap: 16px; padding: 0; margin: 0;
-  flex: 1 1 auto; justify-content: center; /* 置中，節省兩側空間 */
-}
-.nav-item{
-  text-decoration: none; color: inherit; text-align: center;
-  padding: 4px 6px; border-radius: 8px;
-  transition: transform .2s, box-shadow .2s, background-color .2s, color .2s;
-  font-size: .9rem;
-}
-.nav-item:hover{ transform: translateY(-2px); box-shadow: 0 6px 14px rgba(0,0,0,.12); color: var(--primary); }
-.nav-item.active{ background: #000; color: #fff; }
-.nav-icon{ width: 34px; height: auto; display: block; margin: 0 auto 2px; }
-
-/* 漢堡按鈕（桌面隱藏、手機顯示） */
-.nav-toggle{
-  margin-left: auto;
-  font-size: 1.4rem; line-height: 1;
-  background: none; border: 0; color: inherit; cursor: pointer;
-  padding: 6px 8px; border-radius: 6px;
-}
-.nav-toggle:focus{ outline: 3px solid var(--ring); outline-offset: 2px; }
-
-/* 手機版：預設收合 nav，點漢堡展開為直向 */
-@media (max-width: 767.98px){
-  header .wrapper{ flex-wrap: wrap; row-gap: 8px; }
-  .icon-nav{ 
-    order: 3; width: 100%;
-    display: none; flex-direction: column; gap: 10px; padding: 8px 0 10px;
-  }
-  .icon-nav.open{ display: flex; }
-  .nav-toggle{ display: inline-flex; }
-  .home-link{ order: 2; }
-}
-/* 預設隱藏導覽列（手機版） */
-.icon-nav {
-  display: none;
-  flex-direction: column; /* 手機版直排 */
-  gap: 12px;
-  padding: 12px 0;
-}
-
-/* 當加上 open class 時展開 */
-.icon-nav.open {
-  display: flex;
-}
-
-/* 切換按鈕 */
-.nav-toggle {
-  margin-left: auto;
-  font-size: 1.6rem;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: var(--fg);
-}
-
-/* 桌面版直接展開 */
-@media (min-width: 768px) {
-  .nav-toggle { display: none; }
-  .icon-nav { 
-    display: flex !important; 
-    flex-direction: row;
-  }
-}
-
- :root{
-      --bg:#f3f4ea;
-      --fg:#1d1f21;
-      --muted:#565b5f;
-      --primary:#0a66c2;
-      --card:#ffffff;
-      --ring:#89b4fa;
-      --maxw:1000px;
+    :root{
+      --bg:#f3f4ea; --fg:#1d1f21; --muted:#565b5f; --primary:#0a66c2;
+      --card:#ffffff; --ring:#89b4fa; --maxw:1000px;
     }
     @media (prefers-color-scheme: dark){
-      :root{
-        --bg:#0e1116;
-        --fg:#e6e6e6;
-        --muted:#a0a4aa;
-        --card:#11151c;
-        --primary:#7ab0ff;
-        --ring:#3b82f6;
-      }
+      :root{ --bg:#0e1116; --fg:#e6e6e6; --muted:#a0a4aa; --card:#11151c; --primary:#7ab0ff; --ring:#3b82f6; }
     }
 
     *{box-sizing:border-box}
     html,body{margin:0;padding:0}
-    body{
-      font-family: Arial, Helvetica, sans-serif;
-      color:var(--fg);
-      background:var(--bg);
-      line-height:1.6;
-    }
-
-    /* 共用容器 */
+    body{ font-family: Arial, Helvetica, sans-serif; color:var(--fg); background:var(--bg); line-height:1.6; }
     .wrapper{max-width:var(--maxw); margin:0 auto; padding:0 16px;}
 
-    /* 跳至主內容（可近用） */
-    .skip-link{
-      position: absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden;
+    /* Skip to content */
+    .skip-link{ position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden; }
+    .skip-link:focus{ position:fixed; left:16px; top:16px; width:auto; height:auto; background:#000; color:#fff; padding:8px 12px; border-radius:6px; z-index:1000; }
+
+       /* ===== Header（精簡 + 手機收合） ===== */
+    header{
+      position: sticky; top: 0; z-index: 50;
+      background: var(--bgcc, rgba(255,255,255,0.6));
+      backdrop-filter: saturate(180%) blur(12px);
+      border-bottom: 1px solid rgba(0,0,0,0.08);
     }
-    .skip-link:focus{
-      position: fixed; left:16px; top:16px; width:auto; height:auto; background:#000; color:#fff;
-      padding:8px 12px; border-radius:6px; z-index:1000;
+    header .wrapper{
+      display: flex; align-items: center; gap: 16px;
+      justify-content: space-between;
+      padding: 6px 16px;
+    }
+    .brand{ display: inline-flex; align-items: center; gap: 10px; }
+    .brand img{ width: 80px; height: auto; }
+    .brand-title{ margin: 0; font-size: 1.25rem; line-height: 1.1; }
+    .brand-sub{ margin: 0; font-size: .8rem; color: var(--muted); }
+
+    .home-link{
+      margin-left: 8px;
+      padding: 6px 10px; border-radius: 8px;
+      border: 1px solid rgba(0,0,0,0.15);
+      display: inline-flex; align-items: center; gap: 8px; text-decoration: none; color: inherit;
     }
 
-    /* 導覽列 */
-    nav.icon-nav{
-      display:flex; flex-wrap:wrap; justify-content:center; gap:28px; padding:10px 0 16px;
+    /* 導覽列：手機預設收合 */
+    .icon-nav{
+      display: none;           /* mobile default: hidden */
+      flex-direction: column;  /* mobile vertical */
+      gap: 28px;
+      padding: 10px 0 16px;
+      margin: 0;
+      flex: 1 1 auto;
     }
+    .icon-nav.open{ display: flex; }
+
     .nav-item{
       text-decoration:none; color:inherit; text-align:center; padding:10px 12px; border-radius:10px;
       transition: transform .2s, box-shadow .2s, background-color .2s, color .2s;
       outline-offset:2px;
     }
     .nav-item:focus{outline:3px solid var(--ring)}
-    .nav-item:hover{transform:translateY(-3px); box-shadow:0 6px 14px rgba(0,0,0,.15); color:var(--primary)}
-    .nav-item.active{background:#000; color:#fff}
-    .nav-icon{width:50px; height:auto; display:block; margin:0 auto 6px}
+    .nav-item:hover{ transform: translateY(-2px); box-shadow: 0 6px 14px rgba(0,0,0,.12); color: var(--primary); }
+    .nav-item.active{ background: #000; color: #fff; }
+    .nav-icon{ width: 50px; height: auto; display: block; margin: 0 auto 2px; }
+
+    .nav-toggle{
+      margin-left: auto;
+      font-size: 1.4rem; line-height: 1;
+      background: none; border: 0; color: inherit; cursor: pointer;
+      padding: 6px 8px; border-radius: 6px;
+    }
+    .nav-toggle:focus{ outline: 3px solid var(--ring); outline-offset: 2px; }
+
+    /* 桌面：nav 展開、漢堡隱藏 */
+    @media (min-width:768px){
+      .nav-toggle{ display:none; }
+      .icon-nav{ display:flex !important; flex-direction:row; align-items:center; justify-content:center; gap:16px; padding:0; }
+    }
 
     /* 主內容 */
-    main{padding:24px 0}
-    .page-title{text-align:center; font-size:2rem; margin:24px 0 12px; font-weight:bold}
-    .intro-text{max-width:760px; margin:0 auto 28px; text-align:center; color:var(--muted)}
+    main{ padding:24px 0; }
+    .page-title{ text-align:center; font-size:2rem; margin:24px 0 12px; font-weight:bold; }
+    .intro-text{ max-width:760px; margin:0 auto 28px; text-align:center; color:var(--muted); }
 
-    /* 書籍卡片 */
-    .book-grid{
-      display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap:24px; max-width:900px; margin:0 auto;
-    }
-    .book-card{
-      background:var(--card); border:1px solid rgba(0,0,0,0.12); border-radius:12px;
-      padding:12px; text-align:center; position:relative; overflow:hidden;
-      transition: transform .2s, box-shadow .2s, border-color .2s;
-    }
-    .book-card:hover{transform:translateY(-5px); box-shadow:0 12px 24px rgba(0,0,0,.18); border-color:rgba(0,0,0,0.18)}
-    .book-link{display:block; text-decoration:none; color:inherit; outline-offset:3px}
-    .book-link:focus{outline:3px solid var(--ring)}
-    .book-cover{width:250px; max-width:100%; height:auto; display:block; margin:6px auto 12px; border-radius:8px}
-    .solution-title{font-size:1rem; line-height:1.4; margin:0 8px 8px}
+    /* Section / Timeline */
+    .section{ margin-bottom:40px; }
+    .section h2{ font-size:1.5rem; margin-bottom:15px; border-bottom:2px solid #ccc; padding-bottom:5px; }
+    .timeline{ list-style:none; padding-left:0; }
+    .timeline li{ margin-bottom:15px; line-height:1.5; }
+    .timeline .time{ font-style:italic; color:#555; display:inline-block; margin-right:8px; min-width:120px; }
 
-    /* 角落標籤 (Coming soon) */
-    .ribbon{
-      position:absolute; top:12px; right:-40px; transform:rotate(45deg);
-      background:#111; color:#fff; padding:6px 50px; font-size:.8rem; letter-spacing:.5px;
-      box-shadow:0 6px 12px rgba(0,0,0,.25);
+    /* 小螢幕微調 */
+    @media (max-width:640px){
+      .home-link{ display:none; }
     }
 
     /* 頁尾 */
-    footer{padding:28px 0 36px; border-top:1px solid rgba(0,0,0,0.1); margin-top:36px}
-    .logos{display:flex; justify-content:center; align-items:center; gap:28px}
-    .logos img{height:80px; width:auto}
-
-    /* 響應式微調 */
-    @media (max-width:640px){
-      .brand img{width:56px}
-      .brand-title{font-size:1.4rem}
-      .home-link{display:none} /* 小螢幕可隱藏右上 Home 按鈕（可視需要保留） */
-      .nav-icon{width:44px}
-    }
-    .section {
-  margin-bottom: 40px;
-}
-
-.section h2 {
-  font-size: 1.5rem;
-  margin-bottom: 15px;
-  border-bottom: 2px solid #ccc;
-  padding-bottom: 5px;
-}
-
-.timeline {
-  list-style: none;  /* 移除原本的點點 */
-  padding-left: 0;
-}
-
-.timeline li {
-  margin-bottom: 15px;
-  line-height: 1.5;
-}
-
-.timeline .time {
-  font-style: italic;
-  color: #555;
-  display: inline-block;
-  margin-right: 8px;
-  min-width: 120px;
-}
+    footer{ padding:28px 0 36px; border-top:1px solid rgba(0,0,0,0.1); margin-top:36px; }
+    .logos{ display:flex; justify-content:center; align-items:center; gap:28px; }
+    .logos img{ height:80px; width:auto; }
   </style>
 </head>
 
 <body>
   <a href="#main" class="skip-link">Skip to main content</a>
 
- <!-- 頁首 -->
-   <header>
-  <div class="wrapper">
-    <div class="brand">
-      
-      <div>
-        <img src="yen.png" alt="HYY Logo">
-        <h1 class="brand-title">Hao-Yang Yen</h1>
-        <p class="brand-sub">HYY Home</p>
+  <!-- Header -->
+  <header>
+    <div class="wrapper">
+      <div class="brand">
+        <div>
+          <img src="yen.png" alt="HYY Logo">
+          <h1 class="brand-title">Hao-Yang Yen</h1>
+        </div>
       </div>
+
+      <!-- 導覽列 -->
+      <nav id="primary-nav" class="icon-nav" aria-label="Primary">
+        <a href="experience.html" class="nav-item active">
+          <img src="flipped_exp.png" alt="" class="nav-icon"><span>Experience</span>
+        </a>
+        <a href="learning.html" class="nav-item">
+          <img src="l.png" alt="" class="nav-icon"><span>Learning</span>
+        </a>
+        <a href="research.html" class="nav-item">
+          <img src="r.png" alt="" class="nav-icon"><span>Research</span>
+        </a>
+        <a href="Explore.html" class="nav-item">
+          <img src="e.png" alt="" class="nav-icon"><span>Explore</span>
+        </a>
+      </nav>
+
+      <!-- 漢堡／Home -->
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="primary-nav">☰</button>
+      <a class="home-link" href="index.html" aria-label="Go to HYY Home">Home</a>
     </div>
+  </header>
 
-    <!-- 導覽列：與品牌同一行（桌面），手機可收合 -->
-    <nav class="icon-nav" aria-label="Primary">
-      <a href="experience.html" class="nav-item active">
-        <img src="flipped_exp.png" alt="" class="nav-icon"><span>Experience</span>
-      </a>
-      <a href="learning.html" class="nav-item">
-        <img src="l.png" alt="" class="nav-icon"><span>Learning</span>
-      </a>
-      <a href="research.html" class="nav-item">
-        <img src="r.png" alt="" class="nav-icon"><span>Research</span>
-      </a>
-      <a href="Explore.html" class="nav-item">
-        <img src="e.png" alt="" class="nav-icon"><span>Explore</span>
-      </a>
-    </nav>
-
-    <!-- 右側：手機版漢堡 + Home 按鈕 -->
-    <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="primary-nav">☰</button>
-
-    <a class="home-link" href="index.html" aria-label="Go to HYY Home">
-       Home
-    </a>
-  </div>
-</header>
-
-  <!-- 主內容 -->
+  <!-- Main -->
   <main id="main" class="wrapper">
+    <!-- Education -->
+    <section class="section">
+      <h2>Education</h2>
+      <ul class="timeline">
+        <li>Institute of Physics, National Tsing Hua University, Hsinchu, Taiwan <span class="time">(2025~)</span></li>
+        <li>Interdisciplinary Program of Sciences, National Tsing Hua University, Hsinchu, Taiwan <span class="time">(2021~present)</span></li>
+        <li>Wen Hua Senior High School, Taichung, Taiwan <span class="time">(2018~2021)</span></li>
+      </ul>
+    </section>
 
- <!-- Education Section -->
-<section class="section">
-  <h2>Education</h2>
-  <ul class="timeline">
-    <li>
-      Institute of Physics, National Tsing Hua University, Hsinchu, Taiwan 
-      <span class="time">(2025~)</span>
-    </li>
-    <li>
-      Interdisciplinary Program of Sciences, National Tsing Hua University, Hsinchu, Taiwan 
-      <span class="time">(2021~present)</span>
-    </li>
-    <li>
-      Wen Hua Senior High School, Taichung, Taiwan 
-      <span class="time">(2018~2021)</span>
-    </li>
-  </ul>
-</section>
+    <!-- Research Experience -->
+    <section class="section">
+      <h2>Research Experience</h2>
+      <ul class="timeline">
+        <li><span class="time">2025/6~present</span> Research Assistant<br>Department of Mathematics, National Tsing Hua University, Taiwan</li>
+        <li><span class="time">2024/9~present</span> Student<br>Institute of Physics, Academia Sinica, Taiwan</li>
+        <li><span class="time">2023/7~present</span> Student<br>Department of Physics, National Tsing Hua University, Taiwan</li>
+        <li><span class="time">2024/7~2024/8</span> Summer Research<br>Institute of Physics, Academia Sinica, Taiwan</li>
+      </ul>
+    </section>
 
-<!-- Experience Section -->
-<section class="section">
-  <h2>Research Experience</h2>
-  <ul class="timeline">
-
-    <li>
-      <span class="time">2025/6~present</span> Research Assistant<br>
-      Department of Mathemetics, National Tsing Hua University, Taiwan
-    </li>
-    <li>
-      <span class="time">2024/9~present</span> Student<br>
-      Institute of Physics, Academia Sinica, Taiwan
-    </li>
-    <li>
-      <span class="time">2023/7~present</span> Student<br>
-      Department of Physics, National Tsing Hua University, Taiwan
-    </li>
-    <li>
-      <span class="time">2024/7~2024/8</span> Summer Research<br>
-      Institute of Physics, Academia Sinica, Taiwan
-    </li>
-  </ul>
-</section>
-
-<section class="section">
-  <h2>Teaching Experience</h2>
-  <ul class="timeline">
-    <li>
-      <span class="time">2025/9~present</span> Teaching Assistant for Statistical Mechanics (II) (offered in English)<br>
-      Department of Physics, National Tsing Hua University, Taiwan
-    </li>
-    <li>
-      <span class="time">2025/9~present</span> Teaching Assistant for Theoretical Mechanics (I)<br>
-      Department of Physics, National Tsing Hua University, Taiwan
-    </li>
-    <li>
-      <span class="time">2025/2~2025/6</span> Teaching Assistant for Statistical Mechanics (I) (offered in English)<br>
-      Department of Physics, National Tsing Hua University, Taiwan
-    </li>
-    <li>
-      <span class="time">2025/2~2025/6</span> Teaching Assistant for Electrodynamics (II) (offered in English)<br>
-      Department of Physics, National Tsing Hua University, Taiwan
-    </li>
-    <li>
-      <span class="time">2025/2~2025/6</span> Teaching Assistant for Thermal and Statistical Physics (II)<br>
-      Department of Physics, National Tsing Hua University, Taiwan
-    </li>
-    <li>
-      <span class="time">2024/9~2024/12</span> Teaching Assistant for Statistical Mechanics (II) (offered in English)<br>
-      Department of Physics, National Tsing Hua University, Taiwan
-    </li>
-    <li>
-      <span class="time">2024/9~2024/12</span> Teaching Assistant for Electrodynamics (I) (offered in English)<br>
-      Department of Physics, National Tsing Hua University, Taiwan
-    </li>
-    <li>
-      <span class="time">2024/9~2024/12</span> Teaching Assistant for Thermal and Statistical Physics (I)<br>
-      Department of Physics, National Tsing Hua University, Taiwan
-    </li>
-    <li>
-      <span class="time">2024/2~2024/6</span> Teaching Assistant for Statistical Mechanics (I) (offered in English)<br>
-      Department of Physics, National Tsing Hua University, Taiwan
-    </li>
-  </ul>
-</section>
-
+    <!-- Teaching Experience -->
+    <section class="section">
+      <h2>Teaching Experience</h2>
+      <ul class="timeline">
+        <li><span class="time">2025/9~present</span> Teaching Assistant for Statistical Mechanics (II) (offered in English)<br>Department of Physics, National Tsing Hua University, Taiwan</li>
+        <li><span class="time">2025/9~present</span> Teaching Assistant for Theoretical Mechanics (I)<br>Department of Physics, National Tsing Hua University, Taiwan</li>
+        <li><span class="time">2025/2~2025/6</span> Teaching Assistant for Statistical Mechanics (I) (offered in English)<br>Department of Physics, National Tsing Hua University, Taiwan</li>
+        <li><span class="time">2025/2~2025/6</span> Teaching Assistant for Electrodynamics (II) (offered in English)<br>Department of Physics, National Tsing Hua University, Taiwan</li>
+        <li><span class="time">2025/2~2025/6</span> Teaching Assistant for Thermal and Statistical Physics (II)<br>Department of Physics, National Tsing Hua University, Taiwan</li>
+        <li><span class="time">2024/9~2024/12</span> Teaching Assistant for Statistical Mechanics (II) (offered in English)<br>Department of Physics, National Tsing Hua University, Taiwan</li>
+        <li><span class="time">2024/9~2024/12</span> Teaching Assistant for Electrodynamics (I) (offered in English)<br>Department of Physics, National Tsing Hua University, Taiwan</li>
+        <li><span class="time">2024/9~2024/12</span> Teaching Assistant for Thermal and Statistical Physics (I)<br>Department of Physics, National Tsing Hua University, Taiwan</li>
+        <li><span class="time">2024/2~2024/6</span> Teaching Assistant for Statistical Mechanics (I) (offered in English)<br>Department of Physics, National Tsing Hua University, Taiwan</li>
+      </ul>
+    </section>
   </main>
 
-  <!-- 頁尾 -->
+  <!-- JS：手機導覽開關 -->
+  <script>
+    (function(){
+      const toggle = document.querySelector('.nav-toggle');
+      const nav = document.querySelector('.icon-nav');
+      if(!toggle || !nav) return;
+      toggle.addEventListener('click', function(){
+        const opened = nav.classList.toggle('open');
+        toggle.setAttribute('aria-expanded', opened ? 'true' : 'false');
+      });
+    })();
+  </script>
+
+  <!-- Footer -->
   <footer>
     <div class="wrapper">
       <div class="logos">
