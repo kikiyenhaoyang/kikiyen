@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Cardy — Solutions Explorer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Worked solutions to exercises in John Cardy's Scaling and Renormalization in Statistical Physics." />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Cardy — Solutions Explorer" />
+  <meta property="og:description" content="Worked solutions to Cardy's Scaling and Renormalization in Statistical Physics." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="cover.png" />
+
+  <!-- KaTeX (較新版本，並限制渲染範圍) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" crossorigin="anonymous"
+          onload="renderMathInElement(document.getElementById('main'),{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});"></script>
+
+  <style>
+    :root{
+      --bg:#f3f4ea; --fg:#1d1f21; --muted:#565b5f; --primary:#0a66c2;
+      --card:#ffffff; --ring:#89b4fa; --maxw:1000px; --border: rgba(0,0,0,.12);
+    }
+    @media (prefers-color-scheme: dark){
+      :root{ --bg:#0e1116; --fg:#e6e6e6; --muted:#a0a4aa; --card:#11151c; --primary:#7ab0ff; --ring:#3b82f6; --border: rgba(255,255,255,.16); }
+    }
+    @media (prefers-reduced-motion: reduce){
+      *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; scroll-behavior:auto !important;}
+    }
+
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{ font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Noto Sans", "Liberation Sans", sans-serif;
+          color:var(--fg); background:var(--bg); line-height:1.6; }
+    .wrapper{max-width:var(--maxw); margin:0 auto; padding:0 16px;}
+
+    /* Skip to content */
+    .skip-link{ position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden; }
+    .skip-link:focus{ position:fixed; left:16px; top:16px; width:auto; height:auto; background:#000; color:#fff; padding:8px 12px; border-radius:6px; z-index:1000; }
+
+    /* ===== Header（精簡 + 手機收合） ===== */
+    header{
+      position: sticky; top: 0; z-index: 50;
+      background: var(--bgcc, rgba(255,255,255,0.6));
+      backdrop-filter: saturate(180%) blur(12px);
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+    }
+    header .wrapper{
+      display: flex; align-items: center; gap: 16px;
+      justify-content: space-between;
+      padding: 6px 16px;
+    }
+    .brand{ display: inline-flex; align-items: center; gap: 10px; }
+    .brand img{ width: 80px; height: auto; }
+    .brand-title{ margin: 0; font-size: 1.25rem; line-height: 1.1; }
+    .brand-sub{ margin: 0; font-size: .8rem; color: var(--muted); }
+
+    .home-link{
+      margin-left: 8px;
+      padding: 6px 10px; border-radius: 8px;
+      border: 1px solid rgba(0,0,0,0.15);
+      display: inline-flex; align-items: center; gap: 8px; text-decoration: none; color: inherit;
+    }
+
+/* 導覽列：手機預設收合 */
+    .icon-nav{
+      display: none;           /* mobile default: hidden */
+      flex-direction: column;  /* mobile vertical */
+      gap: 28px;
+      padding: 10px 0 16px;
+      margin: 0;
+      flex: 1 1 auto;
+    }
+    .icon-nav.open{ display: flex; }
+
+    .nav-item{
+      text-decoration:none; color:inherit; text-align:center; padding:10px 12px; border-radius:10px;
+      transition: transform .2s, box-shadow .2s, background-color .2s, color .2s;
+      outline-offset:2px;
+    }
+    .nav-item:focus{outline:3px solid var(--ring)}
+    .nav-item:hover{ transform: translateY(-2px); box-shadow: 0 6px 14px rgba(0,0,0,.12); color: var(--primary); }
+    .nav-item.active{ background: #000; color: #fff; }
+    .nav-icon{ width: 50px; height: auto; display: block; margin: 0 auto 2px; }
+
+    .nav-toggle{
+      margin-left: auto;
+      font-size: 1.4rem; line-height: 1;
+      background: none; border: 0; color: inherit; cursor: pointer;
+      padding: 6px 8px; border-radius: 6px;
+    }
+    .nav-toggle:focus{ outline: 3px solid var(--ring); outline-offset: 2px; }
+
+
+    /* 桌面：nav 展開、漢堡隱藏 */
+    @media (min-width:768px){
+      .nav-toggle{ display:none; }
+      .icon-nav{ display:flex !important; flex-direction:row; align-items:center; justify-content:center; gap:16px; padding:0; }
+    }
+
+    .home-link{
+      margin-left: 8px;
+      padding: 6px 10px; border-radius: 8px;
+      border: 1px solid var(--border);
+      display: inline-flex; align-items: center; gap: 8px; text-decoration: none; color: inherit;
+    }
+
+    main{ padding:18px 0; }
+    h1.page-title{ font-size: 1.6rem; margin: 16px 0 2px; }
+    p.page-sub{ margin:0 0 14px; color: var(--muted); }
+
+    .toolbar{
+      display:flex; gap:12px; flex-wrap:wrap; align-items:center; justify-content:space-between;
+      background: color-mix(in oklab, var(--card), var(--bg) 30%);
+      border:1px solid var(--border); border-radius:12px; padding:10px 12px; margin: 16px 0 10px;
+    }
+    .toolbar input, .toolbar select{
+      padding:8px 10px; border-radius:8px; border:1px solid var(--border); background:var(--card); color:inherit;
+    }
+
+    .chapter-block{ margin-top: 20px; }
+    .chapter-title{ font-size: 1.25rem; margin: 18px 0 10px; }
+    .book-grid{
+      display:grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap:10px; margin:10px 0 0;
+    }
+    .text-card{
+      background:var(--card); border:1px solid var(--border); border-radius:12px; text-align:center; padding:14px;
+      transition: transform .16s, box-shadow .16s; position:relative;
+    }
+    .text-card:hover{ transform: translateY(-3px); box-shadow: 0 8px 16px rgba(0,0,0,.12); }
+    .solution-link{ text-decoration:none; color:inherit; display:block; }
+    .book-title{ color:inherit; font-size:.95rem; margin:0 0 4px; font-weight:bold; line-height:1.1; }
+    .book-detail{ font-size:.85rem; color:var(--muted); margin:0; }
+    .ribbon{ position:absolute; top:10px; right:-36px; transform:rotate(45deg); background:#111; color:#fff; padding:6px 44px; font-size:.75rem; letter-spacing:.5px; box-shadow:0 6px 12px rgba(0,0,0,.25); }
+
+    footer{ padding:28px 0 36px; border-top:1px solid var(--border); margin-top:36px }
+    .logos{ display:flex; justify-content:center; align-items:center; gap:28px }
+    .logos img{ height:80px; width:auto }
+  </style>
+</head>
+
+<body>
+  <a href="#main" class="skip-link">Skip to main content</a>
+
+  <!-- Header -->
+  <header>
+    <div class="wrapper">
+      <div class="brand">
+        <div>
+           <img src="yen.png" alt="HYY Logo">
+          <h1 class="brand-title">Hao-Yang Yen</h1>
+        </div>
+      </div>
+
+      <!-- 導覽列 -->
+      <nav id="primary-nav" class="icon-nav" aria-label="Primary">
+        <a href="experience.html" class="nav-item">
+          <img src="exp.png" alt="" class="nav-icon"><span>Experience</span>
+        </a>
+        <a href="learning.html" class="nav-item active">
+          <img src="flipped_l.png" alt="" class="nav-icon"><span>Learning</span>
+        </a>
+        <a href="research.html" class="nav-item">
+          <img src="r.png" alt="" class="nav-icon"><span>Research</span>
+        </a>
+        <a href="Explore.html" class="nav-item">
+          <img src="e.png" alt="" class="nav-icon"><span>Explore</span>
+        </a>
+      </nav>
+
+      <!-- 漢堡／Home -->
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="primary-nav">☰</button>
+      <a class="home-link" href="index.html" aria-label="Go to HYY Home">Home</a>
+    </div>
+  </header>
+
+  <main id="main" class="wrapper" tabindex="-1">
+    <h1 class="page-title">Scaling and Renormalization in Statistical Physics — Solutions</h1>
+    <p class="page-sub">Worked problems by chapter and problem number. Use the filters to find an exercise quickly.</p>
+
+    <!-- 工具列：搜尋 + 篩選 -->
+    <div class="toolbar" role="search">
+      <input id="q" type="search" placeholder="Search (e.g. Ising, fixed point, RG)" aria-label="Search problems">
+      <div>
+        <label for="chap">Chapter</label>
+        <select id="chap" aria-label="Filter by chapter">
+          <option value="">All</option>
+          <option value="1">1. Phase transitions in simple systems</option>
+          <option value="2">2. Mean field theory</option>
+          <option value="3">3. The renormalization group idea</option>
+          <option value="4">4. Phase diagrams and fixed points</option>
+        </select>
+        <label for="pno">Problem</label>
+        <select id="pno" aria-label="Filter by problem">
+          <option value="">All</option>
+          <option>1</option><option>2</option><option>3</option><option>4</option>
+          <option>5</option><option>6</option><option>7</option><option>8</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- 章節容器：JS 會塞入卡片 -->
+    <section id="chap-1" class="chapter-block" aria-labelledby="chap-1-title">
+      <h2 id="chap-1-title" class="chapter-title">Chapter 1. Phase transitions in simple systems</h2>
+      <div class="book-grid" data-chapter="1"></div>
+    </section>
+
+    <section id="chap-2" class="chapter-block" aria-labelledby="chap-2-title">
+      <h2 id="chap-2-title" class="chapter-title">Chapter 2. Mean field theory</h2>
+      <div class="book-grid" data-chapter="2"></div>
+    </section>
+
+    <section id="chap-3" class="chapter-block" aria-labelledby="chap-3-title">
+      <h2 id="chap-3-title" class="chapter-title">Chapter 3. The renormalization group idea</h2>
+      <div class="book-grid" data-chapter="3"></div>
+    </section>
+
+     <section id="chap-4" class="chapter-block" aria-labelledby="chap-4-title">
+      <h2 id="chap-4-title" class="chapter-title">Chapter 4. Phase diagrams and fixed points</h2>
+      <div class="book-grid" data-chapter="4"></div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrapper">
+      <div class="logos">
+        <img src="NTHU-Photoroom.png" alt="NTHU logo" loading="lazy">
+        <img src="ips_logo-Photoroom.png" alt="Institute of Physics logo" loading="lazy">
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // 漢堡選單
+    (function(){
+      const toggle = document.querySelector('.nav-toggle');
+      const nav = document.querySelector('.icon-nav');
+      if(!toggle || !nav) return;
+      toggle.addEventListener('click', function(){
+        const opened = nav.classList.toggle('open');
+        toggle.setAttribute('aria-expanded', opened ? 'true' : 'false');
+      });
+    })();
+
+    // ====== 資料來源（之後只要改這裡就能新增題目）======
+    const PROBLEMS = [
+      // ch, problem, title(optional), url
+      {ch:1, p:1, url:'Cardy_solution_1_1.pdf'},
+      {ch:1, p:2, url:'Cardy_solution_1_2.pdf'},
+      {ch:1, p:3, url:'Cardy_solution_1_3.html'},
+      {ch:1, p:4, url:'Cardy_solution_1_4.html'},
+      {ch:2, p:1, url:'Cardy_solution_2_1.html'},
+      {ch:2, p:2, url:'solution_2_2.html'},
+      {ch:2, p:3, url:'solution_2_3.html'},
+      {ch:2, p:4, url:'solution_2_4.html'},
+      {ch:2, p:5, url:'solution_2_5.html'},
+      {ch:2, p:6, url:'solution_2_6.html'},
+      {ch:2, p:7, url:'solution_2_7.html'},
+      {ch:2, p:8, url:'solution_2_8.html'},
+      {ch:3, p:1, url:'solution_3_1.html'},
+      {ch:3, p:2, url:'solution_3_2.html'},
+      {ch:3, p:3, url:'solution_3_3.html'},
+      {ch:3, p:4, url:'solution_3_4.html'},
+      {ch:3, p:5, url:'solution_3_5.html'},
+      {ch:3, p:6, url:'solution_3_6.html'},
+      {ch:3, p:7, url:'solution_3_7.html'},
+      {ch:4, p:1, url:'solution_4_1.html'},
+      {ch:4, p:2, url:'solution_4_1.html'},
+      {ch:4, p:3, url:'solution_4_1.html'},
+    ];
+
+    // ====== 產生卡片 ======
+    function renderCards(list){
+      // 先清空
+      document.querySelectorAll('.book-grid').forEach(g=>g.innerHTML='');
+      // 依章節分組
+      for(const item of list){
+        const grid = document.querySelector(`.book-grid[data-chapter="${item.ch}"]`);
+        if(!grid) continue;
+        const card = document.createElement('article');
+        card.className = 'book-solution text-card';
+        card.innerHTML = `
+          <a class="solution-link" href="${item.url}">
+            <h3 class="book-title">Chapter ${item.ch}</h3>
+            <p class="book-detail">Problem ${item.p}</p>
+          </a>`;
+        grid.appendChild(card);
+      }
+    }
+    renderCards(PROBLEMS);
+
+    // ====== 搜尋/篩選 ======
+    const q = document.getElementById('q');
+    const chapSel = document.getElementById('chap');
+    const pnoSel = document.getElementById('pno');
+
+    function applyFilter(){
+      const kw = (q.value||'').toLowerCase().trim();
+      const c = chapSel.value;
+      const p = pnoSel.value;
+
+      const filtered = PROBLEMS.filter(x=>{
+        const byC = c ? String(x.ch)===c : true;
+        const byP = p ? String(x.p)===p : true;
+        // 目前先對 URL/文字簡單比對；未來可加標籤 keywords
+        const byKw = kw ? (`chapter ${x.ch} problem ${x.p} ${x.url}`.toLowerCase().includes(kw)) : true;
+        return byC && byP && byKw;
+      });
+      renderCards(filtered);
+    }
+    [q, chapSel, pnoSel].forEach(el=>el.addEventListener('input', applyFilter));
+  </script>
+</body>
+</html>
