@@ -29,7 +29,6 @@
     .skip-link:focus{ position:fixed; left:16px; top:16px; width:auto; height:auto; background:#000; color:#fff; padding:8px 12px; border-radius:6px; z-index:1000; }
 
     /* ===== Header（精簡 + 手機收合） ===== */
- /* ===== Header（精簡 + 手機收合） ===== */
     header{
       position: sticky; top: 0; z-index: 50;
       background: var(--bgcc, rgba(255,255,255,0.6));
@@ -53,7 +52,7 @@
       display: inline-flex; align-items: center; gap: 8px; text-decoration: none; color: inherit;
     }
 
-/* 導覽列：手機預設收合 */
+    /* 導覽列：手機預設收合 */
     .icon-nav{
       display: none;           /* mobile default: hidden */
       flex-direction: column;  /* mobile vertical */
@@ -91,26 +90,30 @@
 
     /* 主內容 */
     main{ padding:24px 0; }
-    .page-title{ text-align:center; font-size:2rem; margin:24px 0 12px; font-weight:bold; }
-    .intro-text{ max-width:760px; margin:0 auto 28px; text-align:center; color:var(--muted); }
+    .section{ margin: 36px 0; }
+    .section-heading{ text-align:center; margin:0 0 8px; font-size:2rem; font-weight:700; }
+    .section-sub{ max-width:760px; margin:0 auto 24px; text-align:center; color:var(--muted); }
 
-    /* 書籍卡片（整併版） */
-    .book-grid{
-      display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 240px));
-      gap:16px; justify-content:center; margin:20px auto; max-width:1100px;
+    /* 卡片網格（書籍 & 筆記共用） */
+    .card-grid{
+      display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap:16px; margin: 0 auto; max-width:1100px;
     }
     .text-card{
-      background:#f8f9fa; border:1px solid #ddd; border-radius:10px; text-align:center; padding:14px;
-      transition: transform .2s, box-shadow .2s;
+      background:var(--card); border:1px solid rgba(0,0,0,0.12); border-radius:12px; text-align:left; padding:16px;
+      transition: transform .2s, box-shadow .2s, border-color .2s;
     }
-    .text-card:hover{ transform: translateY(-4px); box-shadow: 0 8px 16px rgba(0,0,0,.12); }
-    .solution-link{ text-decoration:none; color:inherit; display:block; }
+    .text-card:hover{ transform: translateY(-4px); box-shadow: 0 8px 16px rgba(0,0,0,.12); border-color: rgba(0,0,0,0.18); }
+    .solution-link{ text-decoration:none; color:inherit; display:block; height:100%; }
     .book-title{
-      color:#111; font-size:1.05rem; margin:0 0 8px; font-weight:bold; line-height:1.3;
+      color:inherit; font-size:1.05rem; margin:0 0 8px; font-weight:700; line-height:1.35;
       display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;
     }
-    .book-author{ font-size:.95rem; color:#555; margin:0 0 4px; }
-    .book-detail{ font-size:.85rem; color:#777; margin:0; }
+    .book-author{ font-size:.95rem; color:var(--muted); margin:0 0 4px; }
+    .book-detail{ font-size:.85rem; color:var(--muted); margin:0; }
+
+    /* Notes 標籤樣式（可選） */
+    .tag{ display:inline-block; font-size:.75rem; padding:2px 8px; border-radius:999px; border:1px solid rgba(0,0,0,0.15); color:var(--muted); margin-bottom:8px; }
 
     /* 頁尾 */
     footer{ padding:28px 0 36px; border-top:1px solid rgba(0,0,0,0.1); margin-top:36px; }
@@ -156,45 +159,96 @@
 
   <!-- Main -->
   <main id="main" class="wrapper">
-    <h2 class="page-title">Exercise Solutions for Advanced Physics Textbooks</h2>
-    <p class="intro-text">
-      These are some important Textbooks related to my research and learning journey.
-      I am now keep making solutions to exercises from these books, which I hope will be helpful for students and researchers alike.
-    </p>
 
-    <section class="book-grid">
-      <article class="book-solution text-card">
-        <a href="HD_solution.html" class="solution-link">
-          <h2 class="book-title">Introduction to Hamiltonian Dynamical Systems and the N-Body Problem</h2>
-          <p class="book-author">K.R. Meyer</p>
-          <p class="book-detail">Problem Solutions (2nd Ed.)</p>
-        </a>
-      </article>
+    <!-- Textbooks -->
+    <section class="section" aria-labelledby="books-heading">
+      <h2 id="books-heading" class="section-heading">Exercise Solutions for Advanced Physics Textbooks</h2>
+      <p class="section-sub">
+        These are some important Textbooks related to my research and learning journey.
+        I am now keep making solutions to exercises from these books, which I hope will be helpful for students and researchers alike.
+      </p>
 
-      <article class="book-solution text-card">
-        <a href="Jackson_solution.html" class="solution-link">
-          <h2 class="book-title">Classical Electrodynamics</h2>
-          <p class="book-author">J.D. Jackson</p>
-          <p class="book-detail">Problem Solutions (3rd Ed.)</p>
-        </a>
-      </article>
+      <div class="card-grid">
+        <article class="text-card">
+          <a href="HD_solution.html" class="solution-link">
+            <p class="tag">Solutions</p>
+            <h3 class="book-title">Introduction to Hamiltonian Dynamical Systems and the N-Body Problem</h3>
+            <p class="book-author">K.R. Meyer</p>
+            <p class="book-detail">2nd Edition</p>
+          </a>
+        </article>
 
-      <article class="book-solution text-card">
-        <a href="Goldstein_solution.html" class="solution-link">
-          <h2 class="book-title">Classical Mechanics</h2>
-          <p class="book-author">H. Goldstein</p>
-          <p class="book-detail">Problem Solutions (3rd Ed.)</p>
-        </a>
-      </article>
+        <article class="text-card">
+          <a href="Jackson_solution.html" class="solution-link">
+            <p class="tag">Solutions</p>
+            <h3 class="book-title">Classical Electrodynamics</h3>
+            <p class="book-author">J.D. Jackson</p>
+            <p class="book-detail">3rd Edition</p>
+          </a>
+        </article>
 
-      <article class="book-solution text-card">
-        <a href="Cardy_solution.html" class="solution-link">
-          <h2 class="book-title">Scaling and Renormalization in Statistical Physics</h2>
-          <p class="book-author">John Cardy</p>
-          <p class="book-detail">Problem Solutions</p>
-        </a>
-      </article>
+        <article class="text-card">
+          <a href="Goldstein_solution.html" class="solution-link">
+            <p class="tag">Solutions</p>
+            <h3 class="book-title">Classical Mechanics</h3>
+            <p class="book-author">H. Goldstein</p>
+            <p class="book-detail">3rd Edition</p>
+          </a>
+        </article>
+
+        <article class="text-card">
+          <a href="Cardy_solution.html" class="solution-link">
+            <p class="tag">Solutions</p>
+            <h3 class="book-title">Scaling and Renormalization in Statistical Physics</h3>
+            <p class="book-author">John Cardy</p>
+            <p class="book-detail">Problems & Solutions</p>
+          </a>
+        </article>
+      </div>
     </section>
+
+    <!-- Notes（修正版：納入 main，語意化結構 + 共用網格樣式） -->
+    <section id="notes" class="section" aria-labelledby="notes-heading">
+      <h2 id="notes-heading" class="section-heading">Notes</h2>
+      <p class="section-sub">
+       These supplementary notes support my teaching-assistant responsibilities and research interests. 
+       They cover diverse topics and are designed to offer students deeper insights and clarifications
+        than those available in standard textbooks.
+      </p>
+      <div class="card-grid">
+        <article class="text-card">
+          <a href="" class="solution-link">
+            <p class="tag">Notes</p>
+            <h3 class="book-title">Vector Spaces and Linear Algebra for Physics</h3>
+            <p class="book-detail">Orientation: Vector spaces, linear transformations, inner products</p>
+          </a>
+        </article>
+        <article class="text-card">
+          <a href="" class="solution-link">
+            <p class="tag">Notes</p>
+            <h3 class="book-title">Vector Analysis with Differential Forms for Physics</h3>
+            <p class="book-detail">Orientation: calculus on manifolds, Stokes, Maxwell</p>
+          </a>
+        </article>
+
+        <article class="text-card">
+          <a href="Green_Functions.pdf" class="solution-link">
+            <p class="tag">Notes</p>
+            <h3 class="book-title">Green Functions, Generalized Functions, and Their Applications in Physics </h3>
+            <p class="book-detail">Orientation: Green Functions, generalized Functions, Fourier trnasforms</p>
+          </a>
+        </article>
+
+        <article class="text-card">
+          <a href="" class="solution-link">
+            <p class="tag">Notes</p>
+            <h3 class="book-title">Geometry and Lie Algebra for Mechanics (under prepartion)</h3>
+            <p class="book-detail">Orientation: Poisson geometry, Lie algebra, geometric mechanics</p>
+          </a>
+        </article>
+      </div>
+    </section>
+
   </main>
 
   <!-- JS：手機導覽開關 -->
