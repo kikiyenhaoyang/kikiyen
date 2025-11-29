@@ -119,6 +119,13 @@
     footer{ padding:28px 0 36px; border-top:1px solid rgba(0,0,0,0.1); margin-top:36px; }
     .logos{ display:flex; justify-content:center; align-items:center; gap:28px; }
     .logos img{ height:80px; width:auto; }
+
+        .notes-subheading{
+      margin: 24px 0 8px;
+      font-size: 1.4rem;
+      font-weight: 600;
+    }
+
   </style>
 </head>
 
@@ -159,6 +166,69 @@
 
   <!-- Main -->
   <main id="main" class="wrapper">
+     <!-- Notes（語意化結構 + 共用網格樣式） -->
+    <!-- Notes（語意化結構 + 分三類） -->
+    <section id="notes" class="section" aria-labelledby="notes-heading">
+      <h2 id="notes-heading" class="section-heading">Notes and Teaching Materials</h2>
+      <p class="section-sub">
+       These supplementary notes support my teaching-assistant responsibilities and research interests. 
+       They cover diverse topics and are designed to offer students deeper insights and clarifications
+        than those available in standard textbooks.
+      </p>
+
+      <!-- Topics in Vectors -->
+      <h3 class="notes-subheading">Topics in Vectors</h3>
+      <div class="card-grid">
+        <article class="text-card">
+          <a href="Linear_Algebra.pdf" class="solution-link">
+            <p class="tag">Notes</p>
+            <h3 class="book-title">Vector Spaces and Linear Algebra for Physics</h3>
+            <p class="book-detail">Orientation: Vector spaces, linear transformations, inner products</p>
+          </a>
+        </article>
+
+        <article class="text-card">
+          <a href="Vector_Analysis.pdf" class="solution-link">
+            <p class="tag">Notes</p>
+            <h3 class="book-title">Vector Analysis with Differential Forms for Physics</h3>
+            <p class="book-detail">Orientation: calculus on manifolds, Stokes, Maxwell's equation</p>
+          </a>
+        </article>
+      </div>
+
+      <!-- Mathematical Analysis -->
+      <h3 class="notes-subheading">Mathematical Analysis</h3>
+      <div class="card-grid">
+        <article class="text-card">
+          <a href="Green_Functions.pdf" class="solution-link">
+            <p class="tag">Notes</p>
+            <h3 class="book-title">Green Functions, Generalized Functions, and Their Applications in Physics</h3>
+            <p class="book-detail">Orientation: Green functions, Generalized functions, Fourier transforms</p>
+          </a>
+        </article>
+
+        <article class="text-card">
+          <a href="" class="solution-link">
+            <p class="tag">Notes</p>
+            <h3 class="book-title">Real Analysis in Mathematical Physics</h3>
+            <p class="book-detail">Orientation: Measures, Lebesgue integral, Convergence, Probability</p>
+          </a>
+        </article>
+      </div>
+
+      <!-- Differential Geometry in Physics -->
+      <h3 class="notes-subheading">Differential Geometry in Physics</h3>
+      <div class="card-grid">
+        <article class="text-card">
+          <a href="" class="solution-link">
+            <p class="tag">Notes</p>
+            <h3 class="book-title">Geometry and Lie Algebra for Mechanics (under preparation)</h3>
+            <p class="book-detail">Orientation: Poisson geometry, Lie algebra, geometric mechanics</p>
+          </a>
+        </article>
+      </div>
+    </section>
+
 
     <!-- Textbooks -->
     <section class="section" aria-labelledby="books-heading">
@@ -207,47 +277,7 @@
       </div>
     </section>
 
-    <!-- Notes（修正版：納入 main，語意化結構 + 共用網格樣式） -->
-    <section id="notes" class="section" aria-labelledby="notes-heading">
-      <h2 id="notes-heading" class="section-heading">Notes</h2>
-      <p class="section-sub">
-       These supplementary notes support my teaching-assistant responsibilities and research interests. 
-       They cover diverse topics and are designed to offer students deeper insights and clarifications
-        than those available in standard textbooks.
-      </p>
-      <div class="card-grid">
-        <article class="text-card">
-          <a href="Linear_Algebra.pdf" class="solution-link">
-            <p class="tag">Notes</p>
-            <h3 class="book-title">Vector Spaces and Linear Algebra for Physics</h3>
-            <p class="book-detail">Orientation: Vector spaces, linear transformations, inner products</p>
-          </a>
-        </article>
-        <article class="text-card">
-          <a href="Vector_Analysis.pdf" class="solution-link">
-            <p class="tag">Notes</p>
-            <h3 class="book-title">Vector Analysis with Differential Forms for Physics</h3>
-            <p class="book-detail">Orientation: calculus on manifolds, Stokes, Maxwell</p>
-          </a>
-        </article>
-
-        <article class="text-card">
-          <a href="Green_Functions.pdf" class="solution-link">
-            <p class="tag">Notes</p>
-            <h3 class="book-title">Green Functions, Generalized Functions, and Their Applications in Physics </h3>
-            <p class="book-detail">Orientation: Green Functions, generalized Functions, Fourier trnasforms</p>
-          </a>
-        </article>
-
-        <article class="text-card">
-          <a href="" class="solution-link">
-            <p class="tag">Notes</p>
-            <h3 class="book-title">Geometry and Lie Algebra for Mechanics (under prepartion)</h3>
-            <p class="book-detail">Orientation: Poisson geometry, Lie algebra, geometric mechanics</p>
-          </a>
-        </article>
-      </div>
-    </section>
+   
 
   </main>
 
