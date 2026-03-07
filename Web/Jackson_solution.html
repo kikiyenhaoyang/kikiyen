@@ -2,13 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>Cardy — Solutions Explorer</title>
+  <title>Jackson — Solutions Explorer</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Worked solutions to exercises in John Cardy's Scaling and Renormalization in Statistical Physics." />
+  <meta name="description" content="Worked solutions to exercises in J.D. Jackson's Electrodynamics." />
 
   <!-- Open Graph -->
-  <meta property="og:title" content="Cardy — Solutions Explorer" />
-  <meta property="og:description" content="Worked solutions to Cardy's Scaling and Renormalization in Statistical Physics." />
+  <meta property="og:title" content="Jackson — Solutions Explorer" />
+  <meta property="og:description" content="Worked solutions to Jackson's Electrodynamics." />
   <meta property="og:type" content="website" />
   <meta property="og:image" content="cover.png" />
 
@@ -178,19 +178,19 @@
   </header>
 
   <main id="main" class="wrapper" tabindex="-1">
-    <h1 class="page-title">Scaling and Renormalization in Statistical Physics — Solutions</h1>
+    <h1 class="page-title">Classical Electrodynamics — Solutions</h1>
     <p class="page-sub">Worked problems by chapter and problem number. Use the filters to find an exercise quickly.</p>
 
     <!-- 工具列：搜尋 + 篩選 -->
     <div class="toolbar" role="search">
-      <input id="q" type="search" placeholder="Search (e.g. Ising, fixed point, RG)" aria-label="Search problems">
+      <input id="q" type="search" placeholder="Search" aria-label="Search problems">
       <div>
         <label for="chap">Chapter</label>
         <select id="chap" aria-label="Filter by chapter">
           <option value="">All</option>
-          <option value="1">1. Phase transitions in simple systems</option>
-          <option value="2">2. Mean field theory</option>
-          <option value="3">3. The renormalization group idea</option>
+          <option value="1">1. Introduction and Survey</option>
+          <option value="2">2. Boundary-Value Problems in Electrostatics: I</option>
+          <option value="3">3. Boundary-Value Problems in Electrostatics: II</option>
           <option value="4">4. Phase diagrams and fixed points</option>
         </select>
         <label for="pno">Problem</label>
@@ -204,17 +204,17 @@
 
     <!-- 章節容器：JS 會塞入卡片 -->
     <section id="chap-1" class="chapter-block" aria-labelledby="chap-1-title">
-      <h2 id="chap-1-title" class="chapter-title">Chapter 1. Phase transitions in simple systems</h2>
+      <h2 id="chap-1-title" class="chapter-title">Chapter 1. Introduction and Survey</h2>
       <div class="book-grid" data-chapter="1"></div>
     </section>
 
     <section id="chap-2" class="chapter-block" aria-labelledby="chap-2-title">
-      <h2 id="chap-2-title" class="chapter-title">Chapter 2. Mean field theory</h2>
+      <h2 id="chap-2-title" class="chapter-title">Chapter 2. Boundary-Value Problems in Electrostatics: I</h2>
       <div class="book-grid" data-chapter="2"></div>
     </section>
 
     <section id="chap-3" class="chapter-block" aria-labelledby="chap-3-title">
-      <h2 id="chap-3-title" class="chapter-title">Chapter 3. The renormalization group idea</h2>
+      <h2 id="chap-3-title" class="chapter-title">Chapter 3. Boundary-Value Problems in Electrostatics: II</h2>
       <div class="book-grid" data-chapter="3"></div>
     </section>
 
@@ -248,28 +248,48 @@
     // ====== 資料來源 ======
     const PROBLEMS = [
       // ch, problem, title(optional), url
-      {ch:1, p:1, url:'Cardy_solution_1_1.pdf'},
-      {ch:1, p:2, url:'Cardy_solution_1_2.pdf'},
-      {ch:1, p:3, url:'Cardy_solution_1_3.pdf'},
-      {ch:1, p:4, url:'Cardy_solution_1_4.pdf'},
-      {ch:2, p:1, url:'Cardy_solution_2_1.pdf'},
-      {ch:2, p:2, url:'Cardy_solution_2_2.pdf'},
-      {ch:2, p:3, url:'Cardy_solution_2_3.pdf'},
-      {ch:2, p:4, url:'Cardy_solution_2_4.pdf'},
-      {ch:2, p:5, url:'Cardy_solution_2_5.pdf'},
-      {ch:2, p:6, url:'Cardy_solution_2_6.pdf'},
-      {ch:2, p:7, url:'Cardy_solution_2_7.pdf'},
-      {ch:2, p:8, url:'Cardy_solution_2_8.pdf'},
-      {ch:3, p:1, url:'Cardy_solution_3_1.pdf'},
-      {ch:3, p:2, url:'Cardy_solution_3_2.pdf'},
-      {ch:3, p:3, url:'Cardy_solution_3_3.pdf'},
-      {ch:3, p:4, url:'Cardy_solution_3_4.pdf'},
-      {ch:3, p:5, url:'Cardy_solution_3_5.pdf'},
-      {ch:3, p:6, url:'Cardy_solution_3_6.pdf'},
-      {ch:3, p:7, url:'Cardy_solution_3_7.pdf'},
-      {ch:4, p:1, url:'Cardy_solution_4_1.pdf'},
-      {ch:4, p:2, url:'Cardy_solution_4_2.pdf'},
-      {ch:4, p:3, url:'Cardy_solution_4_3.pdf'},
+      {ch:1, p:1, url:'Jackson_solution_1_1.pdf'},
+      {ch:1, p:2, url:'Jackson_solution_1_2.pdf'},
+      {ch:1, p:3, url:'Jackson_solution_1_3.html'},
+      {ch:1, p:4, url:'Jackson_solution_1_4.html'},
+      {ch:1, p:5, url:'Jackson_solution_1_5.pdf'},
+      {ch:1, p:6, url:'Jackson_solution_1_6.pdf'},
+      {ch:1, p:7, url:'Jackson_solution_1_7.html'},
+      {ch:1, p:8, url:'Jackson_solution_1_8.html'},
+      {ch:1, p:9, url:'Jackson_solution_1_9.pdf'},
+      {ch:1, p:10, url:'Jackson_solution_1_10.pdf'},
+      {ch:1, p:11, url:'Jackson_solution_1_3.html'},
+      {ch:1, p:12, url:'Jackson_solution_1_4.html'},
+      {ch:1, p:13, url:'Jackson_solution_1_1.pdf'},
+      {ch:1, p:14, url:'Jackson_solution_1_2.pdf'},
+      {ch:1, p:15, url:'Jackson_solution_1_3.html'},
+      {ch:1, p:16, url:'Jackson_solution_1_4.html'},
+      {ch:1, p:17, url:'Jackson_solution_1_1.pdf'},
+      {ch:1, p:18, url:'Jackson_solution_1_2.pdf'},
+      {ch:1, p:19, url:'Jackson_solution_1_3.html'},
+      {ch:1, p:20, url:'Jackson_solution_1_4.html'},
+      {ch:1, p:21, url:'Jackson_solution_1_1.pdf'},
+      {ch:1, p:22, url:'Jackson_solution_1_2.pdf'},
+      {ch:1, p:23, url:'Jackson_solution_1_3.html'},
+      {ch:1, p:24, url:'Jackson_solution_1_4.html'},
+      {ch:2, p:1, url:'Jackson_solution_2_1.html'},
+      {ch:2, p:2, url:'solution_2_2.html'},
+      {ch:2, p:3, url:'solution_2_3.html'},
+      {ch:2, p:4, url:'solution_2_4.html'},
+      {ch:2, p:5, url:'solution_2_5.html'},
+      {ch:2, p:6, url:'solution_2_6.html'},
+      {ch:2, p:7, url:'solution_2_7.html'},
+      {ch:2, p:8, url:'solution_2_8.html'},
+      {ch:3, p:1, url:'solution_3_1.html'},
+      {ch:3, p:2, url:'solution_3_2.html'},
+      {ch:3, p:3, url:'solution_3_3.html'},
+      {ch:3, p:4, url:'solution_3_4.html'},
+      {ch:3, p:5, url:'solution_3_5.html'},
+      {ch:3, p:6, url:'solution_3_6.html'},
+      {ch:3, p:7, url:'solution_3_7.html'},
+      {ch:4, p:1, url:'solution_4_1.html'},
+      {ch:4, p:2, url:'solution_4_1.html'},
+      {ch:4, p:3, url:'solution_4_1.html'},
     ];
 
     // ====== 產生卡片 ======
