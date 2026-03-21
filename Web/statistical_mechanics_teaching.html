@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Statistical Mechanics — Learning Hub</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="A teaching webpage for statistical mechanics featuring topics, lecture notes, and video resources." />
+
+  <meta property="og:title" content="Statistical Mechanics — Learning Hub" />
+  <meta property="og:description" content="Topics, lecture notes, and video resources for learning statistical mechanics." />
+  <meta property="og:type" content="website" />
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" crossorigin="anonymous"
+    onload="renderMathInElement(document.getElementById('main'),{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});"></script>
+
+  <style>
+    :root{
+      --bg:#f6f7fb;
+      --fg:#18212f;
+      --muted:#5f6b7a;
+      --primary:#1d4ed8;
+      --primary-soft:#dbeafe;
+      --card:#ffffff;
+      --border:rgba(24,33,47,.12);
+      --ring:#93c5fd;
+      --maxw:1100px;
+      --shadow:0 12px 30px rgba(0,0,0,.08);
+    }
+
+    @media (prefers-color-scheme: dark){
+      :root{
+        --bg:#0b1220;
+        --fg:#e5edf7;
+        --muted:#9aa8ba;
+        --primary:#7cb3ff;
+        --primary-soft:#172554;
+        --card:#101a2c;
+        --border:rgba(255,255,255,.12);
+        --ring:#60a5fa;
+        --shadow:0 12px 30px rgba(0,0,0,.28);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      *{animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; scroll-behavior:auto !important;}
+    }
+
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background:linear-gradient(180deg, var(--bg) 0%, color-mix(in oklab, var(--bg), #ffffff 8%) 100%);
+      color:var(--fg);
+      line-height:1.6;
+    }
+
+    a{color:var(--primary)}
+    img{max-width:100%}
+    .wrapper{max-width:var(--maxw); margin:0 auto; padding:0 18px}
+
+    .skip-link{
+      position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden;
+    }
+    .skip-link:focus{
+      position:fixed; left:16px; top:16px; width:auto; height:auto;
+      background:#000; color:#fff; padding:8px 12px; border-radius:8px; z-index:1000;
+    }
+
+    header{
+      position:sticky; top:0; z-index:50;
+      background:rgba(255,255,255,.72);
+      backdrop-filter:saturate(180%) blur(14px);
+      border-bottom:1px solid var(--border);
+    }
+    @media (prefers-color-scheme: dark){
+      header{background:rgba(11,18,32,.72)}
+    }
+
+    .topbar{
+      display:flex; align-items:center; justify-content:space-between; gap:16px;
+      padding:14px 0;
+    }
+    .brand h1{
+      margin:0; font-size:1.2rem; line-height:1.1;
+    }
+    .brand p{
+      margin:4px 0 0; color:var(--muted); font-size:.92rem;
+    }
+
+    .nav{
+      display:flex; gap:10px; flex-wrap:wrap;
+    }
+    .nav a{
+      text-decoration:none; color:inherit;
+      padding:8px 12px; border:1px solid var(--border); border-radius:999px;
+      background:color-mix(in oklab, var(--card), transparent 10%);
+    }
+    .nav a:hover{color:var(--primary); border-color:color-mix(in oklab, var(--primary), var(--border) 60%)}
+
+    main{padding:30px 0 50px}
+
+    .hero{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:24px;
+      box-shadow:var(--shadow);
+      padding:28px;
+      margin-bottom:22px;
+    }
+    .hero-badge{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:6px 12px; border-radius:999px; font-size:.9rem;
+      background:var(--primary-soft); color:var(--primary); font-weight:600;
+    }
+    .hero h2{
+      margin:14px 0 10px; font-size:clamp(1.8rem, 4vw, 3rem); line-height:1.1;
+    }
+    .hero p{
+      margin:0; max-width:760px; color:var(--muted); font-size:1.03rem;
+    }
+    .hero-grid{
+      display:grid; grid-template-columns:1.3fr .7fr; gap:18px; align-items:start; margin-top:20px;
+    }
+    .hero-card{
+      background:color-mix(in oklab, var(--card), var(--bg) 18%);
+      border:1px solid var(--border);
+      border-radius:18px; padding:18px;
+    }
+    .hero-card h3{margin:0 0 8px; font-size:1rem}
+    .hero-card p{margin:0; font-size:.95rem}
+    .formula{
+      font-size:1.05rem; overflow:auto;
+    }
+
+    .toolbar{
+      display:flex; gap:12px; flex-wrap:wrap; align-items:center; justify-content:space-between;
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:14px;
+      box-shadow:var(--shadow);
+      margin-bottom:18px;
+    }
+    .toolbar-group{
+      display:flex; gap:10px; flex-wrap:wrap; align-items:center;
+    }
+    .toolbar input, .toolbar select{
+      padding:10px 12px; border-radius:10px; border:1px solid var(--border);
+      background:var(--card); color:inherit; min-width:180px;
+    }
+    .toolbar input:focus, .toolbar select:focus{
+      outline:3px solid var(--ring); outline-offset:2px;
+    }
+
+    .table-wrap{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:20px;
+      overflow:hidden;
+      box-shadow:var(--shadow);
+    }
+    table{
+      width:100%; border-collapse:collapse;
+    }
+    thead th{
+      text-align:left;
+      padding:16px 18px;
+      background:color-mix(in oklab, var(--primary-soft), var(--card) 35%);
+      color:var(--fg);
+      border-bottom:1px solid var(--border);
+      font-size:.95rem;
+      letter-spacing:.02em;
+    }
+    tbody td{
+      padding:16px 18px;
+      border-bottom:1px solid var(--border);
+      vertical-align:top;
+    }
+    tbody tr:hover{
+      background:color-mix(in oklab, var(--primary-soft), transparent 75%);
+    }
+    tbody tr:last-child td{border-bottom:none}
+
+    .topic-title{
+      margin:0 0 6px; font-weight:700; font-size:1rem;
+    }
+    .topic-tag{
+      display:inline-block; padding:4px 10px; border-radius:999px;
+      background:color-mix(in oklab, var(--primary-soft), var(--card) 15%);
+      color:var(--primary); font-size:.8rem; font-weight:600;
+      margin-bottom:8px;
+    }
+    .topic-desc, .notes-text{
+      margin:0; color:var(--muted); font-size:.94rem;
+    }
+    .resource-link{
+      display:inline-flex; align-items:center; gap:8px;
+      text-decoration:none; padding:8px 12px; border-radius:10px;
+      border:1px solid var(--border); color:inherit;
+      background:color-mix(in oklab, var(--card), var(--bg) 18%);
+      font-weight:600;
+    }
+    .resource-link:hover{
+      color:var(--primary); border-color:color-mix(in oklab, var(--primary), var(--border) 55%);
+    }
+    .resource-stack{
+      display:flex; flex-direction:column; gap:10px;
+    }
+
+    .empty-state{
+      display:none;
+      padding:28px 20px;
+      text-align:center;
+      color:var(--muted);
+      background:var(--card);
+      border-top:1px solid var(--border);
+    }
+
+    footer{
+      padding:26px 0 40px; color:var(--muted);
+    }
+    footer .footer-card{
+      border:1px solid var(--border);
+      background:var(--card);
+      border-radius:18px;
+      padding:18px;
+      text-align:center;
+      box-shadow:var(--shadow);
+    }
+
+    @media (max-width: 860px){
+      .hero-grid{grid-template-columns:1fr}
+      .topbar{flex-direction:column; align-items:flex-start}
+    }
+
+    @media (max-width: 720px){
+      .table-wrap{overflow:auto}
+      table{min-width:760px}
+    }
+  </style>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to main content</a>
+
+  
+  <header>
+    <div class="wrapper topbar">
+      <div class="brand">
+        <h1>Statistical Mechanics</h1>
+        <p>@ NTHU in Spring 2026.</p>
+      </div>
+
+      <nav class="nav" aria-label="Primary">
+        <a href="#overview">Overview</a>
+        <a href="#resources">Resources</a>
+        <a href="#table">Course Table</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="wrapper" tabindex="-1">
+    <section class="hero" id="overview">
+      <span class="hero-badge">Physics Learning Hub</span>
+      <h2>Statistical Mechanics beyond the standard curriculum</h2>
+      <p>
+        This webpage collects course materials prepared for my TA work for
+        <em>Statistical Mechanics I</em> at NTHU in Spring 2026. It is intended
+        for students who would like to explore advanced and less commonly covered
+        topics that go beyond the standard statistical mechanics curriculum.
+      </p>
+
+      <div class="hero-grid">
+        <div class="hero-card">
+          <h3>What you will study</h3>
+          <p>
+            We will explore several advanced yet important techniques in
+            statistical mechanics, covering both analytical and numerical
+            approaches. In particular, we will examine how these methods can be
+            used to study one of the central objects in the subject: the
+            canonical partition function.
+          </p>
+          <div class="formula">$$Z = \sum_i e^{-\beta E_i}, \qquad F = -k_B T \ln Z$$</div>
+        </div>
+
+        <div class="hero-card" id="resources">
+          <h3>How to use this page</h3>
+          <p>
+            Start with the summary note, then move on to the linked lecture note
+            or PDF, and finally reinforce your understanding with a video
+            lecture. You can also search by keyword or filter topics by
+            difficulty below.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="toolbar" aria-label="Filters">
+      <div class="toolbar-group">
+        <input id="searchInput" type="search" placeholder="Search topics, notes, or videos" aria-label="Search table content">
+        <select id="levelFilter" aria-label="Filter by level">
+          <option value="">All levels</option>
+          <option value="Intro">Intro</option>
+          <option value="Intermediate">Intermediate</option>
+          <option value="Advanced">Advanced</option>
+        </select>
+      </div>
+      <div class="toolbar-group">
+        <span id="resultCount" aria-live="polite">9 topics</span>
+      </div>
+    </section>
+
+    <section class="table-wrap" id="table" aria-labelledby="table-title">
+      <table>
+        <thead>
+          <tr>
+            <th id="table-title">Topics</th>
+            <th>Notes</th>
+            <th>Videos</th>
+          </tr>
+        </thead>
+        <tbody id="courseTableBody"></tbody>
+      </table>
+      <div id="emptyState" class="empty-state">No matching topics found.</div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrapper">
+      <div class="footer-card">
+        Statistical Mechanics Learning Hub · The teaching webpage for <em>Statistical Mechanics I</em> at NTHU in Spring 2026.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const COURSE_DATA = [
+      {
+        level: 'Advanced',
+        topic: 'Random Matrix Theory',
+        description: 'Learn the statistical properties of random matrices and why they play an important role in quantum chaos.',
+        noteLabel: 'Random Matrix Theory notes',
+        noteUrl: 'https://hackmd.io/@t-pk65XEQ2eHiF7pmft1vg/rJJMibmY-l',
+        noteText: 'Introduces quantum chaos and the spectral statistics of random matrices.',
+        videoLabel: 'Random Matrix Theory video',
+        videoUrl: '#'
+      },
+      {
+        level: 'Advanced',
+        topic: 'Asymptotic Expansions',
+        description: 'Learn how asymptotic methods approximate functions in the limit of large parameters or arguments.',
+        noteLabel: 'Asymptotic Expansions notes',
+        noteUrl: 'https://hackmd.io/@t-pk65XEQ2eHiF7pmft1vg/HJMh1ofYZx',
+        noteText: 'Covers the basic ideas of asymptotic expansions and the Laplace method of integration.',
+        videoLabel: 'Asymptotic Expansions video',
+        videoUrl: '#'
+      },
+      {
+        level: 'Intermediate',
+        topic: 'Emergent Symmetry',
+        description: 'Study the mathematical foundations of symmetry and how emergent symmetries arise in many-body systems.',
+        noteLabel: 'Emergent Symmetry notes',
+        noteUrl: 'https://hackmd.io/@t-pk65XEQ2eHiF7pmft1vg/BJC4GFr5We',
+        noteText: 'Introduces the basic ideas of group theory and discusses how symmetries can emerge in many-body systems.',
+        videoLabel: 'Emergent Symmetry video',
+        videoUrl: '#'
+      },
+      {
+        level: 'Intro',
+        topic: 'Monte Carlo Methods',
+        description: 'Learn how to implement Monte Carlo simulations on a computer and apply them to problems in statistical mechanics.',
+        noteLabel: 'Monte Carlo Methods notes',
+        noteUrl: '#',
+        noteText: 'Introduces random sampling and its use in estimating integrals and studying stochastic systems.',
+        videoLabel: 'Monte Carlo Methods video',
+        videoUrl: '#'
+      },
+      {
+        level: 'Intro',
+        topic: 'Exact Computation of the 2D Ising Model',
+        description: 'Explore efficient ways to compute properties of spin systems, such as magnetization, in simple models of collective behavior.',
+        noteLabel: '2D Ising Model notes',
+        noteUrl: '#',
+        noteText: 'Introduces lattice spins, couplings, and computational approaches for studying the model.',
+        videoLabel: '2D Ising Model video',
+        videoUrl: '#'
+      },
+      {
+        level: 'Intermediate',
+        topic: 'Factorization of Partition Functions',
+        description: 'Understand what it means for partition functions to factorize and the combinatorics and number theory behind this structure.',
+        noteLabel: 'Partition Function notes',
+        noteUrl: '#',
+        noteText: 'Focuses on the factorization of partition functions and the mathematics underlying it.',
+        videoLabel: 'Factorization video',
+        videoUrl: '#'
+      },
+      {
+        level: 'Advanced',
+        topic: 'Dimers and the Triangular Ising Model',
+        description: 'Study the relationship between dimer models and the triangular Ising model.',
+        noteLabel: 'Triangular Ising Model notes',
+        noteUrl: '#',
+        noteText: 'Derives the connection between the triangular Ising model and dimer models.',
+        videoLabel: 'Dimers video',
+        videoUrl: '#'
+      },
+      {
+        level: 'Advanced',
+        topic: 'Bosons, Fermions, and Metals',
+        description: 'Understand the differences between bosons and fermions and how these distinctions appear in models of metallic systems.',
+        noteLabel: 'Bosons and Fermions notes',
+        noteUrl: '#',
+        noteText: 'Introduces the properties of bosons and fermions and explains how they influence solid-state systems.',
+        videoLabel: 'Bosons and Fermions overview video',
+        videoUrl: '#'
+      },
+      {
+        level: 'Advanced',
+        topic: 'Symmetries in Statistical Physics Models',
+        description: 'Explore different kinds of symmetries that appear in models of statistical physics.',
+        noteLabel: 'Symmetries in Statistical Physics Models notes',
+        noteUrl: '#',
+        noteText: 'Introduces global, local, and gauge symmetries, as well as symmetry breaking.',
+        videoLabel: 'Symmetries in Statistical Physics Models overview video',
+        videoUrl: '#'
+      }
+    ];
+
+    const tbody = document.getElementById('courseTableBody');
+    const searchInput = document.getElementById('searchInput');
+    const levelFilter = document.getElementById('levelFilter');
+    const resultCount = document.getElementById('resultCount');
+    const emptyState = document.getElementById('emptyState');
+
+    function renderTable(items){
+      tbody.innerHTML = '';
+
+      if(items.length === 0){
+        emptyState.style.display = 'block';
+        resultCount.textContent = '0 topics';
+        return;
+      }
+
+      emptyState.style.display = 'none';
+      resultCount.textContent = `${items.length} topic${items.length > 1 ? 's' : ''}`;
+
+      items.forEach(item => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>
+            <div class="topic-tag">${item.level}</div>
+            <h3 class="topic-title">${item.topic}</h3>
+            <p class="topic-desc">${item.description}</p>
+          </td>
+          <td>
+            <div class="resource-stack">
+              <a class="resource-link" href="${item.noteUrl}">${item.noteLabel}</a>
+              <p class="notes-text">${item.noteText}</p>
+            </div>
+          </td>
+          <td>
+            <div class="resource-stack">
+              <a class="resource-link" href="${item.videoUrl}">${item.videoLabel}</a>
+              <p class="notes-text">Video explanation for ${item.topic}.</p>
+            </div>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function applyFilters(){
+      const keyword = searchInput.value.trim().toLowerCase();
+      const level = levelFilter.value;
+
+      const filtered = COURSE_DATA.filter(item => {
+        const text = `${item.topic} ${item.description} ${item.noteLabel} ${item.noteText} ${item.videoLabel}`.toLowerCase();
+        const byKeyword = keyword ? text.includes(keyword) : true;
+        const byLevel = level ? item.level === level : true;
+        return byKeyword && byLevel;
+      });
+
+      renderTable(filtered);
+    }
+
+    searchInput.addEventListener('input', applyFilters);
+    levelFilter.addEventListener('change', applyFilters);
+
+    renderTable(COURSE_DATA);
+  </script>
+</body>
+</html>
