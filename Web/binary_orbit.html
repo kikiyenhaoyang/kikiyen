@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Binary Orbit — Learning Hub Style</title>
+<meta name="description" content="雙星橢圓軌道模擬" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="A teaching webpage for statistical mechanics featuring topics, lecture notes, and video resources." />
+
+  <meta property="og:title" content="Statistical Mechanics — Learning Hub" />
+  <meta property="og:description" content="Topics, lecture notes, and video resources for learning statistical mechanics." />
+  <meta property="og:type" content="website" />
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" crossorigin="anonymous"
+    onload="renderMathInElement(document.getElementById('main'),{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});"></script>
+
+<style>
+  :root{
+    --bg:#f6f7fb;
+    --fg:#18212f;
+    --muted:#5f6b7a;
+    --primary:#1d4ed8;
+    --primary-soft:#dbeafe;
+    --card:#ffffff;
+    --border:rgba(24,33,47,.12);
+    --ring:#93c5fd;
+    --maxw:1100px;
+    --shadow:0 12px 30px rgba(0,0,0,.08);
+  }
+
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#0b1220;
+      --fg:#e5edf7;
+      --muted:#9aa8ba;
+      --primary:#7cb3ff;
+      --primary-soft:#172554;
+      --card:#101a2c;
+      --border:rgba(255,255,255,.12);
+      --ring:#60a5fa;
+      --shadow:0 12px 30px rgba(0,0,0,.28);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; scroll-behavior:auto !important;}
+  }
+
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background:linear-gradient(180deg, var(--bg) 0%, color-mix(in oklab, var(--bg), #ffffff 8%) 100%);
+    color:var(--fg);
+    line-height:1.6;
+  }
+
+  a{color:var(--primary)}
+  .wrapper{max-width:var(--maxw); margin:0 auto; padding:0 18px}
+
+  .skip-link{
+    position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden;
+  }
+  .skip-link:focus{
+    position:fixed; left:16px; top:16px; width:auto; height:auto;
+    background:#000; color:#fff; padding:8px 12px; border-radius:8px; z-index:1000;
+  }
+
+  header{
+    position:sticky; top:0; z-index:50;
+    background:rgba(255,255,255,.72);
+    backdrop-filter:saturate(180%) blur(14px);
+    border-bottom:1px solid var(--border);
+  }
+  @media (prefers-color-scheme: dark){
+    header{background:rgba(11,18,32,.72)}
+  }
+
+  .topbar{
+    display:flex; align-items:center; justify-content:space-between; gap:16px;
+    padding:14px 0;
+  }
+  .brand h1{
+    margin:0; font-size:1.2rem; line-height:1.1;
+  }
+  .brand p{
+    margin:4px 0 0; color:var(--muted); font-size:.92rem;
+  }
+
+  .nav{
+    display:flex; gap:10px; flex-wrap:wrap;
+  }
+  .nav a{
+    text-decoration:none; color:inherit;
+    padding:8px 12px; border:1px solid var(--border); border-radius:999px;
+    background:color-mix(in oklab, var(--card), transparent 10%);
+  }
+  .nav a:hover{color:var(--primary); border-color:color-mix(in oklab, var(--primary), var(--border) 60%)}
+
+  main{padding:30px 0 50px}
+
+  .hero{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:24px;
+    box-shadow:var(--shadow);
+    padding:28px;
+    margin-bottom:22px;
+  }
+  .hero-badge{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:6px 12px; border-radius:999px; font-size:.9rem;
+    background:var(--primary-soft); color:var(--primary); font-weight:600;
+  }
+  .hero h2{
+    margin:14px 0 10px; font-size:clamp(1.8rem, 4vw, 3rem); line-height:1.1;
+  }
+  .hero p{
+    margin:0; max-width:760px; color:var(--muted); font-size:1.03rem;
+  }
+  .hero-grid{
+    display:grid; grid-template-columns:1.3fr .7fr; gap:18px; align-items:start; margin-top:20px;
+  }
+  .hero-card{
+    background:color-mix(in oklab, var(--card), var(--bg) 18%);
+    border:1px solid var(--border);
+    border-radius:18px; padding:18px;
+  }
+  .hero-card h3{margin:0 0 8px; font-size:1rem}
+  .hero-card p{margin:0; font-size:.95rem}
+  .formula{
+    font-size:1rem; overflow:auto; margin-top:12px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    background:color-mix(in oklab, var(--card), var(--bg) 22%);
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:12px;
+  }
+
+  .toolbar{
+    display:flex; gap:12px; flex-wrap:wrap; align-items:end; justify-content:space-between;
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:14px;
+    box-shadow:var(--shadow);
+    margin-bottom:18px;
+  }
+  .toolbar-group{
+    display:flex; gap:10px; flex-wrap:wrap; align-items:end;
+  }
+  .field{
+    display:flex; flex-direction:column; gap:6px;
+  }
+  .field label{
+    font-size:.88rem; color:var(--muted);
+  }
+  .toolbar input, .toolbar select, .toolbar button{
+    padding:10px 12px; border-radius:10px; border:1px solid var(--border);
+    background:var(--card); color:inherit; min-width:110px;
+    font:inherit;
+  }
+  .toolbar input:focus, .toolbar select:focus, .toolbar button:focus{
+    outline:3px solid var(--ring); outline-offset:2px;
+  }
+  .toolbar button{
+    cursor:pointer;
+    background:var(--primary);
+    color:white;
+    border-color:transparent;
+    font-weight:600;
+  }
+  .toolbar button:hover{
+    filter:brightness(1.04);
+  }
+
+  .sim-grid{
+    display:grid;
+    grid-template-columns:minmax(0, 1fr) 320px;
+    gap:18px;
+    align-items:start;
+  }
+
+  .card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:20px;
+    box-shadow:var(--shadow);
+    overflow:hidden;
+  }
+  .card-head{
+    padding:16px 18px;
+    background:color-mix(in oklab, var(--primary-soft), var(--card) 35%);
+    border-bottom:1px solid var(--border);
+  }
+  .card-head h3{
+    margin:0;
+    font-size:1rem;
+  }
+  .card-body{
+    padding:18px;
+  }
+
+  .canvas-wrap{
+    padding:18px;
+  }
+  canvas{
+    display:block;
+    width:100%;
+    height:auto;
+    background:#000;
+    border:1px solid var(--border);
+    border-radius:16px;
+  }
+
+  .metric-list{
+    display:grid;
+    gap:12px;
+  }
+  .metric{
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:12px 14px;
+    background:color-mix(in oklab, var(--card), var(--bg) 18%);
+  }
+  .metric .label{
+    font-size:.84rem;
+    color:var(--muted);
+    margin-bottom:4px;
+  }
+  .metric .value{
+    font-weight:700;
+    font-size:1rem;
+    word-break:break-word;
+  }
+
+  .legend{
+    display:grid;
+    gap:10px;
+  }
+  .legend-row{
+    display:flex; align-items:center; gap:10px;
+    color:var(--muted);
+    font-size:.94rem;
+  }
+  .dot{
+    width:12px; height:12px; border-radius:999px; display:inline-block;
+  }
+  .line{
+    width:18px; height:0; border-top:2px solid; display:inline-block;
+  }
+
+  footer{
+    padding:26px 0 40px; color:var(--muted);
+  }
+  footer .footer-card{
+    border:1px solid var(--border);
+    background:var(--card);
+    border-radius:18px;
+    padding:18px;
+    text-align:center;
+    box-shadow:var(--shadow);
+  }
+
+  @media (max-width: 960px){
+    .hero-grid{grid-template-columns:1fr}
+    .sim-grid{grid-template-columns:1fr}
+    .topbar{flex-direction:column; align-items:flex-start}
+  }
+
+  @media (max-width: 720px){
+    .toolbar{align-items:stretch}
+    .toolbar-group{width:100%}
+    .field{flex:1 1 120px}
+    .toolbar input{min-width:unset; width:100%}
+  }
+</style>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to main content</a>
+
+  <header>
+    <div class="wrapper topbar">
+      <div class="brand">
+        <h1>Theoretical Mechanics: Orbit Visualization</h1>
+        <p>@ NTHU 2026 spring</p>
+      </div>
+
+      <nav class="nav" aria-label="Primary">
+        <a href="#overview">Overview</a>
+        <a href="#simulator">Simulator</a>
+        <a href="#diagnostics">Diagnostics</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="wrapper" tabindex="-1">
+    <section class="hero" id="overview">
+      <span class="hero-badge">Orbital Mechanics Learning Hub</span>
+      <h2>Binary elliptic orbit simulation</h2>
+    
+      <div class="hero-grid">
+        <div class="hero-card">
+          <h3>Physical model</h3>
+          <p>
+            Two stars move in the center-of-mass frame under Newtonian gravity.
+            The initial separation is treated as the periapsis distance, and the
+            initial speed is chosen from the vis-viva relation for an elliptic orbit.
+          </p>
+          <div class="formula">
+            $$r_p = a(1-e),\qquad v_{\mathrm{rel}} = \sqrt{GM\left(\frac{2}{r_p}-\frac{1}{a}\right)}$$
+          </div>
+        </div>
+
+        <div class="hero-card">
+          <h3>Numerical method</h3>
+          <p>
+            The trajectory is evolved with leapfrog / velocity Verlet integration.
+            The panel on the right reports total energy, energy range, and maximum
+            relative drift so you can monitor numerical stability while adjusting parameters.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="toolbar" aria-label="Simulation controls">
+      <div class="toolbar-group">
+        <div class="field">
+          <label for="m1">m1</label>
+          <input id="m1" type="number" step="0.1" value="2.0" />
+        </div>
+        <div class="field">
+          <label for="m2">m2</label>
+          <input id="m2" type="number" step="0.1" value="1.0" />
+        </div>
+        <div class="field">
+          <label for="d">periapsis distance $d$</label>
+          <input id="d" type="number" step="0.1" value="1.0" />
+        </div>
+        <div class="field">
+          <label for="e">eccentricity $\epsilon$</label>
+          <input id="e" type="number" step="0.01" value="0.4" min="0" max="0.999" />
+        </div>
+      </div>
+
+      <div class="toolbar-group">
+        <div class="field">
+          <label for="steps">total steps</label>
+          <input id="steps" type="number" step="100" value="6000" />
+        </div>
+        <div class="field">
+          <label for="saveEvery">saveEvery</label>
+          <input id="saveEvery" type="number" step="1" value="10" />
+        </div>
+        <div class="field">
+          <label for="restartBtn">　</label>
+          <button id="restartBtn" type="button">simulate again</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="sim-grid" id="simulator">
+      <div class="card">
+        <div class="card-head">
+          <h3>Orbit visualization</h3>
+        </div>
+        <div class="canvas-wrap">
+          <canvas id="canvas" width="700" height="700" aria-label="Binary orbit animation"></canvas>
+        </div>
+      </div>
+
+      <div class="stack">
+        <div class="card" id="diagnostics">
+          <div class="card-head">
+            <h3>Diagnostics</h3>
+          </div>
+          <div class="card-body">
+            <div class="metric-list">
+              <div class="metric">
+                <div class="label">initial total energy</div>
+                <div class="value" id="metricE0">–</div>
+              </div>
+              <div class="metric">
+                <div class="label">energy range</div>
+                <div class="value" id="metricRange">–</div>
+              </div>
+              <div class="metric">
+                <div class="label">maximum relative drift</div>
+                <div class="value" id="metricDrift">–</div>
+              </div>
+              <div class="metric">
+                <div class="label">current frame / total frames</div>
+                <div class="value" id="metricFrame">–</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:18px;">
+          <div class="card-head">
+            <h3>Legend</h3>
+          </div>
+          <div class="card-body">
+            <div class="legend">
+              <div class="legend-row"><span class="dot" style="background:#4da3ff"></span> Star 1 trajectory / body</div>
+              <div class="legend-row"><span class="dot" style="background:#ffb347"></span> Star 2 trajectory / body</div>
+              <div class="legend-row"><span class="line" style="border-color:#aaaaaa"></span> Center-of-mass path</div>
+              <div class="legend-row"><span style="font-weight:700; color:var(--fg)">×</span> Current center of mass</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrapper">
+      <div class="footer-card">
+        Theoretical Mechanics Learning Hub · The teaching webpage for <em>Theoretical Mechanics II</em> at NTHU in Spring 2026..
+      </div>
+    </div>
+  </footer>
+
+<script>
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+
+const metricE0 = document.getElementById("metricE0");
+const metricRange = document.getElementById("metricRange");
+const metricDrift = document.getElementById("metricDrift");
+const metricFrame = document.getElementById("metricFrame");
+
+const G = 1.0;
+const eps2 = 1e-6;
+
+let simData = null;
+let frameIndex = 0;
+let lastTime = 0;
+const fps = 30;
+const frameDuration = 1000 / fps;
+
+function initBinaryElliptic(m, d = 1.0, e = 0.0, G = 1.0) {
+  if (m.length !== 2) throw new Error("目前只支援雙星系統");
+  if (!(m[0] > 0 && m[1] > 0)) throw new Error("質量必須大於 0");
+  if (!(e >= 0 && e < 1)) throw new Error("偏心率 e 必須滿足 0 <= e < 1");
+
+  const [m1, m2] = m;
+  const M = m1 + m2;
+  const rp = d;
+  const a = rp / (1 - e);
+  const vrel = Math.sqrt(G * M * (2 / rp - 1 / a));
+
+  const x1 = -m2 / M * rp;
+  const x2 =  m1 / M * rp;
+
+  const r = [
+    [x1, 0.0],
+    [x2, 0.0]
+  ];
+
+  const v1 = m2 / M * vrel;
+  const v2 = m1 / M * vrel;
+
+  const v = [
+    [0.0, -v1],
+    [0.0,  v2]
+  ];
+
+  return { r, v };
+}
+
+function acceleration(m, r, G = 1.0, eps2 = 1e-6) {
+  const N = m.length;
+  const a = Array.from({ length: N }, () => [0, 0]);
+
+  for (let i = 0; i < N - 1; i++) {
+    for (let j = i + 1; j < N; j++) {
+      const dx = r[j][0] - r[i][0];
+      const dy = r[j][1] - r[i][1];
+      const dist2 = dx * dx + dy * dy + eps2;
+      const invr3 = 1 / Math.pow(dist2, 1.5);
+
+      const ax = G * dx * invr3;
+      const ay = G * dy * invr3;
+
+      a[i][0] += m[j] * ax;
+      a[i][1] += m[j] * ay;
+
+      a[j][0] -= m[i] * ax;
+      a[j][1] -= m[i] * ay;
+    }
+  }
+  return a;
+}
+
+function centerOfMass(m, r) {
+  const M = m[0] + m[1];
+  const xcm = (m[0] * r[0][0] + m[1] * r[1][0]) / M;
+  const ycm = (m[0] * r[0][1] + m[1] * r[1][1]) / M;
+  return [xcm, ycm];
+}
+
+function totalEnergy(m, r, v, G = 1.0, eps2 = 1e-6) {
+  const N = m.length;
+  let K = 0;
+  for (let i = 0; i < N; i++) {
+    K += 0.5 * m[i] * (v[i][0] ** 2 + v[i][1] ** 2);
+  }
+
+  let U = 0;
+  for (let i = 0; i < N - 1; i++) {
+    for (let j = i + 1; j < N; j++) {
+      const dx = r[j][0] - r[i][0];
+      const dy = r[j][1] - r[i][1];
+      const dist = Math.sqrt(dx * dx + dy * dy + eps2);
+      U += -G * m[i] * m[j] / dist;
+    }
+  }
+  return K + U;
+}
+
+function simulate(params) {
+  const { m, d, e, dt, steps, saveEvery } = params;
+  let { r, v } = initBinaryElliptic(m, d, e, G);
+
+  const N = m.length;
+  const xs = Array.from({ length: N }, () => []);
+  const ys = Array.from({ length: N }, () => []);
+  const xcms = [];
+  const ycms = [];
+  const Es = [];
+
+  for (let i = 0; i < N; i++) {
+    xs[i].push(r[i][0]);
+    ys[i].push(r[i][1]);
+  }
+
+  let [xcm, ycm] = centerOfMass(m, r);
+  xcms.push(xcm);
+  ycms.push(ycm);
+  Es.push(totalEnergy(m, r, v, G, eps2));
+
+  let a = acceleration(m, r, G, eps2);
+
+  for (let step = 1; step <= steps; step++) {
+    for (let i = 0; i < N; i++) {
+      v[i][0] += 0.5 * dt * a[i][0];
+      v[i][1] += 0.5 * dt * a[i][1];
+    }
+
+    for (let i = 0; i < N; i++) {
+      r[i][0] += dt * v[i][0];
+      r[i][1] += dt * v[i][1];
+    }
+
+    a = acceleration(m, r, G, eps2);
+
+    for (let i = 0; i < N; i++) {
+      v[i][0] += 0.5 * dt * a[i][0];
+      v[i][1] += 0.5 * dt * a[i][1];
+    }
+
+    if (step % saveEvery === 0) {
+      for (let i = 0; i < N; i++) {
+        xs[i].push(r[i][0]);
+        ys[i].push(r[i][1]);
+      }
+      [xcm, ycm] = centerOfMass(m, r);
+      xcms.push(xcm);
+      ycms.push(ycm);
+      Es.push(totalEnergy(m, r, v, G, eps2));
+    }
+  }
+
+  const allx = xs.flat();
+  const ally = ys.flat();
+
+  let xmin = Math.min(...allx);
+  let xmax = Math.max(...allx);
+  let ymin = Math.min(...ally);
+  let ymax = Math.max(...ally);
+
+  const dx = xmax - xmin;
+  const dy = ymax - ymin;
+  const pad = 0.15 * Math.max(dx, dy, 1.0);
+
+  xmin -= pad;
+  xmax += pad;
+  ymin -= pad;
+  ymax += pad;
+
+  const maxm = Math.max(...m);
+  const ms = m.map(mi => 6 + 10 * Math.sqrt(mi / maxm));
+
+  const E0 = Es[0];
+  const Emin = Math.min(...Es);
+  const Emax = Math.max(...Es);
+  const maxDrift = Math.max(...Es.map(E => Math.abs((E - E0) / E0)));
+
+  return {
+    xs, ys, xcms, ycms, Es,
+    xmin, xmax, ymin, ymax,
+    ms, nframes: xs[0].length,
+    E0, Emin, Emax, maxDrift,
+    e
+  };
+}
+
+function worldToCanvas(x, y, data) {
+  const { xmin, xmax, ymin, ymax } = data;
+  const w = canvas.width;
+  const h = canvas.height;
+
+  const scaleX = w / (xmax - xmin);
+  const scaleY = h / (ymax - ymin);
+  const scale = Math.min(scaleX, scaleY);
+
+  const worldW = xmax - xmin;
+  const worldH = ymax - ymin;
+
+  const offsetX = (w - worldW * scale) / 2;
+  const offsetY = (h - worldH * scale) / 2;
+
+  const cx = offsetX + (x - xmin) * scale;
+  const cy = h - (offsetY + (y - ymin) * scale);
+
+  return [cx, cy, scale];
+}
+
+function drawAxes(data) {
+  const [x0, y0] = worldToCanvas(0, 0, data);
+  ctx.strokeStyle = "#333";
+  ctx.lineWidth = 1;
+
+  ctx.beginPath();
+  ctx.moveTo(0, y0);
+  ctx.lineTo(canvas.width, y0);
+  ctx.stroke();
+
+  ctx.beginPath();
+  ctx.moveTo(x0, 0);
+  ctx.lineTo(x0, canvas.height);
+  ctx.stroke();
+}
+
+function drawFrame(k, data) {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  drawAxes(data);
+
+  const colors = ["#4da3ff", "#ffb347"];
+  const comColor = "#ffffff";
+
+  for (let i = 0; i < data.xs.length; i++) {
+    ctx.beginPath();
+    for (let j = 0; j <= k; j++) {
+      const [cx, cy] = worldToCanvas(data.xs[i][j], data.ys[i][j], data);
+      if (j === 0) ctx.moveTo(cx, cy);
+      else ctx.lineTo(cx, cy);
+    }
+    ctx.strokeStyle = colors[i % colors.length];
+    ctx.lineWidth = 2;
+    ctx.stroke();
+  }
+
+  ctx.beginPath();
+  ctx.setLineDash([6, 6]);
+  for (let j = 0; j <= k; j++) {
+    const [cx, cy] = worldToCanvas(data.xcms[j], data.ycms[j], data);
+    if (j === 0) ctx.moveTo(cx, cy);
+    else ctx.lineTo(cx, cy);
+  }
+  ctx.strokeStyle = "#aaaaaa";
+  ctx.lineWidth = 1;
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  for (let i = 0; i < data.xs.length; i++) {
+    const [cx, cy] = worldToCanvas(data.xs[i][k], data.ys[i][k], data);
+    ctx.beginPath();
+    ctx.arc(cx, cy, data.ms[i], 0, Math.PI * 2);
+    ctx.fillStyle = colors[i % colors.length];
+    ctx.fill();
+  }
+
+  const [ccx, ccy] = worldToCanvas(data.xcms[k], data.ycms[k], data);
+  ctx.strokeStyle = comColor;
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(ccx - 6, ccy - 6);
+  ctx.lineTo(ccx + 6, ccy + 6);
+  ctx.moveTo(ccx + 6, ccy - 6);
+  ctx.lineTo(ccx - 6, ccy + 6);
+  ctx.stroke();
+
+  ctx.fillStyle = "#ddd";
+  ctx.font = "18px sans-serif";
+  ctx.fillText(`Binary orbit (e = ${data.e.toFixed(3)})`, 18, 28);
+
+  metricFrame.textContent = `${k + 1} / ${data.nframes}`;
+}
+
+function animate(timestamp) {
+  if (!simData) return;
+
+  if (!lastTime) lastTime = timestamp;
+  const elapsed = timestamp - lastTime;
+
+  if (elapsed >= frameDuration) {
+    drawFrame(frameIndex, simData);
+    frameIndex = (frameIndex + 1) % simData.nframes;
+    lastTime = timestamp;
+  }
+
+  requestAnimationFrame(animate);
+}
+
+function formatNumber(x) {
+  if (!Number.isFinite(x)) return "–";
+  return Math.abs(x) >= 1e4 || (Math.abs(x) > 0 && Math.abs(x) < 1e-3)
+    ? x.toExponential(6)
+    : x.toFixed(10).replace(/\.?0+$/, "");
+}
+
+function updateStats(data) {
+  metricE0.textContent = formatNumber(data.E0);
+  metricRange.textContent = `[${formatNumber(data.Emin)}, ${formatNumber(data.Emax)}]`;
+  metricDrift.textContent = formatNumber(data.maxDrift);
+  metricFrame.textContent = `1 / ${data.nframes}`;
+}
+
+function startSimulation() {
+  try {
+    const m1 = parseFloat(document.getElementById("m1").value);
+    const m2 = parseFloat(document.getElementById("m2").value);
+    const d = parseFloat(document.getElementById("d").value);
+    const e = parseFloat(document.getElementById("e").value);
+    const dt = 0.001;
+    const steps = parseInt(document.getElementById("steps").value, 10);
+    const saveEvery = parseInt(document.getElementById("saveEvery").value, 10);
+
+    simData = simulate({
+      m: [m1, m2],
+      d, e, dt, steps, saveEvery
+    });
+
+    frameIndex = 0;
+    lastTime = 0;
+    updateStats(simData);
+    drawFrame(0, simData);
+  } catch (err) {
+    alert(err.message);
+  }
+}
+
+document.getElementById("restartBtn").addEventListener("click", startSimulation);
+
+startSimulation();
+requestAnimationFrame(animate);
+</script>
+</body>
+</html>
