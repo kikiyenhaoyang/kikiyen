@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Explore</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+
+  <style>
+    :root{
+      --bg:#f3f4ea; --fg:#1d1f21; --muted:#565b5f; --primary:#0a66c2;
+      --card:#ffffff; --ring:#89b4fa; --maxw:1000px;
+    }
+    @media (prefers-color-scheme: dark){
+      :root{ --bg:#0e1116; --fg:#e6e6e6; --muted:#a0a4aa; --card:#11151c; --primary:#7ab0ff; --ring:#3b82f6; }
+    }
+
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{ font-family: Arial, Helvetica, sans-serif; color:var(--fg); background:var(--bg); line-height:1.6; }
+    .wrapper{max-width:var(--maxw); margin:0 auto; padding:0 16px;}
+
+    /* Skip to content */
+    .skip-link{ position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden; }
+    .skip-link:focus{ position:fixed; left:16px; top:16px; width:auto; height:auto; background:#000; color:#fff; padding:8px 12px; border-radius:6px; z-index:1000; }
+
+        /* ===== Header（精簡 + 手機收合） ===== */
+    header{
+      position: sticky; top: 0; z-index: 50;
+      background: var(--bgcc, rgba(255,255,255,0.6));
+      backdrop-filter: saturate(180%) blur(12px);
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+    }
+    header .wrapper{
+      display: flex; align-items: center; gap: 16px;
+      justify-content: space-between;
+      padding: 6px 16px;
+    }
+    .brand{ display: inline-flex; align-items: center; gap: 10px; }
+    .brand img{ width: 80px; height: auto; }
+    .brand-title{ margin: 0; font-size: 1.25rem; line-height: 1.1; }
+    .brand-sub{ margin: 0; font-size: .8rem; color: var(--muted); }
+
+    .home-link{
+      margin-left: 8px;
+      padding: 6px 10px; border-radius: 8px;
+      border: 1px solid rgba(0,0,0,0.15);
+      display: inline-flex; align-items: center; gap: 8px; text-decoration: none; color: inherit;
+    }
+
+    /* 導覽列：手機預設收合 */
+    .icon-nav{
+      display: none;           /* mobile default: hidden */
+      flex-direction: column;  /* mobile vertical */
+      gap: 28px;
+      padding: 10px 0 16px;
+      margin: 0;
+      flex: 1 1 auto;
+    }
+    .icon-nav.open{ display: flex; }
+
+    .nav-item{
+      text-decoration:none; color:inherit; text-align:center; padding:10px 12px; border-radius:10px;
+      transition: transform .2s, box-shadow .2s, background-color .2s, color .2s;
+      outline-offset:2px;
+    }
+    .nav-item:focus{outline:3px solid var(--ring)}
+    .nav-item:hover{ transform: translateY(-2px); box-shadow: 0 6px 14px rgba(0,0,0,.12); color: var(--primary); }
+    .nav-item.active{ background: #000; color: #fff; }
+    .nav-icon{ width: 50px; height: auto; display: block; margin: 0 auto 2px; }
+
+    .nav-toggle{
+      margin-left: auto;
+      font-size: 1.4rem; line-height: 1;
+      background: none; border: 0; color: inherit; cursor: pointer;
+      padding: 6px 8px; border-radius: 6px;
+    }
+    .nav-toggle:focus{ outline: 3px solid var(--ring); outline-offset: 2px; }
+
+    /* 桌面：nav 展開、漢堡隱藏 */
+    @media (min-width:768px){
+      .nav-toggle{ display:none; }
+      .icon-nav{ display:flex !important; flex-direction:row; align-items:center; justify-content:center; gap:16px; padding:0; }
+    }
+
+    /* 主內容 */
+    main{ padding:18px 0; }
+    .page-title{text-align:center; font-size:2rem; margin:24px 0 12px; font-weight:bold}
+    .intro-text{max-width:760px; margin:0 auto 28px; text-align:center; color:var(--muted)}
+
+    /* 書籍卡片 */
+    .book-grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:24px; max-width:900px; margin:0 auto; }
+    .book-card{ background:var(--card); border:1px solid rgba(0,0,0,0.12); border-radius:12px; padding:12px; text-align:center; position:relative; overflow:hidden; transition: transform .2s, box-shadow .2s, border-color .2s; }
+    .book-card:hover{ transform:translateY(-5px); box-shadow:0 12px 24px rgba(0,0,0,.18); border-color:rgba(0,0,0,0.18) }
+    .book-link{ display:block; text-decoration:none; color:inherit; outline-offset:3px }
+    .book-link:focus{ outline:3px solid var(--ring) }
+    .book-cover{ width:250px; max-width:100%; height:auto; display:block; margin:6px auto 12px; border-radius:8px }
+    .solution-title{ font-size:1rem; line-height:1.4; margin:0 8px 8px }
+
+    /* 角落標籤 */
+    .ribbon{ position:absolute; top:12px; right:-40px; transform:rotate(45deg); background:#111; color:#fff; padding:6px 50px; font-size:.8rem; letter-spacing:.5px; box-shadow:0 6px 12px rgba(0,0,0,.25); }
+
+    /* 頁尾 */
+    footer{ padding:28px 0 36px; border-top:1px solid rgba(0,0,0,0.1); margin-top:36px }
+    .logos{ display:flex; justify-content:center; align-items:center; gap:28px }
+    .logos img{ height:80px; width:auto }
+  </style>
+</head>
+
+<body>
+  <a href="#main" class="skip-link">Skip to main content</a>
+
+  <!-- Header -->
+  <header>
+    <div class="wrapper">
+      <div class="brand">
+       
+        <div>
+           <img src="yen.png" alt="HYY Logo">
+          <h1 class="brand-title">Hao-Yang Yen</h1>
+        </div>
+      </div>
+
+      <!-- 導覽列 -->
+      <nav id="primary-nav" class="icon-nav" aria-label="Primary">
+        <a href="experience.html" class="nav-item">
+          <img src="exp.png" alt="" class="nav-icon"><span>Experience</span>
+        </a>
+        <a href="learning.html" class="nav-item">
+          <img src="l.png" alt="" class="nav-icon"><span>Learning</span>
+        </a>
+        <a href="research.html" class="nav-item">
+          <img src="r.png" alt="" class="nav-icon"><span>Research</span>
+        </a>
+        <a href="Explore.html" class="nav-item active">
+          <img src="flipped_e.png" alt="" class="nav-icon"><span>Explore</span>
+        </a>
+      </nav>
+
+      <!-- 漢堡／Home -->
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="primary-nav">☰</button>
+      <a class="home-link" href="index.html" aria-label="Go to HYY Home">Home</a>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main id="main" class="wrapper">
+    <h2 class="page-title">Books</h2>
+    <p class="intro-text">
+      These books expose the harmful behaviors of several problematic teachers I encountered during my learning journey.
+      Through these writings, I hope to raise awareness about the many unfit teachers who continue to mistreat students in schools today.
+    </p>
+
+    <section class="book-grid" aria-label="Books list">
+      <article class="book-card">
+
+        <a class="book-link" href="Evil_Teachers.pdf">
+          <img src="evil_1_cartoon.jpg" class="book-cover" alt="Cover of『惡師 Evil Teachers』version 1">
+          <h3 class="solution-title">《惡師 Evil Teachers》</h3>
+        </a>
+      </article>
+
+      <article class="book-card">
+        <span class="ribbon">COMING&nbsp;SOON</span>
+        <a class="book-link" href="">
+          <img src="evil_2.jpg" class="book-cover" alt="Cover of『惡師・貳 Evil Teachers 2』version 1">
+          <h3 class="solution-title">《惡師．貳 Evil Teachers 2》 (Coming soon)</h3>
+        </a>
+      </article>
+
+      <article class="book-card">
+        <span class="ribbon">COMING&nbsp;SOON</span>
+        <a class="book-link" href="">
+          <img src="evil_3.jpg" class="book-cover" alt="Cover of『惡師・參 Evil Teachers 3』version 1">
+          <h3 class="solution-title">《惡師．參 Evil Teachers 3》 (Coming soon)</h3>
+        </a>
+      </article>
+
+
+    </section>
+
+  </main>
+
+  <!-- JS：手機導覽開關 -->
+  <script>
+    (function(){
+      const toggle = document.querySelector('.nav-toggle');
+      const nav = document.querySelector('.icon-nav');
+      if(!toggle || !nav) return;
+      toggle.addEventListener('click', function(){
+        const opened = nav.classList.toggle('open');
+        toggle.setAttribute('aria-expanded', opened ? 'true' : 'false');
+      });
+    })();
+  </script>
+
+  <!-- Footer -->
+  <footer>
+    <div class="wrapper">
+      <div class="logos">
+        <img src="NTHU-Photoroom.png" alt="NTHU Logo">
+        <img src="ips_logo-Photoroom.png" alt="IPS Logo">
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
