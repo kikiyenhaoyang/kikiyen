@@ -1,0 +1,1216 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Inclined GEO — Learning Hub Style</title>
+<meta name="description" content="傾斜地球同步衛星地面軌跡與觀測者天空軌跡模擬" />
+<meta property="og:title" content="Inclined GEO — Learning Hub" />
+<meta property="og:description" content="Interactive visualization for inclined geosynchronous orbit, ground track, and observer sky path." />
+<meta property="og:type" content="website" />
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" crossorigin="anonymous"
+  onload="renderMathInElement(document.getElementById('main'),{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});"></script>
+
+<style>
+  :root{
+    --bg:#f6f7fb;
+    --fg:#18212f;
+    --muted:#5f6b7a;
+    --primary:#1d4ed8;
+    --primary-soft:#dbeafe;
+    --card:#ffffff;
+    --border:rgba(24,33,47,.12);
+    --ring:#93c5fd;
+    --maxw:1200px;
+    --shadow:0 12px 30px rgba(0,0,0,.08);
+  }
+
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#0b1220;
+      --fg:#e5edf7;
+      --muted:#9aa8ba;
+      --primary:#7cb3ff;
+      --primary-soft:#172554;
+      --card:#101a2c;
+      --border:rgba(255,255,255,.12);
+      --ring:#60a5fa;
+      --shadow:0 12px 30px rgba(0,0,0,.28);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; scroll-behavior:auto !important;}
+  }
+
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background:linear-gradient(180deg, var(--bg) 0%, color-mix(in oklab, var(--bg), #ffffff 8%) 100%);
+    color:var(--fg);
+    line-height:1.6;
+  }
+
+  a{color:var(--primary)}
+  .wrapper{max-width:var(--maxw); margin:0 auto; padding:0 18px}
+
+  .skip-link{
+    position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden;
+  }
+  .skip-link:focus{
+    position:fixed; left:16px; top:16px; width:auto; height:auto;
+    background:#000; color:#fff; padding:8px 12px; border-radius:8px; z-index:1000;
+  }
+
+  header{
+    position:sticky; top:0; z-index:50;
+    background:rgba(255,255,255,.72);
+    backdrop-filter:saturate(180%) blur(14px);
+    border-bottom:1px solid var(--border);
+  }
+  @media (prefers-color-scheme: dark){
+    header{background:rgba(11,18,32,.72)}
+  }
+
+  .topbar{
+    display:flex; align-items:center; justify-content:space-between; gap:16px;
+    padding:14px 0;
+  }
+  .brand h1{
+    margin:0; font-size:1.2rem; line-height:1.1;
+  }
+  .brand p{
+    margin:4px 0 0; color:var(--muted); font-size:.92rem;
+  }
+
+  .nav{
+    display:flex; gap:10px; flex-wrap:wrap;
+  }
+  .nav a{
+    text-decoration:none; color:inherit;
+    padding:8px 12px; border:1px solid var(--border); border-radius:999px;
+    background:color-mix(in oklab, var(--card), transparent 10%);
+  }
+  .nav a:hover{color:var(--primary); border-color:color-mix(in oklab, var(--primary), var(--border) 60%)}
+
+  main{padding:30px 0 50px}
+
+  .hero{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:24px;
+    box-shadow:var(--shadow);
+    padding:28px;
+    margin-bottom:22px;
+  }
+  .hero-badge{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:6px 12px; border-radius:999px; font-size:.9rem;
+    background:var(--primary-soft); color:var(--primary); font-weight:600;
+  }
+  .hero h2{
+    margin:14px 0 10px; font-size:clamp(1.8rem, 4vw, 3rem); line-height:1.1;
+  }
+  .hero p{
+    margin:0; max-width:820px; color:var(--muted); font-size:1.03rem;
+  }
+  .hero-grid{
+    display:grid; grid-template-columns:1.3fr .7fr; gap:18px; align-items:start; margin-top:20px;
+  }
+  .hero-card{
+    background:color-mix(in oklab, var(--card), var(--bg) 18%);
+    border:1px solid var(--border);
+    border-radius:18px; padding:18px;
+  }
+  .hero-card h3{margin:0 0 8px; font-size:1rem}
+  .hero-card p{margin:0; font-size:.95rem}
+  .formula{
+    font-size:1rem; overflow:auto; margin-top:12px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    background:color-mix(in oklab, var(--card), var(--bg) 22%);
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:12px;
+  }
+
+  .toolbar{
+    display:flex; gap:12px; flex-wrap:wrap; align-items:end; justify-content:space-between;
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:14px;
+    box-shadow:var(--shadow);
+    margin-bottom:18px;
+  }
+  .toolbar-group{
+    display:flex; gap:10px; flex-wrap:wrap; align-items:end;
+  }
+  .field{
+    display:flex; flex-direction:column; gap:6px;
+  }
+  .field label{
+    font-size:.88rem; color:var(--muted);
+  }
+  .toolbar input, .toolbar select, .toolbar button{
+    padding:10px 12px; border-radius:10px; border:1px solid var(--border);
+    background:var(--card); color:inherit; min-width:112px;
+    font:inherit;
+  }
+  .toolbar input:focus, .toolbar select:focus, .toolbar button:focus{
+    outline:3px solid var(--ring); outline-offset:2px;
+  }
+  .toolbar button{
+    cursor:pointer;
+    background:var(--primary);
+    color:white;
+    border-color:transparent;
+    font-weight:600;
+  }
+  .toolbar button:hover{filter:brightness(1.04)}
+
+  .sim-grid{
+    display:grid;
+    grid-template-columns:minmax(0, 1fr) 330px;
+    gap:18px;
+    align-items:start;
+  }
+
+  .card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:20px;
+    box-shadow:var(--shadow);
+    overflow:hidden;
+  }
+  .card-head{
+    padding:16px 18px;
+    background:color-mix(in oklab, var(--primary-soft), var(--card) 35%);
+    border-bottom:1px solid var(--border);
+  }
+  .card-head h3{
+    margin:0;
+    font-size:1rem;
+  }
+  .card-body{padding:18px}
+
+  .panel-grid{
+    display:grid;
+    grid-template-columns:1.2fr 1fr;
+    gap:14px;
+    padding:18px;
+  }
+  .panel{
+    border:1px solid var(--border);
+    border-radius:16px;
+    overflow:hidden;
+    background:#000;
+  }
+  .panel:first-child{grid-row:span 2}
+  .panel-title{
+    padding:10px 12px;
+    background:rgba(255,255,255,.08);
+    color:#e9eef8;
+    font-size:.9rem;
+    border-bottom:1px solid rgba(255,255,255,.14);
+  }
+  canvas{
+    display:block;
+    width:100%;
+    height:auto;
+    background:#000;
+  }
+
+  .metric-list{display:grid; gap:12px}
+  .metric{
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:12px 14px;
+    background:color-mix(in oklab, var(--card), var(--bg) 18%);
+  }
+  .metric .label{
+    font-size:.84rem;
+    color:var(--muted);
+    margin-bottom:4px;
+  }
+  .metric .value{
+    font-weight:700;
+    font-size:1rem;
+    word-break:break-word;
+  }
+
+  .legend{display:grid; gap:10px}
+  .legend-row{
+    display:flex; align-items:center; gap:10px;
+    color:var(--muted);
+    font-size:.94rem;
+  }
+  .dot{width:12px; height:12px; border-radius:999px; display:inline-block}
+  .line{width:18px; height:0; border-top:2px solid; display:inline-block}
+
+
+  .relation-table-section{
+    margin-top:22px;
+  }
+  .relation-intro{
+    margin:0 0 14px;
+    color:var(--muted);
+  }
+  .table-wrap{
+    overflow-x:auto;
+    border:1px solid var(--border);
+    border-radius:16px;
+  }
+  .relation-table{
+    width:100%;
+    border-collapse:collapse;
+    min-width:760px;
+    background:var(--card);
+  }
+  .relation-table th,
+  .relation-table td{
+    padding:12px 14px;
+    text-align:left;
+    vertical-align:top;
+    border-bottom:1px solid var(--border);
+  }
+  .relation-table th{
+    background:color-mix(in oklab, var(--primary-soft), var(--card) 28%);
+    color:var(--fg);
+    font-size:.92rem;
+  }
+  .relation-table tr:last-child td{border-bottom:0}
+  .relation-table td:first-child{
+    font-weight:700;
+    white-space:nowrap;
+  }
+  .relation-table code{
+    font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size:.9em;
+    padding:.12em .35em;
+    border-radius:6px;
+    background:color-mix(in oklab, var(--primary-soft), var(--card) 45%);
+    color:var(--primary);
+  }
+  .relation-note{
+    margin:12px 0 0;
+    color:var(--muted);
+    font-size:.92rem;
+  }
+
+  footer{padding:26px 0 40px; color:var(--muted)}
+  footer .footer-card{
+    border:1px solid var(--border);
+    background:var(--card);
+    border-radius:18px;
+    padding:18px;
+    text-align:center;
+    box-shadow:var(--shadow);
+  }
+
+  @media (max-width: 1060px){
+    .hero-grid{grid-template-columns:1fr}
+    .sim-grid{grid-template-columns:1fr}
+    .topbar{flex-direction:column; align-items:flex-start}
+  }
+  @media (max-width: 820px){
+    .panel-grid{grid-template-columns:1fr}
+    .panel:first-child{grid-row:auto}
+  }
+  @media (max-width: 720px){
+    .toolbar{align-items:stretch}
+    .toolbar-group{width:100%}
+    .field{flex:1 1 130px}
+    .toolbar input{min-width:unset; width:100%}
+  }
+  /* 導覽列：手機預設收合 */
+    .icon-nav{
+      display: none;           /* mobile default: hidden */
+      flex-direction: column;  /* mobile vertical */
+      gap: 28px;
+      padding: 10px 0 16px;
+      margin: 0;
+      flex: 1 1 auto;
+    }
+    .icon-nav.open{ display: flex; }
+
+    .nav-item{
+      text-decoration:none; color:inherit; text-align:center; padding:10px 12px; border-radius:10px;
+      transition: transform .2s, box-shadow .2s, background-color .2s, color .2s;
+      outline-offset:2px;
+    }
+    .nav-item:focus{outline:3px solid var(--ring)}
+    .nav-item:hover{ transform: translateY(-2px); box-shadow: 0 6px 14px rgba(0,0,0,.12); color: var(--primary); }
+    .nav-item.active{ background: #000; color: #fff; }
+    .nav-icon{ width: 50px; height: auto; display: block; margin: 0 auto 2px; }
+
+    .nav-toggle{
+      margin-left: auto;
+      font-size: 1.4rem; line-height: 1;
+      background: none; border: 0; color: inherit; cursor: pointer;
+      padding: 6px 8px; border-radius: 6px;
+    }
+    .nav-toggle:focus{ outline: 3px solid var(--ring); outline-offset: 2px; }
+
+
+    /* 桌面：nav 展開、漢堡隱藏 */
+    @media (min-width:768px){
+      .nav-toggle{ display:none; }
+      .icon-nav{ display:flex !important; flex-direction:row; align-items:center; justify-content:center; gap:16px; padding:0; }
+    }
+
+    .home-link{
+      margin-left: 8px;
+      padding: 6px 10px; border-radius: 8px;
+      border: 1px solid var(--border);
+      display: inline-flex; align-items: center; gap: 8px; text-decoration: none; color: inherit;
+    }
+
+    main{ padding:18px 0; }
+    h1.page-title{ font-size: 1.6rem; margin: 16px 0 2px; }
+    p.page-sub{ margin:0 0 14px; color: var(--muted); }
+
+    .toolbar{
+      display:flex; gap:12px; flex-wrap:wrap; align-items:center; justify-content:space-between;
+      background: color-mix(in oklab, var(--card), var(--bg) 30%);
+      border:1px solid var(--border); border-radius:12px; padding:10px 12px; margin: 16px 0 10px;
+    }
+    .toolbar input, .toolbar select{
+      padding:8px 10px; border-radius:8px; border:1px solid var(--border); background:var(--card); color:inherit;
+    }
+
+    .chapter-block{ margin-top: 20px; }
+    .chapter-title{ font-size: 1.25rem; margin: 18px 0 10px; }
+    .book-grid{
+      display:grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap:10px; margin:10px 0 0;
+    }
+    .text-card{
+      background:var(--card); border:1px solid var(--border); border-radius:12px; text-align:center; padding:14px;
+      transition: transform .16s, box-shadow .16s; position:relative;
+    }
+    .text-card:hover{ transform: translateY(-3px); box-shadow: 0 8px 16px rgba(0,0,0,.12); }
+    .solution-link{ text-decoration:none; color:inherit; display:block; }
+    .book-title{ color:inherit; font-size:.95rem; margin:0 0 4px; font-weight:bold; line-height:1.1; }
+    .book-detail{ font-size:.85rem; color:var(--muted); margin:0; }
+    .ribbon{ position:absolute; top:10px; right:-36px; transform:rotate(45deg); background:#111; color:#fff; padding:6px 44px; font-size:.75rem; letter-spacing:.5px; box-shadow:0 6px 12px rgba(0,0,0,.25); }
+
+    footer{ padding:28px 0 36px; border-top:1px solid var(--border); margin-top:36px }
+    .logos{ display:flex; justify-content:center; align-items:center; gap:28px }
+    .logos img{ height:80px; width:auto }
+</style>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to main content</a>
+
+  <header>
+    <div class="wrapper topbar">
+      
+      <div class="brand">
+        <h1>Theoretical Mechanics: Inclined GEO Visualization</h1>
+        <p>@ NTHU 2026 spring</p>
+      </div>
+
+      <nav class="nav" aria-label="Primary">
+        <a href="mechanics.html">Back to <em>Theoretical Mechanics Visualization</em> </a>
+      </nav>
+
+    </div>
+  </header>
+
+  <main id="main" class="wrapper" tabindex="-1">
+    <section class="hero" id="overview">
+      <span class="hero-badge">Orbital Mechanics Learning Hub</span>
+      <h2>Inclined geosynchronous orbit and ground track</h2>
+
+      <div class="hero-grid">
+        <div class="hero-card">
+          <h3>Physical model</h3>
+          <p>
+            This interactive page visualizes an inclined geosynchronous satellite. The left panel shows Earth,
+            the compressed satellite orbit, the sub-satellite point, and the observer line of sight. The two right
+            panels show the zoomed ground track and the sky path seen by the observer.
+          </p>
+        </div>
+
+        <div class="hero-card">
+          <h3>Settings</h3>
+          <p>
+            Default settings: observer at Taipei-like coordinates, nominal GEO longitude
+            $121.565^\circ$, inclination $15^\circ$, eccentricity $0$, and argument of perigee $270^\circ$.
+            Change the controls below and press simulate again.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="toolbar" aria-label="Simulation controls">
+      <div class="toolbar-group">
+        <div class="field">
+          <label for="launchLat">observer lat [deg] <code>φₒ</code> </label>
+          <input id="launchLat" type="number" step="0.001" value="25.033" />
+        </div>
+        <div class="field">
+          <label for="launchLon">observer lon [deg] <code>λₒ</code> </label>
+          <input id="launchLon" type="number" step="0.001" value="121.565" />
+        </div>
+        <div class="field">
+          <label for="satLon">satellite lon [deg] <code>λₛ</code> </label>
+          <input id="satLon" type="number" step="0.001" value="121.565" />
+        </div>
+        <div class="field">
+          <label for="inclination">inclination [deg] <code>i</code></label>
+          <input id="inclination" type="number" step="0.1" value="15.0" />
+        </div>
+      </div>
+
+      <div class="toolbar-group">
+        <div class="field">
+          <label for="eccentricity">eccentricity <code>e</code></label>
+          <input id="eccentricity" type="number" step="0.01" value="0.0" min="0" max="0.8" />
+        </div>
+        <div class="field">
+          <label for="argPerigee">arg. perigee [deg] <code>ω</code> </label>
+          <input id="argPerigee" type="number" step="1" value="270.0" />
+        </div>
+        <div class="field">
+          <label for="samples">time resolution</label>
+          <input id="samples" type="number" step="60" value="720" min="120" />
+        </div>
+        <div class="field">
+          <label for="restartBtn">　</label>
+          <button id="restartBtn" type="button">simulate again</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="sim-grid" id="simulator">
+      <div class="card">
+        <div class="card-head">
+          <h3>Orbit visualization</h3>
+        </div>
+        <div class="panel-grid">
+          <div class="panel">
+            <div class="panel-title">3D Earth view: satellite, sub-point, equator, observer, and observer latitude</div>
+            <canvas id="earthCanvas" width="760" height="760" aria-label="3D Earth orbit animation"></canvas>
+          </div>
+          <div class="panel">
+            <div class="panel-title">Zoomed ground track</div>
+            <canvas id="groundCanvas" width="560" height="360" aria-label="Ground track animation"></canvas>
+          </div>
+          <div class="panel">
+            <div class="panel-title">Observer sky view</div>
+            <canvas id="skyCanvas" width="560" height="360" aria-label="Observer sky animation"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <div class="stack">
+        <div class="card" id="diagnostics">
+          <div class="card-head">
+            <h3>Diagnostics</h3>
+          </div>
+          <div class="card-body">
+            <div class="metric-list">
+              <div class="metric">
+                <div class="label">longitude range</div>
+                <div class="value" id="metricLon">–</div>
+              </div>
+              <div class="metric">
+                <div class="label">latitude range</div>
+                <div class="value" id="metricLat">–</div>
+              </div>
+              <div class="metric">
+                <div class="label">elevation range</div>
+                <div class="value" id="metricEl">–</div>
+              </div>
+              <div class="metric">
+                <div class="label">visible fraction</div>
+                <div class="value" id="metricVisible">–</div>
+              </div>
+              <div class="metric">
+                <div class="label">current time / sidereal day</div>
+                <div class="value" id="metricTime">–</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:18px;">
+          <div class="card-head">
+            <h3>Legend</h3>
+          </div>
+          <div class="card-body">
+            <div class="legend">
+              <div class="legend-row"><span class="dot" style="background:#4da3ff"></span> Full ground / sky track</div>
+              <div class="legend-row"><span class="dot" style="background:#ffb347"></span> Path so far / current point</div>
+              <div class="legend-row"><span class="line" style="border-color:#9be38f"></span> Equator</div>
+              <div class="legend-row"><span class="line" style="border-color:#ffffff"></span> Observer line of sight</div>
+              <div class="legend-row"><span class="dot" style="background:#ff6b6b"></span> Observer site</div>
+              <div class="legend-row"><span class="line" style="border-color:#ff77c8"></span> Observer latitude</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      
+    </section>
+
+    <section class="card relation-table-section" id="parameter-summary">
+      <div class="card-head">
+        <h3>Parameter–Trajectory Shape Summary</h3>
+      </div>
+      <div class="card-body">
+        <p class="relation-intro">
+          The table below summarizes how each control parameter changes the ground-track analemma and the sky path seen by the observer. It is meant as a quick guide for interpreting the simulation results.
+        </p>
+        <div class="table-wrap">
+          <table class="relation-table">
+            <thead>
+              <tr>
+                <th scope="col">Parameter</th>
+                <th scope="col">Main effect when changed</th>
+                <th scope="col">Ground-track shape</th>
+                <th scope="col">Observer sky path</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Inclination <code>i</code></td>
+                <td>Sets the satellite declination range, which controls the north–south motion.</td>
+                <td>For <code>i = 0°</code>, the sub-satellite point is nearly fixed. As <code>i</code> increases, the upper and lower lobes of the figure-eight become taller, with latitude range approximately <code>±i</code>.</td>
+                <td>The sky path stretches more strongly north–south. High-latitude observers may see a larger elevation variation.</td>
+              </tr>
+              <tr>
+                <td>Eccentricity <code>e</code></td>
+                <td>Makes the orbital angular speed non-uniform, producing east–west longitude oscillation.</td>
+                <td>For <code>e = 0</code>, the analemma is mostly symmetric. Larger <code>e</code> increases the left–right width and can make the two lobes asymmetric or tilted.</td>
+                <td>The sky path widens east–west. The satellite appears to linger near some directions longer than others.</td>
+              </tr>
+              <tr>
+                <td>Argument of perigee <code>ω</code></td>
+                <td>Controls the phase of the eccentricity-driven east–west motion relative to the north–south motion.</td>
+                <td>Changes the twist direction and the location of left–right asymmetry in the figure-eight. A common setting, <code>ω = 270°</code>, gives a typical analemma orientation.</td>
+                <td>Changes the tilt of the sky path. The timing of the highest point and the easternmost and westernmost points shifts.</td>
+              </tr>
+              <tr>
+                <td>Nominal satellite longitude <code>λₛ</code></td>
+                <td>Shifts the center longitude of the entire ground track.</td>
+                <td>The figure-eight shape is mostly unchanged, but the whole track moves east or west, centered near <code>λₛ</code>.</td>
+                <td>Relative to the observer, the path shifts toward the eastern or western sky. The elevation range may also increase or decrease.</td>
+              </tr>
+              <tr>
+                <td>Observer latitude <code>φₒ</code></td>
+                <td>Changes the observer’s geometric position relative to the equator and the satellite track.</td>
+                <td>Does not change the satellite ground track itself, but moves the observer-latitude line shown on the plot.</td>
+                <td>At higher latitudes, a GEO satellite usually appears lower in the southern or northern sky. The elevation range decreases, and part of the path may fall below the horizon.</td>
+              </tr>
+              <tr>
+                <td>Observer longitude <code>λₒ</code></td>
+                <td>Changes the longitude difference between the observer and the satellite’s central longitude.</td>
+                <td>Does not change the ground-track figure-eight itself; it only changes the observer’s position relative to the track.</td>
+                <td>A larger longitude difference places the satellite farther east or west in the sky and usually lowers its elevation. If the difference is too large, the satellite may not be visible.</td>
+              </tr>
+          
+            </tbody>
+          </table>
+        </div>
+        <p class="relation-note">
+          Rule of thumb: inclination mainly controls the vertical height, eccentricity mainly controls the horizontal width, and argument of perigee controls the phase relation between the two.
+        </p>
+      </div>
+    </section>
+
+  
+  </main>
+
+  <footer>
+    <div class="wrapper">
+      <div class="footer-card">
+        Theoretical Mechanics Learning Hub · The teaching webpage for <em>Theoretical Mechanics II</em> at NTHU in Spring 2026.
+      </div>
+    </div>
+  </footer>
+
+<script>
+const earthCanvas = document.getElementById("earthCanvas");
+const groundCanvas = document.getElementById("groundCanvas");
+const skyCanvas = document.getElementById("skyCanvas");
+const earthCtx = earthCanvas.getContext("2d");
+const groundCtx = groundCanvas.getContext("2d");
+const skyCtx = skyCanvas.getContext("2d");
+
+const metricLon = document.getElementById("metricLon");
+const metricLat = document.getElementById("metricLat");
+const metricEl = document.getElementById("metricEl");
+const metricVisible = document.getElementById("metricVisible");
+const metricTime = document.getElementById("metricTime");
+
+const MU = 398600.4418;
+const OMEGA_E = 7.2921150e-5;
+const RE = 6378.137;
+const F = 1 / 298.257223563;
+const E2 = F * (2 - F);
+const A_GEO = Math.pow(MU / (OMEGA_E * OMEGA_E), 1 / 3);
+const SIDEREAL_DAY = 2 * Math.PI / OMEGA_E;
+const SAT_DISPLAY_RADIUS = 1.82;
+const TAU = 2 * Math.PI;
+
+let simData = null;
+let frameIndex = 0;
+let lastTime = 0;
+const fps = 30;
+const frameDuration = 1000 / fps;
+
+function deg2rad(x){ return x * Math.PI / 180; }
+function rad2deg(x){ return x * 180 / Math.PI; }
+function clamp(x, lo, hi){ return Math.min(hi, Math.max(lo, x)); }
+function wrap180(x){ return ((x + 180) % 360 + 360) % 360 - 180; }
+function modTau(x){ return ((x % TAU) + TAU) % TAU; }
+
+function add(a, b){ return [a[0] + b[0], a[1] + b[1], a[2] + b[2]]; }
+function sub(a, b){ return [a[0] - b[0], a[1] - b[1], a[2] - b[2]]; }
+function mul(s, a){ return [s * a[0], s * a[1], s * a[2]]; }
+function dot(a, b){ return a[0] * b[0] + a[1] * b[1] + a[2] * b[2]; }
+function cross(a, b){ return [
+  a[1] * b[2] - a[2] * b[1],
+  a[2] * b[0] - a[0] * b[2],
+  a[0] * b[1] - a[1] * b[0]
+]; }
+function norm(a){ return Math.hypot(a[0], a[1], a[2]); }
+function normalize(a){ const n = norm(a) || 1; return mul(1 / n, a); }
+
+function R1(x, v){
+  const c = Math.cos(x), s = Math.sin(x);
+  return [v[0], c * v[1] - s * v[2], s * v[1] + c * v[2]];
+}
+function R3(x, v){
+  const c = Math.cos(x), s = Math.sin(x);
+  return [c * v[0] - s * v[1], s * v[0] + c * v[1], v[2]];
+}
+
+function geodeticToEcef(lat, lon, hKm = 0){
+  const N = RE / Math.sqrt(1 - E2 * Math.sin(lat) ** 2);
+  return [
+    (N + hKm) * Math.cos(lat) * Math.cos(lon),
+    (N + hKm) * Math.cos(lat) * Math.sin(lon),
+    (N * (1 - E2) + hKm) * Math.sin(lat)
+  ];
+}
+
+function ecefToSubpoint(r){
+  const [x, y, z] = r;
+  return {
+    lat: Math.atan2(z, Math.hypot(x, y)),
+    lon: Math.atan2(y, x)
+  };
+}
+
+function azElFromObserver(rSatEcef, latObs, lonObs){
+  const rObs = geodeticToEcef(latObs, lonObs);
+  const rho = sub(rSatEcef, rObs);
+
+  const east = [-Math.sin(lonObs), Math.cos(lonObs), 0];
+  const north = [
+    -Math.sin(latObs) * Math.cos(lonObs),
+    -Math.sin(latObs) * Math.sin(lonObs),
+     Math.cos(latObs)
+  ];
+  const up = [
+    Math.cos(latObs) * Math.cos(lonObs),
+    Math.cos(latObs) * Math.sin(lonObs),
+    Math.sin(latObs)
+  ];
+
+  const e = dot(east, rho);
+  const n = dot(north, rho);
+  const u = dot(up, rho);
+  const az = modTau(Math.atan2(e, n));
+  const el = Math.asin(clamp(u / norm(rho), -1, 1));
+  return { az, el };
+}
+
+function solveKepler(M, e){
+  let E = M;
+  for (let i = 0; i < 30; i++) {
+    E -= (E - e * Math.sin(E) - M) / (1 - e * Math.cos(E));
+  }
+  return E;
+}
+
+function satEcef(t, satLon, inc, e, argp){
+  const M = modTau(OMEGA_E * t);
+  const E = solveKepler(M, e);
+  const nu = 2 * Math.atan2(
+    Math.sqrt(1 + e) * Math.sin(E / 2),
+    Math.sqrt(1 - e) * Math.cos(E / 2)
+  );
+  const r = A_GEO * (1 - e * Math.cos(E));
+  let rOrbit = [r * Math.cos(nu), r * Math.sin(nu), 0];
+
+  const Omega = satLon - Math.atan2(Math.cos(inc) * Math.sin(argp), Math.cos(argp));
+  let rEci = R3(Omega, R1(inc, R3(argp, rOrbit)));
+  return R3(-OMEGA_E * t, rEci);
+}
+
+function hmsFromSeconds(t){
+  const hours = Math.floor(t / 3600);
+  const minutes = Math.floor((t - 3600 * hours) / 60);
+  const seconds = Math.floor(t - 3600 * hours - 60 * minutes);
+  return `${String(hours).padStart(2,"0")}:${String(minutes).padStart(2,"0")}:${String(seconds).padStart(2,"0")}`;
+}
+
+function formatRange(min, max, digits = 2, unit = "°"){
+  return `${min.toFixed(digits)}${unit} to ${max.toFixed(digits)}${unit}`;
+}
+
+function latLonToUnit(latDeg, lonDeg, radius = 1){
+  const lat = deg2rad(latDeg);
+  const lon = deg2rad(lonDeg);
+  return [
+    radius * Math.cos(lat) * Math.cos(lon),
+    radius * Math.cos(lat) * Math.sin(lon),
+    radius * Math.sin(lat)
+  ];
+}
+
+function satToDisplayPoint(rSatEcef, radius = SAT_DISPLAY_RADIUS){
+  return mul(radius / norm(rSatEcef), rSatEcef);
+}
+
+function simulate(params){
+  const latObs = deg2rad(params.launchLatDeg);
+  const lonObs = deg2rad(params.launchLonDeg);
+  const satLon = deg2rad(params.satLonDeg);
+  const inc = deg2rad(params.inclinationDeg);
+  const e = params.eccentricity;
+  const argp = deg2rad(params.argPerigeeDeg);
+  const n = params.samples;
+
+  if (!Number.isFinite(e) || e < 0 || e >= 1) throw new Error("eccentricity must satisfy 0 <= e < 1");
+  if (n < 120) throw new Error("samples should be at least 120");
+
+  const times = [];
+  const satPositions = [];
+  const subLat = [];
+  const subLon = [];
+  const azs = [];
+  const els = [];
+  const visible = [];
+  const skyX = [];
+  const skyY = [];
+
+  for (let i = 0; i < n; i++) {
+    const t = SIDEREAL_DAY * i / (n - 1);
+    const r = satEcef(t, satLon, inc, e, argp);
+    const subpoint = ecefToSubpoint(r);
+    const look = azElFromObserver(r, latObs, lonObs);
+
+    const latDeg = rad2deg(subpoint.lat);
+    const lonDeg = wrap180(rad2deg(subpoint.lon));
+    const azDeg = rad2deg(look.az);
+    const elDeg = rad2deg(look.el);
+    const isVisible = elDeg > 0;
+
+    times.push(t);
+    satPositions.push(r);
+    subLat.push(latDeg);
+    subLon.push(lonDeg);
+    azs.push(azDeg);
+    els.push(elDeg);
+    visible.push(isVisible);
+
+    if (isVisible) {
+      const zenithAngle = 90 - elDeg;
+      const azRad = deg2rad(azDeg);
+      skyX.push(zenithAngle * Math.sin(azRad));
+      skyY.push(zenithAngle * Math.cos(azRad));
+    } else {
+      skyX.push(NaN);
+      skyY.push(NaN);
+    }
+  }
+
+  const lonDeviation = subLon.map(x => Math.abs(wrap180(x - params.satLonDeg)));
+  const lonMargin = Math.max(3, 1.3 * Math.max(...lonDeviation));
+  const trackLatAbs = Math.max(...subLat.map(x => Math.abs(x)));
+  const observerLatAbs = Math.abs(params.launchLatDeg);
+  const latMargin = Math.max(5, 1.2 * trackLatAbs, observerLatAbs + 5);
+  const visibleCount = visible.filter(Boolean).length;
+
+  return {
+    ...params,
+    times, satPositions, subLat, subLon, azs, els, visible, skyX, skyY,
+    lonMin: Math.min(...subLon), lonMax: Math.max(...subLon),
+    latMin: Math.min(...subLat), latMax: Math.max(...subLat),
+    elMin: Math.min(...els), elMax: Math.max(...els),
+    lonMargin, latMargin, visibleFraction: visibleCount / n,
+    nframes: n
+  };
+}
+
+function clearCanvas(ctx, canvas){
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = "#000";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+}
+
+function cameraBasis(k, n){
+  const az = deg2rad(35 + 360 * k / Math.max(1, n - 1));
+  const el = deg2rad(24);
+  const view = normalize([Math.cos(el) * Math.cos(az), Math.cos(el) * Math.sin(az), Math.sin(el)]);
+  const right = normalize([-Math.sin(az), Math.cos(az), 0]);
+  const up = normalize(cross(right, view));
+  return { right, up, view };
+}
+
+function project3(p, basis, canvas, scaleFactor = 0.42){
+  const scale = Math.min(canvas.width, canvas.height) * scaleFactor;
+  return [
+    canvas.width / 2 + dot(p, basis.right) * scale,
+    canvas.height / 2 - dot(p, basis.up) * scale,
+    dot(p, basis.view)
+  ];
+}
+
+function drawProjectedPolyline(ctx, canvas, points, basis, color, width = 1, alpha = 1, dash = []){
+  ctx.save();
+  ctx.strokeStyle = color;
+  ctx.globalAlpha = alpha;
+  ctx.lineWidth = width;
+  ctx.setLineDash(dash);
+  ctx.beginPath();
+  let started = false;
+  for (const p of points) {
+    const [x, y] = project3(p, basis, canvas);
+    if (!Number.isFinite(x) || !Number.isFinite(y)) continue;
+    if (!started) { ctx.moveTo(x, y); started = true; }
+    else ctx.lineTo(x, y);
+  }
+  ctx.stroke();
+  ctx.restore();
+}
+
+function drawProjectedPoint(ctx, canvas, p, basis, color, radius = 5, stroke = null){
+  const [x, y] = project3(p, basis, canvas);
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(x, y, radius, 0, TAU);
+  ctx.fillStyle = color;
+  ctx.fill();
+  if (stroke) {
+    ctx.strokeStyle = stroke;
+    ctx.lineWidth = 2;
+    ctx.stroke();
+  }
+  ctx.restore();
+}
+
+function drawEarth(k, data){
+  const ctx = earthCtx;
+  const canvas = earthCanvas;
+  clearCanvas(ctx, canvas);
+  const basis = cameraBasis(k, data.nframes);
+  const scale = Math.min(canvas.width, canvas.height) * 0.42;
+
+  // Earth disk
+  ctx.save();
+  ctx.translate(canvas.width / 2, canvas.height / 2);
+  const earthGrad = ctx.createRadialGradient(-scale * 0.35, -scale * 0.45, scale * 0.1, 0, 0, scale);
+  earthGrad.addColorStop(0, "#244b88");
+  earthGrad.addColorStop(1, "#081326");
+  ctx.fillStyle = earthGrad;
+  ctx.beginPath();
+  ctx.arc(0, 0, scale, 0, TAU);
+  ctx.fill();
+  ctx.strokeStyle = "rgba(255,255,255,.28)";
+  ctx.lineWidth = 2;
+  ctx.stroke();
+  ctx.restore();
+
+  // Earth grid
+  for (let lon = -180; lon <= 180; lon += 30) {
+    const pts = [];
+    for (let lat = -90; lat <= 90; lat += 3) pts.push(latLonToUnit(lat, lon, 1.006));
+    drawProjectedPolyline(ctx, canvas, pts, basis, "#ffffff", 0.8, 0.13);
+  }
+  for (const lat of [-60, -30, 30, 60]) {
+    const pts = [];
+    for (let lon = -180; lon <= 180; lon += 3) pts.push(latLonToUnit(lat, lon, 1.006));
+    drawProjectedPolyline(ctx, canvas, pts, basis, "#ffffff", 0.8, 0.13);
+  }
+
+  const equator = [];
+  for (let lon = -180; lon <= 180; lon += 2) equator.push(latLonToUnit(0, lon, 1.075));
+  drawProjectedPolyline(ctx, canvas, equator, basis, "#9be38f", 4, 0.92);
+
+  const observerLatitude = [];
+  for (let lon = -180; lon <= 180; lon += 2) observerLatitude.push(latLonToUnit(data.launchLatDeg, lon, 1.105));
+  drawProjectedPolyline(ctx, canvas, observerLatitude, basis, "#ff77c8", 3, 0.9, [10, 6]);
+
+  drawProjectedPolyline(ctx, canvas, [[0,0,-1.35], [0,0,1.35]], basis, "#f6f6f6", 4, 0.9);
+
+  const meridian = [];
+  for (let lat = -90; lat <= 90; lat += 2) meridian.push(latLonToUnit(lat, data.satLonDeg, 1.045));
+  drawProjectedPolyline(ctx, canvas, meridian, basis, "#ffdf6e", 2, 0.62);
+
+  const fullTrack = data.subLat.map((lat, i) => latLonToUnit(lat, data.subLon[i], 1.095));
+  drawProjectedPolyline(ctx, canvas, fullTrack, basis, "#4da3ff", 2, 0.35);
+
+  const pathSoFar = fullTrack.slice(0, k + 1).map(p => mul(1.018, p));
+  drawProjectedPolyline(ctx, canvas, pathSoFar, basis, "#ffb347", 4, 0.96);
+
+  const satTrack = data.satPositions.map(r => satToDisplayPoint(r, SAT_DISPLAY_RADIUS));
+  drawProjectedPolyline(ctx, canvas, satTrack, basis, "#b792ff", 2, 0.28);
+  drawProjectedPolyline(ctx, canvas, satTrack.slice(0, k + 1).map(p => mul(1.018, p)), basis, "#b792ff", 3, 0.88);
+
+  const subNow = latLonToUnit(data.subLat[k], data.subLon[k], 1.18);
+  const satNow = satToDisplayPoint(data.satPositions[k], SAT_DISPLAY_RADIUS + 0.08);
+  const obsNow = latLonToUnit(data.launchLatDeg, data.launchLonDeg, 1.16);
+  const geoNow = latLonToUnit(0, data.satLonDeg, 1.15);
+
+  drawProjectedPolyline(ctx, canvas, [[0,0,0], subNow], basis, "#ffffff", 2, 0.45);
+  drawProjectedPolyline(ctx, canvas, [subNow, satNow], basis, "#ffffff", 2, 0.6);
+  drawProjectedPolyline(ctx, canvas, [obsNow, satNow], basis, "#ffffff", 2, 0.45, [8, 6]);
+
+  drawProjectedPoint(ctx, canvas, subNow, basis, "#ffb347", 7, "#000");
+  drawProjectedPoint(ctx, canvas, satNow, basis, "#d6c2ff", 8, "#000");
+  drawProjectedPoint(ctx, canvas, obsNow, basis, "#ff6b6b", 6, "#000");
+  drawProjectedPoint(ctx, canvas, geoNow, basis, "#ffdf6e", 5, "#000");
+
+  ctx.save();
+  ctx.fillStyle = "#e9eef8";
+  ctx.font = "18px system-ui, sans-serif";
+  ctx.fillText(`Inclined GEO, i = ${data.inclinationDeg.toFixed(1)}°, e = ${data.eccentricity.toFixed(3)}`, 18, 30);
+  ctx.font = "13px system-ui, sans-serif";
+  ctx.fillStyle = "#aab4c6";
+  ctx.fillText("Dashed magenta circle marks the observer latitude; satellite distance is visually compressed.", 18, 52);
+  ctx.restore();
+}
+
+function makePlotMapper(canvas, xmin, xmax, ymin, ymax, pad = 38){
+  return function(x, y){
+    const px = pad + (x - xmin) / (xmax - xmin) * (canvas.width - 2 * pad);
+    const py = canvas.height - pad - (y - ymin) / (ymax - ymin) * (canvas.height - 2 * pad);
+    return [px, py];
+  };
+}
+
+function drawAxes2D(ctx, canvas, xmin, xmax, ymin, ymax, xLabel, yLabel){
+  const map = makePlotMapper(canvas, xmin, xmax, ymin, ymax);
+  ctx.save();
+  ctx.strokeStyle = "rgba(255,255,255,.15)";
+  ctx.fillStyle = "#aab4c6";
+  ctx.font = "12px system-ui, sans-serif";
+  ctx.lineWidth = 1;
+
+  for (let i = 0; i <= 4; i++) {
+    const x = xmin + (xmax - xmin) * i / 4;
+    const [px] = map(x, ymin);
+    ctx.beginPath(); ctx.moveTo(px, 24); ctx.lineTo(px, canvas.height - 32); ctx.stroke();
+    ctx.fillText(x.toFixed(1), px - 14, canvas.height - 12);
+  }
+  for (let i = 0; i <= 4; i++) {
+    const y = ymin + (ymax - ymin) * i / 4;
+    const [, py] = map(xmin, y);
+    ctx.beginPath(); ctx.moveTo(32, py); ctx.lineTo(canvas.width - 24, py); ctx.stroke();
+    ctx.fillText(y.toFixed(1), 4, py + 4);
+  }
+  ctx.strokeStyle = "rgba(255,255,255,.55)";
+  ctx.strokeRect(38, 24, canvas.width - 76, canvas.height - 62);
+  ctx.fillStyle = "#dce6f7";
+  ctx.fillText(xLabel, canvas.width / 2 - 40, canvas.height - 12);
+  ctx.save();
+  ctx.translate(14, canvas.height / 2 + 38);
+  ctx.rotate(-Math.PI / 2);
+  ctx.fillText(yLabel, 0, 0);
+  ctx.restore();
+  ctx.restore();
+}
+
+function drawPolyline2D(ctx, points, color, width = 2, alpha = 1, dash = []){
+  ctx.save();
+  ctx.strokeStyle = color;
+  ctx.globalAlpha = alpha;
+  ctx.lineWidth = width;
+  ctx.setLineDash(dash);
+  ctx.beginPath();
+  let started = false;
+  for (const [x, y] of points) {
+    if (!Number.isFinite(x) || !Number.isFinite(y)) { started = false; continue; }
+    if (!started) { ctx.moveTo(x, y); started = true; }
+    else ctx.lineTo(x, y);
+  }
+  ctx.stroke();
+  ctx.restore();
+}
+
+function drawPoint2D(ctx, x, y, color, r = 5){
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(x, y, r, 0, TAU);
+  ctx.fillStyle = color;
+  ctx.fill();
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = "#000";
+  ctx.stroke();
+  ctx.restore();
+}
+
+function drawGroundTrack(k, data){
+  const ctx = groundCtx;
+  const canvas = groundCanvas;
+  clearCanvas(ctx, canvas);
+  const xmin = data.satLonDeg - data.lonMargin;
+  const xmax = data.satLonDeg + data.lonMargin;
+  const ymin = -data.latMargin;
+  const ymax = data.latMargin;
+  const map = makePlotMapper(canvas, xmin, xmax, ymin, ymax);
+
+  drawAxes2D(ctx, canvas, xmin, xmax, ymin, ymax, "Longitude [deg]", "Latitude [deg]");
+
+  const observerLatitudeLine = [map(xmin, data.launchLatDeg), map(xmax, data.launchLatDeg)];
+  drawPolyline2D(ctx, observerLatitudeLine, "#ff77c8", 2, 0.9, [8, 6]);
+  const [, obsLatY] = map(xmin, data.launchLatDeg);
+  ctx.save();
+  ctx.fillStyle = "#ffb3df";
+  ctx.font = "12px system-ui, sans-serif";
+  ctx.fillText(`Observer latitude ${data.launchLatDeg.toFixed(3)}°`, 48, clamp(obsLatY - 8, 38, canvas.height - 42));
+  ctx.restore();
+
+  const full = data.subLon.map((lon, i) => map(lon, data.subLat[i]));
+  drawPolyline2D(ctx, full, "#4da3ff", 2, 0.36);
+  drawPolyline2D(ctx, full.slice(0, k + 1), "#ffb347", 3, 0.95);
+
+  drawPoint2D(ctx, ...map(data.subLon[k], data.subLat[k]), "#ffb347", 6);
+  drawPoint2D(ctx, ...map(data.satLonDeg, 0), "#ffdf6e", 5);
+  drawPoint2D(ctx, ...map(data.launchLonDeg, data.launchLatDeg), "#ff6b6b", 5);
+
+  ctx.save();
+  ctx.fillStyle = "#e9eef8";
+  ctx.font = "15px system-ui, sans-serif";
+  ctx.fillText("Figure‑8 ground track", 48, 48);
+  ctx.restore();
+}
+
+function drawSky(k, data){
+  const ctx = skyCtx;
+  const canvas = skyCanvas;
+  clearCanvas(ctx, canvas);
+  const cx = canvas.width / 2;
+  const cy = canvas.height / 2;
+  const radius = Math.min(canvas.width, canvas.height) * 0.38;
+
+  function mapSky(xDeg, yDeg){
+    return [cx + xDeg / 90 * radius, cy - yDeg / 90 * radius];
+  }
+
+  ctx.save();
+  ctx.strokeStyle = "rgba(255,255,255,.62)";
+  ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.arc(cx, cy, radius, 0, TAU); ctx.stroke();
+
+  ctx.strokeStyle = "rgba(255,255,255,.22)";
+  ctx.lineWidth = 1;
+  for (const elGuide of [30, 60]) {
+    const r = radius * (90 - elGuide) / 90;
+    ctx.beginPath(); ctx.arc(cx, cy, r, 0, TAU); ctx.stroke();
+    ctx.fillStyle = "#aab4c6";
+    ctx.font = "12px system-ui, sans-serif";
+    ctx.fillText(`${elGuide}°`, cx + r + 4, cy - 3);
+  }
+
+  ctx.fillStyle = "#dce6f7";
+  ctx.font = "12px system-ui, sans-serif";
+  ctx.fillText("N", cx - 4, cy - radius - 8);
+  ctx.fillText("E", cx + radius + 8, cy + 4);
+  ctx.fillText("S", cx - 4, cy + radius + 18);
+  ctx.fillText("W", cx - radius - 18, cy + 4);
+  ctx.fillText("Zenith", cx - 20, cy + 4);
+  ctx.restore();
+
+  const full = data.skyX.map((x, i) => Number.isFinite(x) ? mapSky(x, data.skyY[i]) : [NaN, NaN]);
+  drawPolyline2D(ctx, full, "#4da3ff", 2, 0.36);
+  drawPolyline2D(ctx, full.slice(0, k + 1), "#ffb347", 3, 0.96);
+
+  if (data.visible[k]) {
+    drawPoint2D(ctx, ...mapSky(data.skyX[k], data.skyY[k]), "#ffb347", 6);
+  } else {
+    ctx.save();
+    ctx.fillStyle = "#ffb347";
+    ctx.font = "16px system-ui, sans-serif";
+    ctx.fillText("Below horizon", cx - 52, cy + 28);
+    ctx.restore();
+  }
+
+  ctx.save();
+  ctx.fillStyle = "#e9eef8";
+  ctx.font = "15px system-ui, sans-serif";
+  ctx.fillText("Observer sky path", 42, 34);
+  ctx.restore();
+}
+
+function updateStats(data){
+  metricLon.textContent = formatRange(data.lonMin, data.lonMax, 2);
+  metricLat.textContent = formatRange(data.latMin, data.latMax, 2);
+  metricEl.textContent = formatRange(data.elMin, data.elMax, 2);
+  metricVisible.textContent = `${(100 * data.visibleFraction).toFixed(1)}%`;
+  metricTime.textContent = `00:00:00 / ${hmsFromSeconds(SIDEREAL_DAY)}`;
+}
+
+function updateFrameMetrics(k, data){
+  metricTime.textContent = `${hmsFromSeconds(data.times[k])} / ${hmsFromSeconds(SIDEREAL_DAY)}`;
+}
+
+function drawAll(k, data){
+  drawEarth(k, data);
+  drawGroundTrack(k, data);
+  drawSky(k, data);
+  updateFrameMetrics(k, data);
+}
+
+function readParams(){
+  return {
+    launchLatDeg: parseFloat(document.getElementById("launchLat").value),
+    launchLonDeg: parseFloat(document.getElementById("launchLon").value),
+    satLonDeg: parseFloat(document.getElementById("satLon").value),
+    inclinationDeg: parseFloat(document.getElementById("inclination").value),
+    eccentricity: parseFloat(document.getElementById("eccentricity").value),
+    argPerigeeDeg: parseFloat(document.getElementById("argPerigee").value),
+    samples: parseInt(document.getElementById("samples").value, 10)
+  };
+}
+
+function startSimulation(){
+  try {
+    simData = simulate(readParams());
+    frameIndex = 0;
+    lastTime = 0;
+    updateStats(simData);
+    drawAll(0, simData);
+  } catch (err) {
+    alert(err.message);
+  }
+}
+
+function animate(timestamp){
+  if (!simData) return requestAnimationFrame(animate);
+  if (!lastTime) lastTime = timestamp;
+  const elapsed = timestamp - lastTime;
+  if (elapsed >= frameDuration) {
+    drawAll(frameIndex, simData);
+    frameIndex = (frameIndex + 1) % simData.nframes;
+    lastTime = timestamp;
+  }
+  requestAnimationFrame(animate);
+}
+
+document.getElementById("restartBtn").addEventListener("click", startSimulation);
+startSimulation();
+requestAnimationFrame(animate);
+</script>
+</body>
+</html>
