@@ -1,0 +1,1273 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Rutherford Scattering — Learning Hub Style</title>
+<meta name="description" content="Rutherford scattering and quantum Coulomb scattering interactive visualization" />
+<meta property="og:title" content="Rutherford Scattering — Learning Hub" />
+<meta property="og:description" content="Interactive visualization for classical Rutherford scattering, quantum Coulomb cross section, and wave picture." />
+<meta property="og:type" content="website" />
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" crossorigin="anonymous"
+  onload="renderMathInElement(document.getElementById('main'),{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});"></script>
+
+<style>
+  :root{
+    --bg:#f6f7fb;
+    --fg:#18212f;
+    --muted:#5f6b7a;
+    --primary:#1d4ed8;
+    --primary-soft:#dbeafe;
+    --card:#ffffff;
+    --border:rgba(24,33,47,.12);
+    --ring:#93c5fd;
+    --maxw:1200px;
+    --shadow:0 12px 30px rgba(0,0,0,.08);
+  }
+
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#0b1220;
+      --fg:#e5edf7;
+      --muted:#9aa8ba;
+      --primary:#7cb3ff;
+      --primary-soft:#172554;
+      --card:#101a2c;
+      --border:rgba(255,255,255,.12);
+      --ring:#60a5fa;
+      --shadow:0 12px 30px rgba(0,0,0,.28);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; scroll-behavior:auto !important;}
+  }
+
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background:linear-gradient(180deg, var(--bg) 0%, color-mix(in oklab, var(--bg), #ffffff 8%) 100%);
+    color:var(--fg);
+    line-height:1.6;
+  }
+
+  a{color:var(--primary)}
+  .wrapper{max-width:var(--maxw); margin:0 auto; padding:0 18px}
+
+  .skip-link{
+    position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden;
+  }
+  .skip-link:focus{
+    position:fixed; left:16px; top:16px; width:auto; height:auto;
+    background:#000; color:#fff; padding:8px 12px; border-radius:8px; z-index:1000;
+  }
+
+  header{
+    position:sticky; top:0; z-index:50;
+    background:rgba(255,255,255,.72);
+    backdrop-filter:saturate(180%) blur(14px);
+    border-bottom:1px solid var(--border);
+  }
+  @media (prefers-color-scheme: dark){
+    header{background:rgba(11,18,32,.72)}
+  }
+
+  .topbar{
+    display:flex; align-items:center; justify-content:space-between; gap:16px;
+    padding:14px 0;
+  }
+  .brand h1{margin:0; font-size:1.2rem; line-height:1.1}
+  .brand p{margin:4px 0 0; color:var(--muted); font-size:.92rem}
+
+  .nav{display:flex; gap:10px; flex-wrap:wrap}
+  .nav a{
+    text-decoration:none; color:inherit;
+    padding:8px 12px; border:1px solid var(--border); border-radius:999px;
+    background:color-mix(in oklab, var(--card), transparent 10%);
+  }
+  .nav a:hover{color:var(--primary); border-color:color-mix(in oklab, var(--primary), var(--border) 60%)}
+
+  main{padding:30px 0 50px}
+
+  .hero{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:24px;
+    box-shadow:var(--shadow);
+    padding:28px;
+    margin-bottom:22px;
+  }
+  .hero-badge{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:6px 12px; border-radius:999px; font-size:.9rem;
+    background:var(--primary-soft); color:var(--primary); font-weight:600;
+  }
+  .hero h2{margin:14px 0 10px; font-size:clamp(1.8rem, 4vw, 3rem); line-height:1.1}
+  .hero p{margin:0; max-width:820px; color:var(--muted); font-size:1.03rem}
+  .hero-grid{display:grid; grid-template-columns:1.3fr .7fr; gap:18px; align-items:start; margin-top:20px}
+  .hero-card{
+    background:color-mix(in oklab, var(--card), var(--bg) 18%);
+    border:1px solid var(--border);
+    border-radius:18px; padding:18px;
+  }
+  .hero-card h3{margin:0 0 8px; font-size:1rem}
+  .hero-card p{margin:0; font-size:.95rem}
+  .formula{
+    font-size:1rem; overflow:auto; margin-top:12px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    background:color-mix(in oklab, var(--card), var(--bg) 22%);
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:12px;
+  }
+
+  .toolbar{
+    display:flex; gap:12px; flex-wrap:wrap; align-items:end; justify-content:space-between;
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:14px;
+    box-shadow:var(--shadow);
+    margin-bottom:18px;
+  }
+  .toolbar-group{display:flex; gap:10px; flex-wrap:wrap; align-items:end}
+  .field{display:flex; flex-direction:column; gap:6px}
+  .field label{font-size:.88rem; color:var(--muted)}
+  .toolbar input, .toolbar select, .toolbar button{
+    padding:10px 12px; border-radius:10px; border:1px solid var(--border);
+    background:var(--card); color:inherit; min-width:112px;
+    font:inherit;
+  }
+  .toolbar input:focus, .toolbar select:focus, .toolbar button:focus{outline:3px solid var(--ring); outline-offset:2px}
+  .toolbar button{
+    cursor:pointer;
+    background:var(--primary);
+    color:white;
+    border-color:transparent;
+    font-weight:600;
+  }
+  .toolbar button:hover{filter:brightness(1.04)}
+
+  .sim-grid{display:grid; grid-template-columns:minmax(0, 1fr) 330px; gap:18px; align-items:start}
+  .stack{display:grid; gap:18px}
+
+  .card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:20px;
+    box-shadow:var(--shadow);
+    overflow:hidden;
+  }
+  .card-head{
+    padding:16px 18px;
+    background:color-mix(in oklab, var(--primary-soft), var(--card) 35%);
+    border-bottom:1px solid var(--border);
+  }
+  .card-head h3{margin:0; font-size:1rem}
+  .card-body{padding:18px}
+
+  .visual-grid{display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:14px; padding:18px}
+  .panel{border:1px solid var(--border); border-radius:16px; overflow:hidden; background:#000; min-width:0}
+  .cross-panel{grid-column:1 / -1}
+  .panel-title{
+    padding:10px 12px;
+    background:rgba(255,255,255,.08);
+    color:#e9eef8;
+    font-size:.9rem;
+    border-bottom:1px solid rgba(255,255,255,.14);
+  }
+  canvas{display:block; width:100%; height:auto; background:#000}
+
+  .metric-list{display:grid; gap:12px}
+  .metric{
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:12px 14px;
+    background:color-mix(in oklab, var(--card), var(--bg) 18%);
+  }
+  .metric .label{font-size:.84rem; color:var(--muted); margin-bottom:4px}
+  .metric .value{font-weight:700; font-size:1rem; word-break:break-word}
+
+  .legend{display:grid; gap:10px}
+  .legend-row{display:flex; align-items:center; gap:10px; color:var(--muted); font-size:.94rem}
+  .dot{width:12px; height:12px; border-radius:999px; display:inline-block}
+  .line{width:18px; height:0; border-top:2px solid; display:inline-block}
+
+  .relation-table-section{margin-top:22px}
+  .relation-intro{margin:0 0 14px; color:var(--muted)}
+  .table-wrap{overflow-x:auto; border:1px solid var(--border); border-radius:16px}
+  .relation-table{width:100%; border-collapse:collapse; min-width:760px; background:var(--card)}
+  .relation-table th,.relation-table td{
+    padding:12px 14px;
+    text-align:left;
+    vertical-align:top;
+    border-bottom:1px solid var(--border);
+  }
+  .relation-table th{
+    background:color-mix(in oklab, var(--primary-soft), var(--card) 28%);
+    color:var(--fg);
+    font-size:.92rem;
+  }
+  .relation-table tr:last-child td{border-bottom:0}
+  .relation-table td:first-child{font-weight:700; white-space:nowrap}
+  .relation-table code{
+    font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size:.9em;
+    padding:.12em .35em;
+    border-radius:6px;
+    background:color-mix(in oklab, var(--primary-soft), var(--card) 45%);
+    color:var(--primary);
+  }
+  .relation-note{margin:12px 0 0; color:var(--muted); font-size:.92rem}
+
+  footer{padding:26px 0 40px; color:var(--muted)}
+  footer .footer-card{
+    border:1px solid var(--border);
+    background:var(--card);
+    border-radius:18px;
+    padding:18px;
+    text-align:center;
+    box-shadow:var(--shadow);
+  }
+
+  @media (max-width:1060px){
+    .hero-grid{grid-template-columns:1fr}
+    .sim-grid{grid-template-columns:1fr}
+    .topbar{flex-direction:column; align-items:flex-start}
+  }
+  @media (max-width:920px){
+    .visual-grid{grid-template-columns:1fr}
+    .cross-panel{grid-column:auto}
+  }
+  @media (max-width:720px){
+    .toolbar{align-items:stretch}
+    .toolbar-group{width:100%}
+    .field{flex:1 1 130px}
+    .toolbar input{min-width:unset; width:100%}
+  }
+</style>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to main content</a>
+
+  <header>
+    <div class="wrapper topbar">
+      <div class="brand">
+        <h1>Theoretical Mechanics: Rutherford Scattering Visualization</h1>
+        <p>@ NTHU 2026 spring</p>
+      </div>
+      <nav class="nav" aria-label="Primary">
+        <a href="mechanics.html">Back to <em>Theoretical Mechanics Visualization</em></a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="wrapper" tabindex="-1">
+    <section class="hero" id="overview">
+      <span class="hero-badge">Quantum & Classical Scattering Learning Hub</span>
+      <h2>Classical Rutherford scattering and quantum Coulomb wave picture</h2>
+
+      <div class="hero-grid">
+        <div class="hero-card">
+          <h3>Physical model</h3>
+          <p>
+            This page visualizes alpha particles approaching a heavy Coulomb target. The large panel shows the
+            classical beam and scattered particles. The two right panels compare the classical Rutherford and quantum
+            Coulomb differential cross sections, and show the real part of an incident plane wave plus an outgoing
+            Coulomb scattered wave.
+          </p>
+          <div class="formula">
+            $$\frac{d\sigma}{d\Omega}=\left(\frac{k_e Z_1 Z_2}{4E}\right)^2\frac{1}{\sin^4(\theta/2)},\qquad
+            |f(\theta)|^2=\frac{\eta^2}{4k^2\sin^4(\theta/2)}$$
+          </div>
+        </div>
+
+        <div class="hero-card">
+          <h3>Settings</h3>
+          <p>
+            Default settings use an alpha particle, $Z_1=2$, gold target, $Z_2=79$, and kinetic energy
+            $E=5\,\mathrm{MeV}$. Change the controls below and press simulate again. Pure Coulomb scattering gives
+            the same angular dependence in the classical and quantum differential cross sections.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="toolbar" aria-label="Simulation controls">
+      <div class="toolbar-group">
+        <div class="field">
+          <label for="z1">projectile charge <code>Z₁</code></label>
+          <input id="z1" type="number" step="1" min="1" value="2" />
+        </div>
+        <div class="field">
+          <label for="z2">target charge <code>Z₂</code></label>
+          <input id="z2" type="number" step="1" min="1" value="79" />
+        </div>
+        <div class="field">
+          <label for="energy">energy [MeV] <code>E</code></label>
+          <input id="energy" type="number" step="0.1" min="0.1" value="5.0" />
+        </div>
+        <div class="field">
+          <label for="particleCount">particles</label>
+          <input id="particleCount" type="number" step="10" min="20" max="240" value="80" />
+        </div>
+      </div>
+
+      <div class="toolbar-group">
+        <div class="field">
+          <label for="bMin">min impact <code>bₘᵢₙ</code> [fm]</label>
+          <input id="bMin" type="number" step="0.5" min="0.5" value="2.0" />
+        </div>
+        <div class="field">
+          <label for="bMax">max impact <code>bₘₐₓ</code> [fm]</label>
+          <input id="bMax" type="number" step="1" min="5" value="80.0" />
+        </div>
+        <div class="field">
+          <label for="speed">animation speed</label>
+          <input id="speed" type="number" step="0.25" min="0.25" max="4" value="1.0" />
+        </div>
+        <div class="field">
+          <label for="restartBtn">　</label>
+          <button id="restartBtn" type="button">simulate again</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="sim-grid" id="simulator">
+      <div class="card">
+        <div class="card-head">
+          <h3>Classical and quantum scattering visualization</h3>
+        </div>
+        <div class="visual-grid">
+          <div class="panel">
+            <div class="panel-title">Classical picture: parallel alpha beam → target → scattered particles</div>
+            <canvas id="classicalCanvas" width="760" height="760" aria-label="Classical Rutherford scattering animation"></canvas>
+          </div>
+          <div class="panel">
+            <div class="panel-title">Quantum picture: wave field, outgoing direction, and θ convention</div>
+            <canvas id="waveCanvas" width="760" height="760" aria-label="Quantum Coulomb wave animation, same visual size as classical panel"></canvas>
+          </div>
+          <div class="panel cross-panel">
+            <div class="panel-title">Classical vs quantum differential cross section — same θ highlighted below</div>
+            <canvas id="crossCanvas" width="1120" height="420" aria-label="Cross section comparison"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <div class="stack">
+        <div class="card" id="diagnostics">
+          <div class="card-head">
+            <h3>Diagnostics</h3>
+          </div>
+          <div class="card-body">
+            <div class="metric-list">
+              <div class="metric">
+                <div class="label">Coulomb length scale</div>
+                <div class="value" id="metricA">–</div>
+              </div>
+              <div class="metric">
+                <div class="label">wave number <code>k</code></div>
+                <div class="value" id="metricK">–</div>
+              </div>
+              <div class="metric">
+                <div class="label">Sommerfeld parameter <code>η</code></div>
+                <div class="value" id="metricEta">–</div>
+              </div>
+              <div class="metric">
+                <div class="label">selected cross sections</div>
+                <div class="value" id="metricSigma">–</div>
+              </div>
+              <div class="metric">
+                <div class="label">highlighted scattering angle <code>θ</code> used in all three panels</div>
+                <div class="value" id="metricTheta">–</div>
+              </div>
+              <div class="metric">
+                <div class="label">highlighted impact parameter <code>b</code></div>
+                <div class="value" id="metricB">–</div>
+              </div>
+              <div class="metric">
+                <div class="label">current animation phase</div>
+                <div class="value" id="metricTime">–</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <h3>Legend</h3>
+          </div>
+          <div class="card-body">
+            <div class="legend">
+              <div class="legend-row"><span class="dot" style="background:#ff6b6b"></span> Coulomb target nucleus</div>
+              <div class="legend-row"><span class="dot" style="background:#f2f2f2"></span> Alpha particles</div>
+              <div class="legend-row"><span class="line" style="border-color:#4da3ff"></span> Incident beam direction</div>
+              <div class="legend-row"><span class="line" style="border-color:#ffb347"></span> Particle trail / path so far</div>
+              <div class="legend-row"><span class="line" style="border-color:#b792ff"></span> Classical Rutherford curve</div>
+              <div class="legend-row"><span class="line" style="border-color:#ffb347"></span> Quantum Coulomb curve</div>
+              <div class="legend-row"><span class="line" style="border-color:#7ee7ff"></span> Highlighted <code>θ</code> angle marker</div>
+              <div class="legend-row"><span class="dot" style="background:#7ee7ff"></span> Highlighted particle used for <code>θ</code></div>
+              <div class="legend-row"><span class="line" style="border-color:#d6f7ff"></span> Large quantum panel: radial ray for same <code>θ</code></div>
+              <div class="legend-row"><span class="line" style="border-color:#ffffff"></span> Faint outgoing wavefront guides</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card relation-table-section" id="parameter-summary">
+      <div class="card-head">
+        <h3>Parameter–Scattering Summary</h3>
+      </div>
+      <div class="card-body">
+        <p class="relation-intro">
+          The table below summarizes how the controls change the visible particle scattering, cross section, and wave picture.
+        </p>
+        <div class="table-wrap">
+          <table class="relation-table">
+            <thead>
+              <tr>
+                <th scope="col">Parameter</th>
+                <th scope="col">Main physical role</th>
+                <th scope="col">Classical particle picture</th>
+                <th scope="col">Quantum / cross-section picture</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Projectile charge <code>Z₁</code></td>
+                <td>Sets the Coulomb repulsion strength together with <code>Z₂</code>.</td>
+                <td>Larger <code>Z₁</code> bends particles more strongly, especially for small impact parameter.</td>
+                <td>The differential cross section scales as <code>(Z₁Z₂)²</code>; the Sommerfeld parameter <code>η</code> also increases.</td>
+              </tr>
+              <tr>
+                <td>Target charge <code>Z₂</code></td>
+                <td>Represents the nuclear charge of the scattering center.</td>
+                <td>A heavier charge such as gold produces visibly larger deflection angles.</td>
+                <td>Both classical Rutherford and quantum Coulomb curves rise with <code>Z₂²</code>.</td>
+              </tr>
+              <tr>
+                <td>Energy <code>E</code></td>
+                <td>Controls how easily the projectile is deflected by the Coulomb field.</td>
+                <td>Higher energy makes trajectories straighter; lower energy gives wider scattering.</td>
+                <td>The cross section scales as <code>1/E²</code>. The wave number <code>k</code> increases with <code>√E</code>.</td>
+              </tr>
+              <tr>
+                <td>Impact parameter <code>b</code></td>
+                <td>Distance between incoming trajectory and target center.</td>
+                <td>Small <code>b</code> gives large scattering angle; large <code>b</code> gives near-forward scattering.</td>
+                <td>The angular distribution is sharply forward-peaked because of the <code>sin⁻⁴(θ/2)</code> factor.</td>
+              </tr>
+              <tr>
+                <td>Particle count</td>
+                <td>Controls the visual sampling of many incoming impact parameters.</td>
+                <td>More particles make the scattering cone and forward peak easier to see.</td>
+                <td>Does not change the formula; it only changes the animation density.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="relation-note">
+          Rule of thumb: charge product <code>Z₁Z₂</code> strengthens scattering, energy suppresses scattering, and small impact parameter produces the largest deflection. In the quantum panel, <code>θ</code> is measured from the incident beam direction and is the same angle appearing in <code>f(θ)</code> and <code>dσ/dΩ = |f(θ)|²</code>.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrapper">
+      <div class="footer-card">
+        Theoretical Mechanics Learning Hub · The teaching webpage for <em>Theoretical Mechanics II</em> at NTHU in Spring 2026.
+      </div>
+    </div>
+  </footer>
+
+<script>
+const classicalCanvas = document.getElementById("classicalCanvas");
+const crossCanvas = document.getElementById("crossCanvas");
+const waveCanvas = document.getElementById("waveCanvas");
+const classicalCtx = classicalCanvas.getContext("2d");
+const crossCtx = crossCanvas.getContext("2d");
+const waveCtx = waveCanvas.getContext("2d");
+
+const metricA = document.getElementById("metricA");
+const metricK = document.getElementById("metricK");
+const metricEta = document.getElementById("metricEta");
+const metricSigma = document.getElementById("metricSigma");
+const metricTheta = document.getElementById("metricTheta");
+const metricB = document.getElementById("metricB");
+const metricTime = document.getElementById("metricTime");
+
+const KE2 = 1.43996448;       // MeV fm
+const HBARC = 197.3269804;    // MeV fm
+const M_ALPHA_C2 = 3727.379378; // MeV
+const TAU = 2 * Math.PI;
+const FRAMES = 180;
+const FPS = 30;
+const FRAME_DURATION = 1000 / FPS;
+
+let simData = null;
+let frameIndex = 0;
+let lastTime = 0;
+
+function deg2rad(x){ return x * Math.PI / 180; }
+function rad2deg(x){ return x * 180 / Math.PI; }
+function clamp(x, lo, hi){ return Math.min(hi, Math.max(lo, x)); }
+function smoothstep(x){ return 3 * x * x - 2 * x * x * x; }
+function hypot3(p){ return Math.hypot(p.x, p.y, p.z); }
+function add(a, b){ return {x:a.x+b.x, y:a.y+b.y, z:a.z+b.z}; }
+function sub(a, b){ return {x:a.x-b.x, y:a.y-b.y, z:a.z-b.z}; }
+function mul(s, a){ return {x:s*a.x, y:s*a.y, z:s*a.z}; }
+function dot(a, b){ return a.x*b.x + a.y*b.y + a.z*b.z; }
+function normalize(a){ const n = hypot3(a) || 1; return mul(1/n, a); }
+function cross(a, b){ return {x:a.y*b.z-a.z*b.y, y:a.z*b.x-a.x*b.z, z:a.x*b.y-a.y*b.x}; }
+function complex(re, im){ return {re, im}; }
+function cadd(a, b){ return {re:a.re+b.re, im:a.im+b.im}; }
+function cmul(a, b){ return {re:a.re*b.re-a.im*b.im, im:a.re*b.im+a.im*b.re}; }
+function cis(phi){ return {re:Math.cos(phi), im:Math.sin(phi)}; }
+
+function makeRng(seed){
+  let state = seed >>> 0;
+  return function(){
+    state = (1664525 * state + 1013904223) >>> 0;
+    return state / 4294967296;
+  };
+}
+
+function rutherfordDsigma(theta, Z1, Z2, E){
+  const s = Math.sin(theta / 2);
+  return Math.pow(KE2 * Z1 * Z2 / (4 * E), 2) / Math.pow(s, 4);
+}
+
+function scatteringAngleFromB(b, Z1, Z2, E){
+  const a = KE2 * Z1 * Z2 / (2 * E);
+  return 2 * Math.atan(a / b);
+}
+
+function quantumParams(Z1, Z2, E){
+  const k = Math.sqrt(2 * M_ALPHA_C2 * E) / HBARC;
+  const eta = KE2 * Z1 * Z2 * M_ALPHA_C2 / (HBARC * HBARC * k);
+  return {k, eta};
+}
+
+function quantumCoulombDsigma(theta, Z1, Z2, E){
+  const {k, eta} = quantumParams(Z1, Z2, E);
+  return Math.pow(eta / (2 * k), 2) / Math.pow(Math.sin(theta / 2), 4);
+}
+
+function quantumCoulombAmplitude(theta, Z1, Z2, E){
+  const {k, eta} = quantumParams(Z1, Z2, E);
+  const thetaEff = Math.max(theta, deg2rad(2));
+  const s = Math.sin(thetaEff / 2);
+  const amp = -eta / (2 * k * s * s);
+  return mulComplexScalar(amp, cis(-2 * eta * Math.log(s)));
+}
+
+function mulComplexScalar(s, z){ return {re:s*z.re, im:s*z.im}; }
+
+function makeParticles(Z1, Z2, E, N, bmin, bmax){
+  const rng = makeRng(1);
+  const particles = [];
+  const visualBScale = 0.07;
+  for (let n = 1; n <= N; n++) {
+    const u = (n - 0.5) / N;
+    const b = Math.sqrt(bmin*bmin + u * (bmax*bmax - bmin*bmin));
+    const phi = TAU * rng();
+    const theta = scatteringAngleFromB(b, Z1, Z2, E);
+    const ey = Math.cos(phi);
+    const ez = Math.sin(phi);
+    const bvis = b * visualBScale;
+    const pStart = {x:-12, y:bvis*ey, z:bvis*ez};
+    const pScatter = {x:0, y:bvis*ey, z:bvis*ez};
+    const dirOut = {x:Math.cos(theta), y:Math.sin(theta)*ey, z:Math.sin(theta)*ez};
+    particles.push({pStart, pScatter, dirOut, theta, b, ey, ez});
+  }
+  return particles;
+}
+
+function particlePosition(p, t){
+  if (t < 0.5) {
+    const s = smoothstep(t / 0.5);
+    return add(p.pStart, mul(s, sub(p.pScatter, p.pStart)));
+  }
+  const s = smoothstep((t - 0.5) / 0.5);
+  return add(p.pScatter, mul(13 * s, p.dirOut));
+}
+
+function particleTrail(p, t, trailLength = 0.20, ntrail = 16){
+  const t0 = Math.max(0, t - trailLength);
+  const pts = [];
+  for (let i = 0; i < ntrail; i++) {
+    const tau = t0 + (t - t0) * i / Math.max(1, ntrail - 1);
+    pts.push(particlePosition(p, tau));
+  }
+  return pts;
+}
+
+function quantumWaveGrid(params){
+  const xs = [];
+  const ys = [];
+  const nx = 176;
+  const ny = 134;
+  for (let i = 0; i < nx; i++) xs.push(-70 + 140 * i / (nx - 1));
+  for (let j = 0; j < ny; j++) ys.push(-60 + 120 * j / (ny - 1));
+
+  const {k} = quantumParams(params.Z1, params.Z2, params.E);
+  const psi = new Array(nx * ny);
+
+  for (let ix = 0; ix < nx; ix++) {
+    for (let iy = 0; iy < ny; iy++) {
+      const x = xs[ix];
+      const y = ys[iy];
+      const r0 = Math.hypot(x, y);
+      const r = Math.max(r0, 4.0);
+      const theta = r0 < 1e-8 ? 0 : Math.acos(clamp(x / r0, -1, 1));
+      const psiIn = cis(k * x);
+      const ftheta = quantumCoulombAmplitude(theta, params.Z1, params.Z2, params.E);
+      const psiOut = mulComplexScalar(1 / r, cmul(ftheta, cis(k * r)));
+      psi[ix * ny + iy] = cadd(psiIn, psiOut);
+    }
+  }
+  return {xs, ys, nx, ny, psi};
+}
+
+function simulate(params){
+  if (!Number.isFinite(params.Z1) || params.Z1 < 1) throw new Error("Z₁ should be at least 1");
+  if (!Number.isFinite(params.Z2) || params.Z2 < 1) throw new Error("Z₂ should be at least 1");
+  if (!Number.isFinite(params.E) || params.E <= 0) throw new Error("Energy should be positive");
+  if (!Number.isFinite(params.N) || params.N < 20) throw new Error("Particle count should be at least 20");
+  if (!Number.isFinite(params.bmin) || !Number.isFinite(params.bmax) || params.bmax <= params.bmin) throw new Error("bmax must be larger than bmin");
+
+  const particles = makeParticles(params.Z1, params.Z2, params.E, params.N, params.bmin, params.bmax);
+  const wave = quantumWaveGrid(params);
+  const thetaSamples = [];
+  const sigmaC = [];
+  const sigmaQ = [];
+  for (let i = 0; i < 400; i++) {
+    const theta = deg2rad(3 + (180 - 3) * i / 399);
+    thetaSamples.push(theta);
+    sigmaC.push(rutherfordDsigma(theta, params.Z1, params.Z2, params.E));
+    sigmaQ.push(quantumCoulombDsigma(theta, params.Z1, params.Z2, params.E));
+  }
+
+  const selectedParticleIndex = 0; // smallest b, largest deflection: clearest θ marker
+  const selectedParticle = particles[selectedParticleIndex];
+
+  return {...params, particles, selectedParticleIndex, selectedParticle, wave, thetaSamples, sigmaC, sigmaQ, frames:FRAMES};
+}
+
+function clearCanvas(ctx, canvas){
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = "#000";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+}
+
+function cameraBasis(k){
+  const az = deg2rad(34 + 28 * Math.sin(TAU * k / FRAMES));
+  const el = deg2rad(18);
+  const view = normalize({x:Math.cos(el)*Math.cos(az), y:Math.cos(el)*Math.sin(az), z:Math.sin(el)});
+  const right = normalize({x:-Math.sin(az), y:Math.cos(az), z:0});
+  const up = normalize(cross(right, view));
+  return {right, up, view};
+}
+
+function project3(p, basis, canvas, scaleFactor = 0.035){
+  const scale = Math.min(canvas.width, canvas.height) * scaleFactor;
+  return [
+    canvas.width / 2 + dot(p, basis.right) * scale,
+    canvas.height / 2 - dot(p, basis.up) * scale,
+    dot(p, basis.view)
+  ];
+}
+
+function drawProjectedPolyline(ctx, canvas, points, basis, color, width = 1, alpha = 1, dash = []){
+  ctx.save();
+  ctx.strokeStyle = color;
+  ctx.globalAlpha = alpha;
+  ctx.lineWidth = width;
+  ctx.setLineDash(dash);
+  ctx.beginPath();
+  let started = false;
+  for (const p of points) {
+    const [x, y] = project3(p, basis, canvas);
+    if (!Number.isFinite(x) || !Number.isFinite(y)) continue;
+    if (!started) { ctx.moveTo(x, y); started = true; }
+    else ctx.lineTo(x, y);
+  }
+  ctx.stroke();
+  ctx.restore();
+}
+
+function drawProjectedPoint(ctx, canvas, p, basis, color, radius = 5, stroke = null){
+  const [x, y] = project3(p, basis, canvas);
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(x, y, radius, 0, TAU);
+  ctx.fillStyle = color;
+  ctx.fill();
+  if (stroke) {
+    ctx.strokeStyle = stroke;
+    ctx.lineWidth = 2;
+    ctx.stroke();
+  }
+  ctx.restore();
+}
+
+function drawProjectedText(ctx, canvas, p, basis, text, options = {}){
+  const [x, y] = project3(p, basis, canvas);
+  if (!Number.isFinite(x) || !Number.isFinite(y)) return;
+  const color = options.color || "#e9eef8";
+  const size = options.size || 15;
+  const dx = options.dx || 0;
+  const dy = options.dy || 0;
+  ctx.save();
+  ctx.font = `700 ${size}px system-ui, sans-serif`;
+  ctx.textBaseline = "middle";
+  const paddingX = 7;
+  const paddingY = 4;
+  const w = ctx.measureText(text).width;
+  ctx.fillStyle = "rgba(0,0,0,.62)";
+  ctx.fillRect(x + dx - paddingX, y + dy - size / 2 - paddingY, w + 2 * paddingX, size + 2 * paddingY);
+  ctx.strokeStyle = "rgba(255,255,255,.25)";
+  ctx.strokeRect(x + dx - paddingX, y + dy - size / 2 - paddingY, w + 2 * paddingX, size + 2 * paddingY);
+  ctx.fillStyle = color;
+  ctx.fillText(text, x + dx, y + dy);
+  ctx.restore();
+}
+
+function drawThetaAnnotation(ctx, canvas, particle, basis, t){
+  const theta = particle.theta;
+  const center = particle.pScatter;
+  const ePerp = normalize({x:0, y:particle.ey, z:particle.ez});
+  const incidentDir = {x:1, y:0, z:0};
+  const color = "#7ee7ff";
+  const radius = 1.65;
+  const extension = 2.45;
+  const nseg = Math.max(18, Math.ceil(rad2deg(theta) / 4));
+  const arc = [];
+
+  for (let i = 0; i <= nseg; i++) {
+    const a = theta * i / nseg;
+    arc.push(add(center, add(mul(radius * Math.cos(a), incidentDir), mul(radius * Math.sin(a), ePerp))));
+  }
+
+  const incomingRef = [center, add(center, mul(extension, incidentDir))];
+  const outgoingRef = [center, add(center, mul(extension, particle.dirOut))];
+  const labelPoint = add(center, add(mul((radius + 0.55) * Math.cos(theta / 2), incidentDir), mul((radius + 0.55) * Math.sin(theta / 2), ePerp)));
+
+  drawProjectedPolyline(ctx, canvas, incomingRef, basis, color, 1.5, 0.68, [5,5]);
+  drawProjectedPolyline(ctx, canvas, outgoingRef, basis, color, 2.4, 0.9);
+  drawProjectedPolyline(ctx, canvas, arc, basis, color, 3.2, t < 0.43 ? 0.45 : 0.95);
+  drawProjectedText(ctx, canvas, labelPoint, basis, `θ = ${rad2deg(theta).toFixed(1)}°`, {color, size:16});
+  drawProjectedText(ctx, canvas, add(center, {x:-0.1, y:particle.ey * 2.55, z:particle.ez * 2.55}), basis, `b = ${particle.b.toFixed(2)} fm`, {color:"#d6f7ff", size:13, dx:4, dy:18});
+}
+
+function drawClassical(k, data){
+  const ctx = classicalCtx;
+  const canvas = classicalCanvas;
+  clearCanvas(ctx, canvas);
+  const t = k / Math.max(1, data.frames - 1);
+  const basis = cameraBasis(k);
+
+  const beamLine = [{x:-12, y:0, z:0}, {x:0, y:0, z:0}];
+  drawProjectedPolyline(ctx, canvas, beamLine, basis, "#4da3ff", 5, 0.9);
+
+  for (const z of [-6,-4,-2,0,2,4,6]) {
+    drawProjectedPolyline(ctx, canvas, [{x:-12, y:-6, z}, {x:13, y:-6, z}], basis, "#ffffff", 0.8, 0.08);
+    drawProjectedPolyline(ctx, canvas, [{x:-12, y:z, z:-6}, {x:13, y:z, z:-6}], basis, "#ffffff", 0.8, 0.08);
+  }
+
+  drawProjectedPolyline(ctx, canvas, [{x:-13, y:0, z:0}, {x:13, y:0, z:0}], basis, "#dce6f7", 1.5, 0.25);
+  drawProjectedPolyline(ctx, canvas, [{x:0, y:-8, z:0}, {x:0, y:8, z:0}], basis, "#dce6f7", 1.5, 0.2);
+  drawProjectedPolyline(ctx, canvas, [{x:0, y:0, z:-8}, {x:0, y:0, z:8}], basis, "#dce6f7", 1.5, 0.2);
+
+  for (let i = 0; i < data.particles.length; i++) {
+    if (i === data.selectedParticleIndex) continue;
+    const p = data.particles[i];
+    const trail = particleTrail(p, t);
+    drawProjectedPolyline(ctx, canvas, trail, basis, "#ffb347", 2, 0.48);
+  }
+
+  const positions = data.particles
+    .map((p, i) => ({pos: particlePosition(p, t), index:i}))
+    .sort((a,b) => dot(a.pos,basis.view) - dot(b.pos,basis.view));
+  for (const item of positions) {
+    if (item.index === data.selectedParticleIndex) continue;
+    drawProjectedPoint(ctx, canvas, item.pos, basis, "#f2f2f2", 4, "#000");
+  }
+
+  const selected = data.selectedParticle;
+  const selectedTrail = particleTrail(selected, t, 0.34, 24);
+  drawProjectedPolyline(ctx, canvas, selectedTrail, basis, "#7ee7ff", 4, 0.95);
+  drawThetaAnnotation(ctx, canvas, selected, basis, t);
+  drawProjectedPoint(ctx, canvas, particlePosition(selected, t), basis, "#7ee7ff", 7, "#000");
+
+  drawProjectedPoint(ctx, canvas, {x:0, y:0, z:0}, basis, "#ff6b6b", 17, "#000");
+
+  const cone = [];
+  for (let i = 0; i <= 160; i++) {
+    const a = TAU * i / 160;
+    const r = 4.8;
+    cone.push({x:6, y:r*Math.cos(a), z:r*Math.sin(a)});
+  }
+  drawProjectedPolyline(ctx, canvas, cone, basis, "#ffffff", 1.2, 0.18, [6,6]);
+
+  ctx.save();
+  ctx.fillStyle = "#e9eef8";
+  ctx.font = "18px system-ui, sans-serif";
+  ctx.fillText(`Classical Rutherford scattering: Z₁=${data.Z1}, Z₂=${data.Z2}, E=${data.E.toFixed(2)} MeV`, 18, 30);
+  ctx.font = "13px system-ui, sans-serif";
+  ctx.fillStyle = "#aab4c6";
+  ctx.fillText("Small impact parameters are deflected most strongly; particle distance scales are visualized, not drawn to nuclear scale.", 18, 54);
+  ctx.restore();
+}
+
+function makePlotMapper(canvas, xmin, xmax, ymin, ymax, padLeft = 52, padRight = 22, padTop = 24, padBottom = 44){
+  return function(x, y){
+    const px = padLeft + (x - xmin) / (xmax - xmin) * (canvas.width - padLeft - padRight);
+    const py = canvas.height - padBottom - (y - ymin) / (ymax - ymin) * (canvas.height - padTop - padBottom);
+    return [px, py];
+  };
+}
+
+function drawAxes2D(ctx, canvas, xmin, xmax, ymin, ymax, xLabel, yLabel){
+  const map = makePlotMapper(canvas, xmin, xmax, ymin, ymax);
+  ctx.save();
+  ctx.strokeStyle = "rgba(255,255,255,.15)";
+  ctx.fillStyle = "#aab4c6";
+  ctx.font = "12px system-ui, sans-serif";
+  ctx.lineWidth = 1;
+
+  for (let i = 0; i <= 4; i++) {
+    const x = xmin + (xmax - xmin) * i / 4;
+    const [px] = map(x, ymin);
+    ctx.beginPath(); ctx.moveTo(px, 24); ctx.lineTo(px, canvas.height - 44); ctx.stroke();
+    ctx.fillText(x.toFixed(0), px - 10, canvas.height - 20);
+  }
+  for (let i = 0; i <= 4; i++) {
+    const y = ymin + (ymax - ymin) * i / 4;
+    const [, py] = map(xmin, y);
+    ctx.beginPath(); ctx.moveTo(52, py); ctx.lineTo(canvas.width - 22, py); ctx.stroke();
+    ctx.fillText(y.toFixed(1), 8, py + 4);
+  }
+  ctx.strokeStyle = "rgba(255,255,255,.55)";
+  ctx.strokeRect(52, 24, canvas.width - 74, canvas.height - 68);
+  ctx.fillStyle = "#dce6f7";
+  ctx.fillText(xLabel, canvas.width / 2 - 36, canvas.height - 8);
+  ctx.save();
+  ctx.translate(16, canvas.height / 2 + 50);
+  ctx.rotate(-Math.PI / 2);
+  ctx.fillText(yLabel, 0, 0);
+  ctx.restore();
+  ctx.restore();
+}
+
+function drawPolyline2D(ctx, points, color, width = 2, alpha = 1, dash = []){
+  ctx.save();
+  ctx.strokeStyle = color;
+  ctx.globalAlpha = alpha;
+  ctx.lineWidth = width;
+  ctx.setLineDash(dash);
+  ctx.beginPath();
+  let started = false;
+  for (const [x, y] of points) {
+    if (!Number.isFinite(x) || !Number.isFinite(y)) { started = false; continue; }
+    if (!started) { ctx.moveTo(x, y); started = true; }
+    else ctx.lineTo(x, y);
+  }
+  ctx.stroke();
+  ctx.restore();
+}
+
+function drawCrossSection(data){
+  const ctx = crossCtx;
+  const canvas = crossCanvas;
+  clearCanvas(ctx, canvas);
+  const ysC = data.sigmaC.map(s => Math.log10(1 + s));
+  const ysQ = data.sigmaQ.map(s => Math.log10(1 + s));
+  const ymin = Math.min(...ysC, ...ysQ);
+  const ymax = Math.max(...ysC, ...ysQ);
+  const margin = Math.max(0.2, 0.06 * (ymax - ymin));
+  const map = makePlotMapper(canvas, 3, 180, ymin - margin, ymax + margin);
+
+  drawAxes2D(ctx, canvas, 3, 180, ymin - margin, ymax + margin, "θ [degree]", "log10(1+dσ/dΩ)");
+
+  const ptsC = data.thetaSamples.map((theta, i) => map(rad2deg(theta), ysC[i]));
+  const ptsQ = data.thetaSamples.map((theta, i) => map(rad2deg(theta), ysQ[i]));
+  drawPolyline2D(ctx, ptsC, "#b792ff", 4, 0.9);
+  drawPolyline2D(ctx, ptsQ, "#ffb347", 3, 0.92, [9, 6]);
+
+  if (data.selectedParticle) {
+    const thetaDeg = rad2deg(data.selectedParticle.theta);
+    const yTheta = Math.log10(1 + rutherfordDsigma(data.selectedParticle.theta, data.Z1, data.Z2, data.E));
+    const [mx, my] = map(thetaDeg, yTheta);
+    ctx.save();
+    ctx.strokeStyle = "#7ee7ff";
+    ctx.lineWidth = 2;
+    ctx.setLineDash([6, 6]);
+    ctx.beginPath();
+    ctx.moveTo(mx, 24);
+    ctx.lineTo(mx, canvas.height - 44);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = "#7ee7ff";
+    ctx.beginPath();
+    ctx.arc(mx, my, 5.5, 0, TAU);
+    ctx.fill();
+    ctx.strokeStyle = "#000";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    ctx.font = "700 12px system-ui, sans-serif";
+    ctx.fillStyle = "#d6f7ff";
+    ctx.fillText(`θ = ${thetaDeg.toFixed(1)}°`, Math.min(mx + 8, canvas.width - 86), Math.max(42, my - 10));
+    ctx.restore();
+  }
+
+  ctx.save();
+  ctx.fillStyle = "#e9eef8";
+  ctx.font = "15px system-ui, sans-serif";
+  ctx.fillText("Differential cross section", 60, 48);
+  ctx.font = "12px system-ui, sans-serif";
+  ctx.fillStyle = "#b792ff";
+  ctx.fillRect(canvas.width - 168, 36, 20, 3);
+  ctx.fillText("classical Rutherford", canvas.width - 140, 41);
+  ctx.fillStyle = "#ffb347";
+  ctx.fillRect(canvas.width - 168, 58, 20, 3);
+  ctx.fillText("quantum Coulomb", canvas.width - 140, 63);
+  ctx.restore();
+}
+
+function balanceColor(v){
+  const t = clamp((v + 8) / 16, 0, 1);
+  let r, g, b;
+  if (t < 0.5) {
+    const u = t / 0.5;
+    r = Math.round(35 + 185 * u);
+    g = Math.round(82 + 148 * u);
+    b = Math.round(168 + 70 * u);
+  } else {
+    const u = (t - 0.5) / 0.5;
+    r = Math.round(220 + 20 * u);
+    g = Math.round(230 - 160 * u);
+    b = Math.round(238 - 170 * u);
+  }
+  return [r, g, b];
+}
+
+function drawWave(k, data){
+  const ctx = waveCtx;
+  const canvas = waveCanvas;
+  clearCanvas(ctx, canvas);
+  const {nx, ny, psi} = data.wave;
+  const phase = TAU * 4 * (k / Math.max(1, data.frames - 1));
+  const c = Math.cos(-phase);
+  const s = Math.sin(-phase);
+
+  const xmin = -70, xmax = 70, ymin = -60, ymax = 60;
+  const padLeft = 48, padRight = 16, padTop = 20, padBottom = 36;
+  const w = canvas.width - padLeft - padRight;
+  const h = canvas.height - padTop - padBottom;
+  const image = ctx.createImageData(w, h);
+
+  function mapWave(x, y){
+    return [
+      padLeft + (x - xmin) / (xmax - xmin) * w,
+      padTop + h * (1 - (y - ymin) / (ymax - ymin))
+    ];
+  }
+
+  function drawLabel(text, x, y, color = "#e9eef8", size = 12, align = "left"){
+    const lines = String(text).split("\\n");
+    ctx.save();
+    ctx.font = `700 ${size}px system-ui, sans-serif`;
+    ctx.textBaseline = "middle";
+    ctx.textAlign = align;
+    const lineHeight = size + 4;
+    const widths = lines.map(line => ctx.measureText(line).width);
+    const boxW = Math.max(...widths) + 14;
+    const boxH = lineHeight * lines.length + 8;
+    let left = align === "center" ? x - boxW / 2 : align === "right" ? x - boxW : x;
+    let top = y - boxH / 2;
+    left = clamp(left, 4, canvas.width - boxW - 4);
+    top = clamp(top, 4, canvas.height - boxH - 4);
+    ctx.fillStyle = "rgba(0,0,0,.66)";
+    ctx.fillRect(left, top, boxW, boxH);
+    ctx.strokeStyle = "rgba(255,255,255,.24)";
+    ctx.strokeRect(left, top, boxW, boxH);
+    ctx.fillStyle = color;
+    const textX = align === "center" ? left + boxW / 2 : align === "right" ? left + boxW - 7 : left + 7;
+    for (let i = 0; i < lines.length; i++) {
+      ctx.fillText(lines[i], textX, top + 7 + lineHeight * (i + 0.5));
+    }
+    ctx.restore();
+  }
+
+  function drawArrow(x1, y1, x2, y2, color, width = 2, alpha = 1, dash = []){
+    const ang = Math.atan2(y2 - y1, x2 - x1);
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    ctx.strokeStyle = color;
+    ctx.fillStyle = color;
+    ctx.lineWidth = width;
+    ctx.setLineDash(dash);
+    ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+    ctx.setLineDash([]);
+    const head = 9 + width;
+    ctx.beginPath();
+    ctx.moveTo(x2, y2);
+    ctx.lineTo(x2 - head * Math.cos(ang - 0.45), y2 - head * Math.sin(ang - 0.45));
+    ctx.lineTo(x2 - head * Math.cos(ang + 0.45), y2 - head * Math.sin(ang + 0.45));
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+  }
+
+  function drawMappedPolyline(points, color, width = 2, alpha = 1, dash = []){
+    ctx.save();
+    ctx.strokeStyle = color;
+    ctx.globalAlpha = alpha;
+    ctx.lineWidth = width;
+    ctx.setLineDash(dash);
+    ctx.beginPath();
+    let started = false;
+    for (const [xPhys, yPhys] of points) {
+      const [px, py] = mapWave(xPhys, yPhys);
+      if (!started) { ctx.moveTo(px, py); started = true; }
+      else ctx.lineTo(px, py);
+    }
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  for (let py = 0; py < h; py++) {
+    const iy = Math.floor((1 - py / Math.max(1, h - 1)) * (ny - 1));
+    for (let px = 0; px < w; px++) {
+      const ix = Math.floor(px / Math.max(1, w - 1) * (nx - 1));
+      const z = psi[ix * ny + iy];
+      const re = z.re * c - z.im * s;
+      const value = Math.asinh(re);
+      const [r, g, b] = balanceColor(value);
+      const idx = 4 * (py * w + px);
+      image.data[idx] = r;
+      image.data[idx+1] = g;
+      image.data[idx+2] = b;
+      image.data[idx+3] = 255;
+    }
+  }
+  ctx.putImageData(image, padLeft, padTop);
+
+  ctx.save();
+  ctx.beginPath();
+  ctx.rect(padLeft, padTop, w, h);
+  ctx.clip();
+
+  // Faint outgoing circular-wave guides centered at the target.
+  ctx.strokeStyle = "rgba(255,255,255,.20)";
+  ctx.lineWidth = 1.2;
+  for (const rr of [14, 28, 42, 56]) {
+    const [cx, cy] = mapWave(0, 0);
+    ctx.beginPath();
+    ctx.ellipse(cx, cy, rr * w / (xmax - xmin), rr * h / (ymax - ymin), 0, 0, TAU);
+    ctx.stroke();
+  }
+
+  // Incoming plane-wave fronts before the target.
+  ctx.strokeStyle = "rgba(77,163,255,.45)";
+  ctx.lineWidth = 1.5;
+  ctx.setLineDash([5, 5]);
+  for (const xx of [-60, -48, -36, -24, -12]) {
+    const [x1, y1] = mapWave(xx, -54);
+    const [x2, y2] = mapWave(xx, 54);
+    ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+  }
+  ctx.setLineDash([]);
+  ctx.restore();
+
+  // Grid, frame, and numeric coordinate cues.
+  ctx.save();
+  ctx.strokeStyle = "rgba(255,255,255,.55)";
+  ctx.strokeRect(padLeft, padTop, w, h);
+  ctx.strokeStyle = "rgba(255,255,255,.18)";
+  ctx.lineWidth = 1;
+  ctx.fillStyle = "#aab4c6";
+  ctx.font = "11px system-ui, sans-serif";
+  for (let i = 1; i < 4; i++) {
+    const x = padLeft + w * i / 4;
+    const y = padTop + h * i / 4;
+    ctx.beginPath(); ctx.moveTo(x, padTop); ctx.lineTo(x, padTop + h); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(padLeft, y); ctx.lineTo(padLeft + w, y); ctx.stroke();
+  }
+  for (const xx of [-70, 0, 70]) {
+    const [px] = mapWave(xx, ymin);
+    ctx.fillText(String(xx), px - 10, canvas.height - 21);
+  }
+  for (const yy of [-60, 0, 60]) {
+    const [, py] = mapWave(xmin, yy);
+    ctx.fillText(String(yy), 8, py + 4);
+  }
+  ctx.fillStyle = "#dce6f7";
+  ctx.font = "12px system-ui, sans-serif";
+  ctx.fillText("x [fm]", canvas.width / 2 - 16, canvas.height - 8);
+  ctx.save();
+  ctx.translate(14, canvas.height / 2 + 18);
+  ctx.rotate(-Math.PI / 2);
+  ctx.fillText("y [fm]", 0, 0);
+  ctx.restore();
+  ctx.restore();
+
+  const [ox, oy] = mapWave(0, 0);
+
+  // Forward beam direction and theta reference axis.
+  const [beamStartX, beamStartY] = mapWave(-64, 0);
+  const [beamEndX, beamEndY] = mapWave(64, 0);
+  drawArrow(beamStartX, beamStartY, beamEndX, beamEndY, "#4da3ff", 2.5, 0.92);
+  drawLabel("θ = 0° forward", beamEndX - 112, beamEndY + 23, "#d6e9ff", 18);
+  drawLabel("θ = 180° back", beamStartX + 4, beamStartY + 23, "#d6e9ff", 18);
+
+  // Reference rays make the polar angle convention explicit.
+  for (const refDeg of [30, 90, 150]) {
+    const ref = deg2rad(refDeg);
+    const rRef = 50;
+    drawMappedPolyline([[0,0], [rRef * Math.cos(ref), rRef * Math.sin(ref)]], "#ffffff", 1.2, 0.26, [4, 6]);
+    const [rx, ry] = mapWave((rRef + 4) * Math.cos(ref), (rRef + 4) * Math.sin(ref));
+  }
+
+  // The highlighted classical angle is the same angle used by the quantum amplitude f(theta).
+  const theta = data.selectedParticle ? data.selectedParticle.theta : deg2rad(90);
+  const thetaDeg = rad2deg(theta);
+  const rTheta = 58;
+  const xTheta = rTheta * Math.cos(theta);
+  const yTheta = rTheta * Math.sin(theta);
+  const [tx, ty] = mapWave(xTheta, yTheta);
+  drawArrow(ox, oy, tx, ty, "#7ee7ff", 3.2, 0.95, [7, 5]);
+
+  const arcPts = [];
+  const nArc = Math.max(24, Math.ceil(thetaDeg / 3));
+  const arcR = 20;
+  for (let i = 0; i <= nArc; i++) {
+    const a = theta * i / nArc;
+    arcPts.push([arcR * Math.cos(a), arcR * Math.sin(a)]);
+  }
+  drawMappedPolyline(arcPts, "#7ee7ff", 3, 0.95);
+  const [labelThetaX, labelThetaY] = mapWave((arcR + 10) * Math.cos(theta / 2), (arcR + 10) * Math.sin(theta / 2));
+  drawLabel(`θ = ${thetaDeg.toFixed(1)}°`, labelThetaX, labelThetaY, "#d6f7ff", 18, "center");
+  // Target marker and scattered-wave label.
+  ctx.save();
+  ctx.fillStyle = "#ff6b6b";
+  ctx.beginPath(); ctx.arc(ox, oy, 6.5, 0, TAU); ctx.fill();
+  ctx.strokeStyle = "#000"; ctx.lineWidth = 2; ctx.stroke();
+  ctx.restore();
+
+  // Compact color scale for the heat map.
+  const cbX = padLeft + w - 18;
+  const cbY = padTop + 18;
+  const cbW = 10;
+  const cbH = 92;
+  ctx.save();
+  for (let i = 0; i < cbH; i++) {
+    const v = 8 - 16 * i / Math.max(1, cbH - 1);
+    const [r, g, b] = balanceColor(v);
+    ctx.fillStyle = `rgb(${r},${g},${b})`;
+    ctx.fillRect(cbX, cbY + i, cbW, 1);
+  }
+  ctx.strokeStyle = "rgba(255,255,255,.7)";
+  ctx.strokeRect(cbX, cbY, cbW, cbH);
+  ctx.fillStyle = "#000000";
+  ctx.font = "17px system-ui, sans-serif";
+  ctx.fillText("+8", cbX - 19, cbY + 7);
+  ctx.fillText("0", cbX - 13, cbY + cbH / 2 + 4);
+  ctx.fillText("-8", cbX - 18, cbY + cbH);
+  ctx.save();
+  ctx.translate(cbX - 30, cbY + cbH + 52);
+  ctx.rotate(-Math.PI / 2);
+  ctx.fillText("asinh(Re ψ)", 0, 0);
+  ctx.restore();
+  ctx.restore();
+
+  ctx.save();
+  ctx.fillStyle = "#000000";
+  ctx.font = "15px system-ui, sans-serif";
+  ctx.fillText("Quantum wave: ψ = ψᵢₙ + ψₛ", 58, 42);
+  ctx.restore();
+}
+
+function updateStats(data){
+  const a = KE2 * data.Z1 * data.Z2 / (2 * data.E);
+  const {k, eta} = quantumParams(data.Z1, data.Z2, data.E);
+  const sigma30c = rutherfordDsigma(deg2rad(30), data.Z1, data.Z2, data.E);
+  const sigma90c = rutherfordDsigma(deg2rad(90), data.Z1, data.Z2, data.E);
+  const sigma150c = rutherfordDsigma(deg2rad(150), data.Z1, data.Z2, data.E);
+  const sigma30q = quantumCoulombDsigma(deg2rad(30), data.Z1, data.Z2, data.E);
+  const sigma90q = quantumCoulombDsigma(deg2rad(90), data.Z1, data.Z2, data.E);
+  const sigma150q = quantumCoulombDsigma(deg2rad(150), data.Z1, data.Z2, data.E);
+
+  metricA.textContent = `a = ${a.toFixed(4)} fm`;
+  metricK.textContent = `k = ${k.toFixed(4)} fm⁻¹`;
+  metricEta.textContent = `η = ${eta.toFixed(4)}`;
+  metricSigma.innerHTML = `30°: ${sigma30c.toExponential(3)} / ${sigma30q.toExponential(3)}<br>90°: ${sigma90c.toExponential(3)} / ${sigma90q.toExponential(3)}<br>150°: ${sigma150c.toExponential(3)} / ${sigma150q.toExponential(3)}`;
+  if (data.selectedParticle) {
+    metricTheta.textContent = `θ = ${rad2deg(data.selectedParticle.theta).toFixed(2)}°`;
+    metricB.textContent = `b = ${data.selectedParticle.b.toFixed(3)} fm`;
+  }
+  metricTime.textContent = "frame 1 / 180";
+}
+
+function updateFrameMetrics(k){
+  metricTime.textContent = `frame ${String(k + 1).padStart(3,"0")} / ${FRAMES}`;
+}
+
+function drawAll(k, data){
+  drawClassical(k, data);
+  drawCrossSection(data);
+  drawWave(k, data);
+  updateFrameMetrics(k);
+}
+
+function readParams(){
+  return {
+    Z1: parseInt(document.getElementById("z1").value, 10),
+    Z2: parseInt(document.getElementById("z2").value, 10),
+    E: parseFloat(document.getElementById("energy").value),
+    N: parseInt(document.getElementById("particleCount").value, 10),
+    bmin: parseFloat(document.getElementById("bMin").value),
+    bmax: parseFloat(document.getElementById("bMax").value),
+    speed: parseFloat(document.getElementById("speed").value)
+  };
+}
+
+function startSimulation(){
+  try {
+    simData = simulate(readParams());
+    frameIndex = 0;
+    lastTime = 0;
+    updateStats(simData);
+    drawAll(0, simData);
+  } catch (err) {
+    alert(err.message);
+  }
+}
+
+function animate(timestamp){
+  if (!simData) return requestAnimationFrame(animate);
+  if (!lastTime) lastTime = timestamp;
+  const elapsed = timestamp - lastTime;
+  if (elapsed >= FRAME_DURATION) {
+    drawAll(frameIndex, simData);
+    const step = Math.max(1, Math.round(simData.speed || 1));
+    frameIndex = (frameIndex + step) % simData.frames;
+    lastTime = timestamp;
+  }
+  requestAnimationFrame(animate);
+}
+
+window.addEventListener("resize", () => { if (simData) drawAll(frameIndex, simData); });
+document.getElementById("restartBtn").addEventListener("click", startSimulation);
+startSimulation();
+requestAnimationFrame(animate);
+</script>
+</body>
+</html>
