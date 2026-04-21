@@ -261,6 +261,7 @@
         <p>@ NTHU 2026 spring</p>
       </div>
       <nav class="nav" aria-label="Primary">
+       
         <a href="mechanics.html">Back to <em>Theoretical Mechanics Visualization</em></a>
       </nav>
     </div>
@@ -278,7 +279,7 @@
             This page visualizes alpha particles approaching a heavy Coulomb target. The large panel shows the
             classical beam and scattered particles. The two right panels compare the classical Rutherford and quantum
             Coulomb differential cross sections, and show the real part of an incident plane wave plus an outgoing
-            Coulomb scattered wave.
+            Coulomb scattered wave. 
           </p>
           <div class="formula">
             $$\frac{d\sigma}{d\Omega}=\left(\frac{k_e Z_1 Z_2}{4E}\right)^2\frac{1}{\sin^4(\theta/2)},\qquad
@@ -291,7 +292,8 @@
           <p>
             Default settings use an alpha particle, $Z_1=2$, gold target, $Z_2=79$, and kinetic energy
             $E=5\,\mathrm{MeV}$. Change the controls below and press simulate again. Pure Coulomb scattering gives
-            the same angular dependence in the classical and quantum differential cross sections.
+            the same angular dependence in the classical and quantum differential cross sections. The detailed theoretical explaination can be found in page 319 of  
+            <a href=" https://www.damtp.cam.ac.uk/user/tong/aqm/aqmten.pdf"><em>this</em></a> amazing reference.
           </p>
         </div>
       </div>
@@ -406,14 +408,10 @@
               <div class="legend-row"><span class="dot" style="background:#ff6b6b"></span> Coulomb target nucleus</div>
               <div class="legend-row"><span class="dot" style="background:#f2f2f2"></span> Alpha particles</div>
               <div class="legend-row"><span class="line" style="border-color:#4da3ff"></span> Incident beam direction</div>
-              <div class="legend-row"><span class="line" style="border-color:#ffb347"></span> Particle trail / path so far</div>
-              <div class="legend-row"><span class="line" style="border-color:#b792ff"></span> Classical Rutherford curve</div>
-              <div class="legend-row"><span class="line" style="border-color:#ffb347"></span> Quantum Coulomb curve</div>
+              <div class="legend-row"><span class="line" style="border-color:#ffb347"></span> Particle path so far</div>
               <div class="legend-row"><span class="line" style="border-color:#7ee7ff"></span> Highlighted <code>θ</code> angle marker</div>
               <div class="legend-row"><span class="dot" style="background:#7ee7ff"></span> Highlighted particle used for <code>θ</code></div>
-              <div class="legend-row"><span class="line" style="border-color:#d6f7ff"></span> Large quantum panel: radial ray for same <code>θ</code></div>
-              <div class="legend-row"><span class="line" style="border-color:#ffffff"></span> Faint outgoing wavefront guides</div>
-            </div>
+              </div>
           </div>
         </div>
       </div>
@@ -933,10 +931,10 @@ function drawCrossSection(data){
   ctx.fillText("Differential cross section", 60, 48);
   ctx.font = "12px system-ui, sans-serif";
   ctx.fillStyle = "#b792ff";
-  ctx.fillRect(canvas.width - 168, 36, 20, 3);
+  ctx.fillRect(canvas.width - 198, 36, 50, 3);
   ctx.fillText("classical Rutherford", canvas.width - 140, 41);
   ctx.fillStyle = "#ffb347";
-  ctx.fillRect(canvas.width - 168, 58, 20, 3);
+  ctx.fillRect(canvas.width - 198, 58, 50, 3);
   ctx.fillText("quantum Coulomb", canvas.width - 140, 63);
   ctx.restore();
 }

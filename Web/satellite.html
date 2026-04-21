@@ -499,7 +499,7 @@
           </div>
           <div class="panel">
             <div class="panel-title">Zoomed ground track</div>
-            <canvas id="groundCanvas" width="560" height="360" aria-label="Ground track animation"></canvas>
+            <canvas id="groundCanvas" width="640" height="420" aria-label="Ground track animation"></canvas>
           </div>
           <div class="panel">
             <div class="panel-title">Observer sky view</div>
@@ -985,46 +985,67 @@ function drawEarth(k, data){
   ctx.fillStyle = "#e9eef8";
   ctx.font = "18px system-ui, sans-serif";
   ctx.fillText(`Inclined GEO, i = ${data.inclinationDeg.toFixed(1)}°, e = ${data.eccentricity.toFixed(3)}`, 18, 30);
-  ctx.font = "13px system-ui, sans-serif";
+  ctx.font = "17px system-ui, sans-serif";
   ctx.fillStyle = "#aab4c6";
   ctx.fillText("Dashed magenta circle marks the observer latitude; satellite distance is visually compressed.", 18, 52);
   ctx.restore();
 }
 
+function plotPadding(pad = 38){
+  if (typeof pad === "number") {
+    return { left: pad, right: pad, top: pad, bottom: pad };
+  }
+  return {
+    left: pad.left ?? 38,
+    right: pad.right ?? 38,
+    top: pad.top ?? 38,
+    bottom: pad.bottom ?? 38
+  };
+}
+
 function makePlotMapper(canvas, xmin, xmax, ymin, ymax, pad = 38){
+  const p = plotPadding(pad);
   return function(x, y){
-    const px = pad + (x - xmin) / (xmax - xmin) * (canvas.width - 2 * pad);
-    const py = canvas.height - pad - (y - ymin) / (ymax - ymin) * (canvas.height - 2 * pad);
+    const px = p.left + (x - xmin) / (xmax - xmin) * (canvas.width - p.left - p.right);
+    const py = canvas.height - p.bottom - (y - ymin) / (ymax - ymin) * (canvas.height - p.top - p.bottom);
     return [px, py];
   };
 }
 
-function drawAxes2D(ctx, canvas, xmin, xmax, ymin, ymax, xLabel, yLabel){
-  const map = makePlotMapper(canvas, xmin, xmax, ymin, ymax);
+function drawAxes2D(ctx, canvas, xmin, xmax, ymin, ymax, xLabel, yLabel, pad = 38){
+  const p = plotPadding(pad);
+  const map = makePlotMapper(canvas, xmin, xmax, ymin, ymax, p);
+  const plotLeft = p.left;
+  const plotRight = canvas.width - p.right;
+  const plotTop = p.top;
+  const plotBottom = canvas.height - p.bottom;
+
   ctx.save();
   ctx.strokeStyle = "rgba(255,255,255,.15)";
   ctx.fillStyle = "#aab4c6";
-  ctx.font = "12px system-ui, sans-serif";
+  ctx.font = "17px system-ui, sans-serif";
   ctx.lineWidth = 1;
 
   for (let i = 0; i <= 4; i++) {
     const x = xmin + (xmax - xmin) * i / 4;
     const [px] = map(x, ymin);
-    ctx.beginPath(); ctx.moveTo(px, 24); ctx.lineTo(px, canvas.height - 32); ctx.stroke();
-    ctx.fillText(x.toFixed(1), px - 14, canvas.height - 12);
+    ctx.beginPath(); ctx.moveTo(px, plotTop); ctx.lineTo(px, plotBottom); ctx.stroke();
+    const label = x.toFixed(1);
+    ctx.fillText(label, px - ctx.measureText(label).width / 2, plotBottom + 22);
   }
   for (let i = 0; i <= 4; i++) {
     const y = ymin + (ymax - ymin) * i / 4;
     const [, py] = map(xmin, y);
-    ctx.beginPath(); ctx.moveTo(32, py); ctx.lineTo(canvas.width - 24, py); ctx.stroke();
-    ctx.fillText(y.toFixed(1), 4, py + 4);
+    ctx.beginPath(); ctx.moveTo(plotLeft, py); ctx.lineTo(plotRight, py); ctx.stroke();
+    const label = y.toFixed(1);
+    ctx.fillText(label, plotLeft - ctx.measureText(label).width - 10, py + 4);
   }
   ctx.strokeStyle = "rgba(255,255,255,.55)";
-  ctx.strokeRect(38, 24, canvas.width - 76, canvas.height - 62);
+  ctx.strokeRect(plotLeft, plotTop, plotRight - plotLeft, plotBottom - plotTop);
   ctx.fillStyle = "#dce6f7";
-  ctx.fillText(xLabel, canvas.width / 2 - 40, canvas.height - 12);
+  ctx.fillText(xLabel, canvas.width / 2 - ctx.measureText(xLabel).width / 2, canvas.height - 14);
   ctx.save();
-  ctx.translate(14, canvas.height / 2 + 38);
+  ctx.translate(18, canvas.height / 2 + ctx.measureText(yLabel).width / 2);
   ctx.rotate(-Math.PI / 2);
   ctx.fillText(yLabel, 0, 0);
   ctx.restore();
@@ -1068,17 +1089,28 @@ function drawGroundTrack(k, data){
   const xmax = data.satLonDeg + data.lonMargin;
   const ymin = -data.latMargin;
   const ymax = data.latMargin;
-  const map = makePlotMapper(canvas, xmin, xmax, ymin, ymax);
+  const pad = { left: 68, right: 12, top: 64, bottom: 66 };
+  const map = makePlotMapper(canvas, xmin, xmax, ymin, ymax, pad);
 
-  drawAxes2D(ctx, canvas, xmin, xmax, ymin, ymax, "Longitude [deg]", "Latitude [deg]");
+  drawAxes2D(ctx, canvas, xmin, xmax, ymin, ymax, "Longitude [deg]", "Latitude [deg]", pad);
+
+  ctx.save();
+  ctx.fillStyle = "#e9eef8";
+  ctx.font = "20px system-ui, sans-serif";
+  ctx.fillText("Ground track", pad.left, 34);
+  ctx.restore();
 
   const observerLatitudeLine = [map(xmin, data.launchLatDeg), map(xmax, data.launchLatDeg)];
   drawPolyline2D(ctx, observerLatitudeLine, "#ff77c8", 2, 0.9, [8, 6]);
   const [, obsLatY] = map(xmin, data.launchLatDeg);
+  const obsLabel = `Observer latitude ${data.launchLatDeg.toFixed(3)}°`;
   ctx.save();
   ctx.fillStyle = "#ffb3df";
-  ctx.font = "12px system-ui, sans-serif";
-  ctx.fillText(`Observer latitude ${data.launchLatDeg.toFixed(3)}°`, 48, clamp(obsLatY - 8, 38, canvas.height - 42));
+  ctx.font = "17px system-ui, sans-serif";
+  const obsLabelWidth = ctx.measureText(obsLabel).width;
+  const obsLabelX = canvas.width - pad.right - obsLabelWidth - 8;
+  const obsLabelY = clamp(obsLatY - 10, pad.top + 16, canvas.height - pad.bottom - 8);
+  ctx.fillText(obsLabel, obsLabelX, obsLabelY);
   ctx.restore();
 
   const full = data.subLon.map((lon, i) => map(lon, data.subLat[i]));
@@ -1088,12 +1120,6 @@ function drawGroundTrack(k, data){
   drawPoint2D(ctx, ...map(data.subLon[k], data.subLat[k]), "#ffb347", 6);
   drawPoint2D(ctx, ...map(data.satLonDeg, 0), "#ffdf6e", 5);
   drawPoint2D(ctx, ...map(data.launchLonDeg, data.launchLatDeg), "#ff6b6b", 5);
-
-  ctx.save();
-  ctx.fillStyle = "#e9eef8";
-  ctx.font = "15px system-ui, sans-serif";
-  ctx.fillText("Figure‑8 ground track", 48, 48);
-  ctx.restore();
 }
 
 function drawSky(k, data){
@@ -1148,7 +1174,7 @@ function drawSky(k, data){
 
   ctx.save();
   ctx.fillStyle = "#e9eef8";
-  ctx.font = "15px system-ui, sans-serif";
+  ctx.font = "20px system-ui, sans-serif";
   ctx.fillText("Observer sky path", 42, 34);
   ctx.restore();
 }
