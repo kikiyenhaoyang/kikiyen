@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Geometrical Optics — Poisson Variety Interactive</title>
+<meta name="description" content="Interactive visualization of the Lie–Poisson variety C=XY−Z² for axisymmetric geometrical optics and parabolic GRIN guided rays." />
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" crossorigin="anonymous"
+  onload="renderMathInElement(document.getElementById('main'),{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});"></script>
+
+<style>
+  :root{
+    --bg:#f6f7fb;
+    --fg:#18212f;
+    --muted:#5f6b7a;
+    --primary:#2563eb;
+    --primary-soft:#dbeafe;
+    --accent:#f59e0b;
+    --good:#22c55e;
+    --warn:#ef4444;
+    --cyan:#06b6d4;
+    --purple:#a855f7;
+    --card:#ffffff;
+    --border:rgba(24,33,47,.12);
+    --ring:#93c5fd;
+    --maxw:1240px;
+    --shadow:0 12px 30px rgba(0,0,0,.08);
+    --code:#0f172a;
+  }
+
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#0b1220;
+      --fg:#e5edf7;
+      --muted:#9aa8ba;
+      --primary:#7cb3ff;
+      --primary-soft:#172554;
+      --accent:#fbbf24;
+      --good:#86efac;
+      --warn:#fca5a5;
+      --cyan:#67e8f9;
+      --purple:#d8b4fe;
+      --card:#101a2c;
+      --border:rgba(255,255,255,.12);
+      --ring:#60a5fa;
+      --shadow:0 12px 30px rgba(0,0,0,.28);
+      --code:#e5edf7;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; scroll-behavior:auto !important;}
+  }
+
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background:linear-gradient(180deg, var(--bg) 0%, color-mix(in oklab, var(--bg), #ffffff 8%) 100%);
+    color:var(--fg);
+    line-height:1.6;
+  }
+  a{color:var(--primary)}
+  .wrapper{max-width:var(--maxw); margin:0 auto; padding:0 18px}
+  .skip-link{position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden;}
+  .skip-link:focus{position:fixed; left:16px; top:16px; width:auto; height:auto; background:#000; color:#fff; padding:8px 12px; border-radius:8px; z-index:1000;}
+
+  header{position:sticky; top:0; z-index:50; background:rgba(255,255,255,.72); backdrop-filter:saturate(180%) blur(14px); border-bottom:1px solid var(--border);}
+  @media (prefers-color-scheme: dark){header{background:rgba(11,18,32,.72)}}
+  .topbar{display:flex; align-items:center; justify-content:space-between; gap:16px; padding:14px 0;}
+  .brand h1{margin:0; font-size:1.16rem; line-height:1.1;}
+  .brand p{margin:4px 0 0; color:var(--muted); font-size:.92rem;}
+  .nav{display:flex; gap:10px; flex-wrap:wrap;}
+  .nav a{text-decoration:none; color:inherit; padding:8px 12px; border:1px solid var(--border); border-radius:999px; background:color-mix(in oklab, var(--card), transparent 10%);}
+  .nav a:hover{color:var(--primary); border-color:color-mix(in oklab, var(--primary), var(--border) 60%)}
+
+  main{padding:30px 0 50px}
+  .hero{background:var(--card); border:1px solid var(--border); border-radius:24px; box-shadow:var(--shadow); padding:28px; margin-bottom:22px;}
+  .hero-badge{display:inline-flex; align-items:center; gap:8px; padding:6px 12px; border-radius:999px; font-size:.9rem; background:var(--primary-soft); color:var(--primary); font-weight:800;}
+  .hero h2{margin:14px 0 10px; font-size:clamp(1.75rem, 4vw, 3rem); line-height:1.1;}
+  .hero p{margin:0; max-width:900px; color:var(--muted); font-size:1.03rem;}
+  .hero-grid{display:grid; grid-template-columns:1.18fr .82fr; gap:18px; align-items:start; margin-top:20px;}
+  .hero-card{background:color-mix(in oklab, var(--card), var(--bg) 18%); border:1px solid var(--border); border-radius:18px; padding:18px;}
+  .hero-card h3{margin:0 0 8px; font-size:1rem}
+  .formula{font-size:.96rem; overflow:auto; margin-top:12px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; background:color-mix(in oklab, var(--card), var(--bg) 22%); border:1px solid var(--border); border-radius:12px; padding:12px; color:var(--code);}
+
+  .sim-grid{display:grid; grid-template-columns:minmax(0,1fr) 360px; gap:18px; align-items:start;}
+  .card{background:var(--card); border:1px solid var(--border); border-radius:20px; box-shadow:var(--shadow); overflow:hidden;}
+  .card + .card{margin-top:18px}
+  .card-head{padding:16px 18px; background:color-mix(in oklab, var(--primary-soft), var(--card) 35%); border-bottom:1px solid var(--border);}
+  .card-head h3{margin:0; font-size:1rem;}
+  .card-body{padding:18px}
+  .panel-grid{display:grid; grid-template-columns:1.15fr 1fr; gap:14px; padding:18px;}
+  .panel{border:1px solid var(--border); border-radius:16px; overflow:hidden; background:#000; min-width:0;}
+  .panel:first-child{grid-row:span 2}
+  .panel-title{padding:10px 12px; background:rgba(255,255,255,.08); color:#e9eef8; font-size:.9rem; border-bottom:1px solid rgba(255,255,255,.14);}
+  canvas{display:block; width:100%; height:auto; background:#000; touch-action:none;}
+
+  .tabs{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px;}
+  .tab{cursor:pointer; border:1px solid var(--border); border-radius:999px; padding:8px 11px; background:color-mix(in oklab, var(--card), var(--bg) 12%); color:var(--fg); font:inherit; font-size:.9rem;}
+  .tab.active{background:var(--primary); color:#fff; border-color:var(--primary); font-weight:800;}
+
+  .knob-grid{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+  .knob-card{border:1px solid var(--border); border-radius:16px; padding:12px; background:color-mix(in oklab, var(--card), var(--bg) 16%); min-width:0;}
+  .knob-card.invariant{border-color:color-mix(in oklab, var(--primary), var(--border) 55%); background:linear-gradient(180deg, color-mix(in oklab, var(--primary-soft), var(--card) 38%), color-mix(in oklab, var(--card), var(--bg) 16%));}
+  .knob{--angle:0deg; --filled:135deg; position:relative; width:104px; height:104px; margin:0 auto 8px; border-radius:50%; border:1px solid rgba(255,255,255,.16); background:radial-gradient(circle at 50% 50%, #111827 0 47%, transparent 48%), conic-gradient(from 225deg, #60a5fa 0 var(--filled), rgba(255,255,255,.12) var(--filled) 270deg, transparent 270deg 360deg), radial-gradient(circle at 35% 28%, #334155 0%, #111827 58%, #020617 100%); box-shadow:inset 0 4px 18px rgba(255,255,255,.08), inset 0 -10px 20px rgba(0,0,0,.45), 0 10px 20px rgba(0,0,0,.16); cursor:grab; user-select:none;}
+  .knob:active{cursor:grabbing}
+  .knob:focus{outline:3px solid var(--ring); outline-offset:3px}
+  .knob::after{content:""; position:absolute; inset:21px; border-radius:50%; background:radial-gradient(circle at 35% 28%, #475569, #111827 58%, #020617); border:1px solid rgba(255,255,255,.15);}
+  .needle{position:absolute; z-index:2; left:50%; top:17px; width:4px; height:37px; border-radius:4px; background:#f8fafc; transform-origin:50% 35px; transform:translateX(-50%) rotate(var(--angle)); box-shadow:0 0 10px rgba(255,255,255,.45);}
+  .knob-dot{position:absolute; z-index:3; left:50%; top:50%; width:10px; height:10px; border-radius:50%; transform:translate(-50%,-50%); background:#f8fafc;}
+  .knob-label{font-size:.86rem; color:var(--muted); text-align:center; line-height:1.25; min-height:2.2em;}
+  .knob-value{text-align:center; font-weight:800; font-size:1.05rem; margin-top:4px;}
+  .knob-hint{font-size:.78rem; text-align:center; color:var(--muted); margin-top:4px;}
+  .button-row{display:flex; gap:10px; flex-wrap:wrap; margin-top:14px;}
+  button.action{cursor:pointer; border:1px solid var(--border); border-radius:12px; padding:10px 12px; background:var(--primary); color:white; font:inherit; font-weight:800;}
+  button.action.secondary{background:var(--card); color:var(--fg)}
+  button.action:focus{outline:3px solid var(--ring); outline-offset:2px}
+
+  .metric-list{display:grid; gap:12px}
+  .metric{border:1px solid var(--border); border-radius:14px; padding:12px 14px; background:color-mix(in oklab, var(--card), var(--bg) 18%);}
+  .metric .label{font-size:.84rem; color:var(--muted); margin-bottom:4px;}
+  .metric .value{font-weight:800; font-size:1rem; word-break:break-word;}
+  .status-pill{display:inline-flex; align-items:center; gap:6px; padding:4px 9px; border-radius:999px; background:color-mix(in oklab, var(--good), transparent 84%); color:color-mix(in oklab, var(--good), var(--fg) 30%); border:1px solid color-mix(in oklab, var(--good), transparent 60%); font-weight:800;}
+  .status-pill.warn{background:color-mix(in oklab, var(--warn), transparent 86%); color:color-mix(in oklab, var(--warn), var(--fg) 20%); border-color:color-mix(in oklab, var(--warn), transparent 60%);}
+  .legend{display:grid; gap:10px}
+  .legend-row{display:flex; align-items:center; gap:10px; color:var(--muted); font-size:.94rem;}
+  .dot{width:12px; height:12px; border-radius:999px; display:inline-block}
+  .line{width:22px; height:0; border-top:3px solid; display:inline-block}
+
+  .relation-table-section{margin-top:22px;}
+  .relation-intro{margin:0 0 14px; color:var(--muted);}
+  .table-wrap{overflow-x:auto; border:1px solid var(--border); border-radius:16px;}
+  .relation-table{width:100%; border-collapse:collapse; min-width:840px; background:var(--card);}
+  .relation-table th,.relation-table td{padding:12px 14px; text-align:left; vertical-align:top; border-bottom:1px solid var(--border);}
+  .relation-table th{background:color-mix(in oklab, var(--primary-soft), var(--card) 28%); color:var(--fg); font-size:.92rem;}
+  .relation-table tr:last-child td{border-bottom:0}
+  .relation-table td:first-child{font-weight:800; white-space:nowrap;}
+  .relation-table code{font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size:.9em; padding:.12em .35em; border-radius:6px; background:color-mix(in oklab, var(--primary-soft), var(--card) 45%); color:var(--primary);}
+  .relation-note{margin:12px 0 0; color:var(--muted); font-size:.92rem;}
+  footer{padding:26px 0 40px; color:var(--muted)}
+  footer .footer-card{border:1px solid var(--border); background:var(--card); border-radius:18px; padding:18px; text-align:center; box-shadow:var(--shadow);}
+
+  @media (max-width:1080px){.hero-grid{grid-template-columns:1fr}.sim-grid{grid-template-columns:1fr}.topbar{flex-direction:column; align-items:flex-start}}
+  @media (max-width:820px){.panel-grid{grid-template-columns:1fr}.panel:first-child{grid-row:auto}}
+  @media (max-width:520px){.knob-grid{grid-template-columns:1fr}.hero{padding:20px}}
+</style>
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to main content</a>
+
+<header>
+  <div class="wrapper topbar">
+    <div class="brand">
+      <h1>Geometrical Optics as a Poisson Variety</h1>
+      <p>Lie–Poisson reduced space · singular cone C=0 · GRIN guided-ray criterion</p>
+    </div>
+      <nav class="nav" aria-label="Primary">
+        <a href="research.html">Back to <em>Research</em></a>
+      </nav>
+  </div>
+</header>
+
+<main id="main" class="wrapper" tabindex="-1">
+  <section class="hero" id="overview">
+    <span class="hero-badge">Poisson Variety Learning Hub</span>
+    <h2>From ray optics to the singular variety $XY-Z^2=0$</h2>
+    <p>
+      This page visualizes the reduced Lie–Poisson variables $X=q^2$, $Y=p^2$, and $Z=q\cdot p$. The Casimir $C=XY-Z^2$ cuts the affine Poisson variety into leaves: $C>0$ gives regular hyperboloids, while $C=0$ gives a singular cone with a vertex at the origin.
+    </p>
+    <div class="hero-grid">
+      <div class="hero-card">
+        <h3>Reduced optics model</h3>
+        <p>
+          In an axisymmetric paraxial medium, the optical Hamiltonian may be written as $H^2=n(X)^2-Y$. Radial turning points occur where $Z=0$, so the constants $(H_0,C_0)$ reduce the problem to the single equation $F(X)=0$.
+        </p>
+        <div class="formula">
+          $$\{X,Y\}=4Z,\qquad \{X,Z\}=2X,\qquad \{Y,Z\}=-2Y$$
+          $$C=XY-Z^2,\qquad H^2=n(X)^2-Y$$
+          $$F(X)=X\bigl(n(X)^2-H_0^2\bigr)-C_0$$
+        </div>
+      </div>
+      <div class="hero-card">
+        <h3>How to use</h3>
+        <p>
+          Drag the knobs or use arrow keys while focused. Choose the Casimir level $C_0$, the energy $H_0$, and the parabolic GRIN parameter $\alpha$. The big 3D panel shows the Poisson leaf $C=C_0$; the 2D panels show the turning-point polynomial and the simulated radius $r(z)$.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sim-grid" id="simulator">
+    <div class="card">
+      <div class="card-head"><h3>Poisson variety and GRIN ray simulator</h3></div>
+      <div class="panel-grid">
+        <div class="panel">
+          <div class="panel-title">3D reduced space $(X,Y,Z)$: regular leaves $C>0$, singular cone $C=0$, energy surface, and trajectory. Drag to rotate.</div>
+          <canvas id="varietyCanvas" width="760" height="760" aria-label="3D Poisson variety animation"></canvas>
+        </div>
+        <div class="panel">
+          <div class="panel-title">Turning-point polynomial $F(X)$; roots are radial extrema.</div>
+          <canvas id="polyCanvas" width="640" height="420" aria-label="turning point polynomial plot"></canvas>
+        </div>
+        <div class="panel">
+          <div class="panel-title">Numerical ray radius $r(z)=\sqrt{X(z)}$ in the parabolic GRIN model.</div>
+          <canvas id="radiusCanvas" width="640" height="420" aria-label="radius over z plot"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="stack">
+      <div class="card" id="controls">
+        <div class="card-head"><h3>Rotary controls</h3></div>
+        <div class="card-body">
+          <div class="tabs" role="tablist" aria-label="Preset choices">
+            <button class="tab active" id="preset-guided" type="button">guided</button>
+            <button class="tab" id="preset-critical" type="button">critical</button>
+            <button class="tab" id="preset-singular" type="button">C=0 cone</button>
+          </div>
+          <div class="knob-grid">
+            <div class="knob-card invariant">
+              <div id="knob-casimir" class="knob" tabindex="0" role="slider" aria-label="Casimir C0"><span class="needle"></span><span class="knob-dot"></span></div>
+              <div class="knob-label">Casimir level<br><code>C₀=XY−Z²</code></div>
+              <div class="knob-value" id="value-casimir">–</div>
+              <div class="knob-hint">0 gives singular cone</div>
+            </div>
+            <div class="knob-card invariant">
+              <div id="knob-energy" class="knob" tabindex="0" role="slider" aria-label="Hamiltonian H0"><span class="needle"></span><span class="knob-dot"></span></div>
+              <div class="knob-label">Hamiltonian<br><code>H₀</code></div>
+              <div class="knob-value" id="value-energy">–</div>
+              <div class="knob-hint">propagating if H₀&gt;0</div>
+            </div>
+            <div class="knob-card">
+              <div id="knob-alpha" class="knob" tabindex="0" role="slider" aria-label="GRIN gradient alpha"><span class="needle"></span><span class="knob-dot"></span></div>
+              <div class="knob-label">GRIN gradient<br><code>α</code></div>
+              <div class="knob-value" id="value-alpha">–</div>
+              <div class="knob-hint">$n^2=n_0^2-\alpha X$</div>
+            </div>
+            <div class="knob-card">
+              <div id="knob-n0" class="knob" tabindex="0" role="slider" aria-label="central refractive index n0"><span class="needle"></span><span class="knob-dot"></span></div>
+              <div class="knob-label">central index<br><code>n₀</code></div>
+              <div class="knob-value" id="value-n0">–</div>
+              <div class="knob-hint">index on the axis</div>
+            </div>
+            <div class="knob-card">
+              <div id="knob-phase" class="knob" tabindex="0" role="slider" aria-label="initial phase"><span class="needle"></span><span class="knob-dot"></span></div>
+              <div class="knob-label">initial phase<br><code>φ₀</code></div>
+              <div class="knob-value" id="value-phase">–</div>
+              <div class="knob-hint">starting point on level curve</div>
+            </div>
+            <div class="knob-card">
+              <div id="knob-speed" class="knob" tabindex="0" role="slider" aria-label="animation speed"><span class="needle"></span><span class="knob-dot"></span></div>
+              <div class="knob-label">animation speed<br><code>v</code></div>
+              <div class="knob-value" id="value-speed">–</div>
+              <div class="knob-hint">visual speed only</div>
+            </div>
+          </div>
+          <div class="button-row">
+            <button id="togglePlay" class="action" type="button">pause</button>
+            <button id="resetParams" class="action secondary" type="button">guided defaults</button>
+            <button id="resetView" class="action secondary" type="button">reset view</button>
+          </div>
+          <p class="relation-note" style="margin-top:12px;">The cyan curve is $C=C_0\cap H=H_0$. Its intersections with the plane $Z=0$ are the positive roots of $F(X)$.</p>
+        </div>
+      </div>
+
+      <div class="card" id="diagnostics">
+        <div class="card-head"><h3>Diagnostics</h3></div>
+        <div class="card-body">
+          <div class="metric-list">
+            <div class="metric"><div class="label">current regime</div><div class="value" id="metricStatus">–</div></div>
+            <div class="metric"><div class="label">Poisson variety level</div><div class="value" id="metricLeaf">–</div></div>
+            <div class="metric"><div class="label">discriminant $\Delta$</div><div class="value" id="metricDelta">–</div></div>
+            <div class="metric"><div class="label">positive roots of $F(X)$</div><div class="value" id="metricRoots">–</div></div>
+            <div class="metric"><div class="label">turning radii</div><div class="value" id="metricRadii">–</div></div>
+            <div class="metric"><div class="label">current point $(X,Y,Z)$</div><div class="value" id="metricPoint">–</div></div>
+            <div class="metric"><div class="label">check $XY-Z^2$</div><div class="value" id="metricCCheck">–</div></div>
+            <div class="metric"><div class="label">check $H^2=n^2-Y$</div><div class="value" id="metricHCheck">–</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><h3>Legend</h3></div>
+        <div class="card-body">
+          <div class="legend">
+            <div class="legend-row"><span class="line" style="border-color:#22d3ee"></span> Energy–Casimir curve $C\cap H$</div>
+            <div class="legend-row"><span class="line" style="border-color:#fbbf24"></span> Animated trajectory segment</div>
+            <div class="legend-row"><span class="line" style="border-color:#fca5a5"></span> Singular cone $C=0$</div>
+            <div class="legend-row"><span class="line" style="border-color:#c084fc"></span> Energy parabola $Y=n_0^2-\alpha X-H_0^2$</div>
+            <div class="legend-row"><span class="line" style="border-color:#a7f3d0"></span> Turning plane $Z=0$</div>
+            <div class="legend-row"><span class="dot" style="background:#f59e0b"></span> Current reduced ray state</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="card relation-table-section" id="parameter-summary">
+    <div class="card-head"><h3>Control–Geometry Summary</h3></div>
+    <div class="card-body">
+      <p class="relation-intro">
+        Algebraically, the coordinate ring $\mathbb R[X,Y,Z]$ has a Lie–Poisson bracket. Since $C=XY-Z^2$ is a Casimir, the ideal $(C-c)$ is a Poisson ideal, so each level set is a Poisson subvariety.
+      </p>
+      <div class="table-wrap">
+        <table class="relation-table">
+          <thead>
+            <tr>
+              <th scope="col">Object</th>
+              <th scope="col">Equation</th>
+              <th scope="col">Geometric meaning</th>
+              <th scope="col">Optical interpretation</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Affine Poisson variety</td>
+              <td><code>Spec R[X,Y,Z]</code> with <code>{X,Y}=4Z</code></td>
+              <td>The reduced Lie–Poisson space <code>sp(2,R)*</code>.</td>
+              <td>Coordinates are <code>X=q²</code>, <code>Y=p²</code>, <code>Z=q·p</code>.</td>
+            </tr>
+            <tr>
+              <td>Casimir level</td>
+              <td><code>C=XY−Z²=c</code></td>
+              <td>A Poisson subvariety because <code>C</code> Poisson-commutes with every function.</td>
+              <td>Fixes the transverse angular-momentum-like invariant.</td>
+            </tr>
+            <tr>
+              <td>Regular leaf</td>
+              <td><code>C&gt;0</code></td>
+              <td>A smooth two-dimensional hyperboloid branch in the physically accessible region.</td>
+              <td>Generic skew rays; radial motion may be guided depending on $F(X)$.</td>
+            </tr>
+            <tr>
+              <td>Singular Poisson variety</td>
+              <td><code>C=0</code>, i.e. <code>XY−Z²=0</code></td>
+              <td>A quadratic cone singular at the origin.</td>
+              <td>Meridional/radial rays. The vertex is the degenerate state <code>q=p=0</code>.</td>
+            </tr>
+            <tr>
+              <td>Turning-point criterion</td>
+              <td><code>F(X)=X(n(X)²−H₀²)−C₀</code></td>
+              <td>Positive simple roots are intersections with the plane <code>Z=0</code>.</td>
+              <td>Two positive roots mean guided radial oscillation; a double root is critical.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="relation-note">
+        For the parabolic GRIN model $n^2(X)=n_0^2-\alpha X$, the polynomial is $F(X)=-\alpha X^2+(n_0^2-H_0^2)X-C_0$, so the discriminant $\Delta=(n_0^2-H_0^2)^2-4\alpha C_0$ controls the transition between guided, critical, and unguided regimes.
+      </p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrapper">
+    <div class="footer-card">Theoretical Mechanics Learning Hub · Lie–Poisson optics, Poisson varieties, and radial turning points.</div>
+  </div>
+</footer>
+
+<script>
+const varietyCanvas = document.getElementById("varietyCanvas");
+const polyCanvas = document.getElementById("polyCanvas");
+const radiusCanvas = document.getElementById("radiusCanvas");
+const vctx = varietyCanvas.getContext("2d");
+const pctx = polyCanvas.getContext("2d");
+const rctx = radiusCanvas.getContext("2d");
+
+const TAU = 2 * Math.PI;
+const EPS = 1e-9;
+const NPATH = 420;
+
+const DEFAULTS = { casimir:0.030625, energy:1.4517, alpha:0.08, n0:1.50, phase:0, speed:1.00 };
+const CRITICAL = { casimir:0.45, energy:1.30, alpha:0.08, n0:1.50, phase:0, speed:0.60 };
+const SINGULAR = { casimir:0.00, energy:1.42, alpha:0.08, n0:1.50, phase:0, speed:1.00 };
+
+const controls = {
+  casimir:{min:0.00,max:1.00,step:0.001,value:DEFAULTS.casimir,unit:"",digits:4,label:"C0"},
+  energy:{min:0.40,max:1.58,step:0.001,value:DEFAULTS.energy,unit:"",digits:4,label:"H0"},
+  alpha:{min:0.01,max:0.22,step:0.001,value:DEFAULTS.alpha,unit:"",digits:3,label:"alpha"},
+  n0:{min:1.05,max:1.80,step:0.01,value:DEFAULTS.n0,unit:"",digits:2,label:"n0"},
+  phase:{min:0,max:360,step:1,value:DEFAULTS.phase,unit:"°",digits:0,label:"phase"},
+  speed:{min:0.05,max:3.00,step:0.05,value:DEFAULTS.speed,unit:"",digits:2,label:"speed"}
+};
+
+let model = null;
+let playing = true;
+let currentPhase = 0;
+let lastTimestamp = 0;
+let cameraYaw = deg2rad(42);
+let cameraPitch = deg2rad(24);
+let activePreset = "guided";
+
+function deg2rad(x){return x*Math.PI/180}
+function rad2deg(x){return x*180/Math.PI}
+function clamp(x,lo,hi){return Math.min(hi,Math.max(lo,x))}
+function fmt(x,d=3){return Number.isFinite(x)?x.toFixed(d):"–"}
+function add(a,b){return [a[0]+b[0],a[1]+b[1],a[2]+b[2]]}
+function sub(a,b){return [a[0]-b[0],a[1]-b[1],a[2]-b[2]]}
+function mul(s,a){return [s*a[0],s*a[1],s*a[2]]}
+function dot(a,b){return a[0]*b[0]+a[1]*b[1]+a[2]*b[2]}
+function norm(a){return Math.hypot(a[0],a[1],a[2])}
+function normalize(a){const n=norm(a)||1; return mul(1/n,a)}
+function roundToStep(v,step){return Math.round(v/step)*step}
+function setActivePreset(name){
+  activePreset = name;
+  for (const el of document.querySelectorAll(".tab")) el.classList.remove("active");
+  const id = name==="critical"?"preset-critical":name==="singular"?"preset-singular":"preset-guided";
+  document.getElementById(id).classList.add("active");
+}
+
+function rootsFor(C,H,alpha,n0){
+  const b = n0*n0 - H*H;
+  const delta = b*b - 4*alpha*C;
+  if (delta < -1e-9) return {delta, roots:[], positive:[]};
+  const d = Math.sqrt(Math.max(0,delta));
+  const roots = [(b-d)/(2*alpha),(b+d)/(2*alpha)].sort((a,b)=>a-b);
+  const positive = roots.filter(x=>x>1e-8);
+  return {delta, roots, positive};
+}
+
+function FofX(X){
+  const C=controls.casimir.value, H=controls.energy.value, alpha=controls.alpha.value, n0=controls.n0.value;
+  return -alpha*X*X + (n0*n0 - H*H)*X - C;
+}
+
+function computeModel(){
+  const C=controls.casimir.value;
+  const H=controls.energy.value;
+  const alpha=controls.alpha.value;
+  const n0=controls.n0.value;
+  const phase0=deg2rad(controls.phase.value);
+  const speed=controls.speed.value;
+  const rr=rootsFor(C,H,alpha,n0);
+  const Xcut=n0*n0/alpha;
+  const b=n0*n0-H*H;
+  const path=[];
+  const radiusSeries=[];
+  let regime="unguided";
+  if (C < 1e-6) regime="singular cone";
+  else if (rr.delta > 1e-6 && rr.positive.length>=2) regime="guided";
+  else if (Math.abs(rr.delta)<=1e-5 && rr.positive.length>=1) regime="critical";
+
+  const xMinPos = Math.max(0, rr.positive[0] || 0);
+  const xMaxPos = Math.max(xMinPos, rr.positive[rr.positive.length-1] || Math.max(0.5,b/alpha));
+  const Xlo = regime==="singular cone" ? 0.02 : Math.max(0.005, xMinPos);
+  const Xhi = regime==="guided" && rr.positive.length>=2 ? rr.positive[rr.positive.length-1] : Math.min(Xcut*0.8, Math.max(2.0, xMaxPos*1.4));
+
+  if (regime==="guided" && rr.positive.length>=2) {
+    const Xa = rr.positive[0];
+    const Xb = rr.positive[rr.positive.length-1];
+    for (let i=0;i<NPATH;i++){
+      const u = TAU*i/(NPATH-1);
+      const s = 0.5*(1+Math.cos(u+phase0));
+      const X = Xa + (Xb-Xa)*s;
+      const Y = n0*n0 - alpha*X - H*H;
+      const rad = Math.max(0, X*Y-C);
+      const Z = Math.sign(Math.sin(u+phase0) || 1)*Math.sqrt(Math.max(0,rad));
+      path.push([X,Y,Z]);
+      radiusSeries.push({z:i/(NPATH-1)*80, r:Math.sqrt(Math.max(0,X)), X, Y, Z});
+    }
+  } else if (regime==="critical" && rr.positive.length>=1) {
+    const Xc = rr.positive[0];
+    for (let i=0;i<NPATH;i++){
+      const t = (i/(NPATH-1)-0.5)*5;
+      const X = Math.max(0.005, Xc + 0.45*Math.tanh(t));
+      const Y = n0*n0 - alpha*X - H*H;
+      const rad = Math.max(0, X*Y-C);
+      const Z = Math.sign(t || 1)*Math.sqrt(Math.max(0,rad));
+      path.push([X,Y,Z]);
+      radiusSeries.push({z:i/(NPATH-1)*80, r:Math.sqrt(Math.max(0,X)), X, Y, Z});
+    }
+  } else if (regime==="singular cone") {
+    const xmax = Math.min(5, Math.max(1.4, b/alpha*0.85));
+    for (let i=0;i<NPATH;i++){
+      const u = i/(NPATH-1);
+      const X = 0.02 + xmax*u;
+      const Y = Math.max(0, n0*n0 - alpha*X - H*H);
+      const Z = Math.sqrt(Math.max(0,X*Y));
+      path.push([X,Y,Z]);
+      radiusSeries.push({z:u*80, r:Math.sqrt(Math.max(0,X)), X, Y, Z});
+    }
+  } else {
+    const xmax = Math.min(Xcut*0.75, 5);
+    for (let i=0;i<NPATH;i++){
+      const u = i/(NPATH-1);
+      const X = 0.02 + xmax*u;
+      const Y = Math.max(0, n0*n0 - alpha*X - H*H);
+      const rad = Math.max(0, X*Y-C);
+      const Z = Math.sqrt(rad);
+      path.push([X,Y,Z]);
+      radiusSeries.push({z:u*80, r:Math.sqrt(Math.max(0,X)), X, Y, Z});
+    }
+  }
+  return {C,H,alpha,n0,phase0,speed,roots:rr,regime,path,radiusSeries,Xlo,Xhi,Xcut,b};
+}
+
+function setControl(id, raw, silent=false){
+  const cfg=controls[id];
+  cfg.value=clamp(roundToStep(raw,cfg.step),cfg.min,cfg.max);
+  updateKnob(id);
+  if(!silent){ setActivePreset("custom"); refreshModel(true); }
+}
+function updateKnob(id){
+  const cfg=controls[id], knob=document.getElementById(`knob-${id}`), valueEl=document.getElementById(`value-${id}`);
+  const pct=(cfg.value-cfg.min)/(cfg.max-cfg.min);
+  const angle=-135+pct*270;
+  knob.style.setProperty("--angle",`${angle}deg`);
+  knob.style.setProperty("--filled",`${pct*270}deg`);
+  knob.setAttribute("aria-valuemin",cfg.min);
+  knob.setAttribute("aria-valuemax",cfg.max);
+  knob.setAttribute("aria-valuenow",cfg.value.toFixed(cfg.digits));
+  knob.setAttribute("aria-valuetext",`${cfg.value.toFixed(cfg.digits)}${cfg.unit}`);
+  valueEl.textContent=`${cfg.value.toFixed(cfg.digits)}${cfg.unit}`;
+}
+function setupKnobs(){
+  for(const id of Object.keys(controls)){
+    const knob=document.getElementById(`knob-${id}`); updateKnob(id); let dragging=false;
+    function valueFromPointer(ev){
+      const rect=knob.getBoundingClientRect(); const cx=rect.left+rect.width/2; const cy=rect.top+rect.height/2;
+      const dx=ev.clientX-cx, dy=ev.clientY-cy; let angle=rad2deg(Math.atan2(dx,-dy)); angle=clamp(angle,-135,135);
+      const cfg=controls[id], pct=(angle+135)/270; return cfg.min+pct*(cfg.max-cfg.min);
+    }
+    knob.addEventListener("pointerdown",ev=>{dragging=true; knob.setPointerCapture(ev.pointerId); setControl(id,valueFromPointer(ev));});
+    knob.addEventListener("pointermove",ev=>{if(dragging)setControl(id,valueFromPointer(ev));});
+    knob.addEventListener("pointerup",()=>dragging=false); knob.addEventListener("pointercancel",()=>dragging=false);
+    knob.addEventListener("wheel",ev=>{ev.preventDefault(); const cfg=controls[id]; setControl(id,cfg.value+(ev.deltaY<0?cfg.step:-cfg.step));},{passive:false});
+    knob.addEventListener("keydown",ev=>{const cfg=controls[id]; let delta=0; if(ev.key==="ArrowRight"||ev.key==="ArrowUp")delta=cfg.step; if(ev.key==="ArrowLeft"||ev.key==="ArrowDown")delta=-cfg.step; if(ev.key==="PageUp")delta=10*cfg.step; if(ev.key==="PageDown")delta=-10*cfg.step; if(ev.key==="Home"){setControl(id,cfg.min); ev.preventDefault(); return;} if(ev.key==="End"){setControl(id,cfg.max); ev.preventDefault(); return;} if(delta){setControl(id,cfg.value+delta); ev.preventDefault();}});
+  }
+}
+
+function applyPreset(obj,name){
+  for(const [id,val] of Object.entries(obj)) setControl(id,val,true);
+  setActivePreset(name);
+  refreshModel(true);
+}
+
+function clearCanvas(ctx,canvas){
+  const g=ctx.createLinearGradient(0,0,0,canvas.height); g.addColorStop(0,"#020617"); g.addColorStop(1,"#000"); ctx.fillStyle=g; ctx.fillRect(0,0,canvas.width,canvas.height);
+}
+function cameraBasis(){
+  const view=normalize([Math.cos(cameraPitch)*Math.cos(cameraYaw),Math.cos(cameraPitch)*Math.sin(cameraYaw),Math.sin(cameraPitch)]);
+  const right=normalize([-Math.sin(cameraYaw),Math.cos(cameraYaw),0]); const up=normalize([right[1]*view[2]-right[2]*view[1], right[2]*view[0]-right[0]*view[2], right[0]*view[1]-right[1]*view[0]]); return {view,right,up};
+}
+function project3(p,basis,canvas,scale,offset){return [offset.x+dot(p,basis.right)*scale, offset.y-dot(p,basis.up)*scale, dot(p,basis.view)]}
+function drawPolyline3(ctx,canvas,points,basis,scale,offset,color,width=2,alpha=1,dash=[]){
+  ctx.save(); ctx.strokeStyle=color; ctx.lineWidth=width; ctx.globalAlpha=alpha; ctx.setLineDash(dash); ctx.beginPath(); let started=false;
+  for(const p of points){const [x,y]=project3(p,basis,canvas,scale,offset); if(!Number.isFinite(x)||!Number.isFinite(y)){started=false;continue;} if(!started){ctx.moveTo(x,y); started=true;} else ctx.lineTo(x,y);}
+  ctx.stroke(); ctx.restore();
+}
+function drawPoint3(ctx,canvas,p,basis,scale,offset,color,r=7,stroke="#000"){
+  const [x,y]=project3(p,basis,canvas,scale,offset); ctx.save(); ctx.beginPath(); ctx.arc(x,y,r,0,TAU); ctx.fillStyle=color; ctx.fill(); if(stroke){ctx.lineWidth=2; ctx.strokeStyle=stroke; ctx.stroke();} ctx.restore();
+}
+function drawLabel3(ctx,canvas,p,basis,scale,offset,text,color="#e9eef8",dx=6,dy=-6){const [x,y]=project3(p,basis,canvas,scale,offset); ctx.save(); ctx.fillStyle=color; ctx.font="16px system-ui, sans-serif"; ctx.fillText(text,x+dx,y+dy); ctx.restore();}
+
+function hyperbolaBranchPoints(C, sign, xmin, xmax, n=160){
+  const pts=[]; for(let i=0;i<n;i++){const X=xmin+(xmax-xmin)*i/(n-1); const Y=(C)/X; const Z=sign*Math.sqrt(Math.max(0,X*Y-C)); pts.push([X,Y,Z]);} return pts;
+}
+function coneMeridian(sign, slope, xmax, n=120){
+  const pts=[];
+  for(let i=0;i<n;i++){
+    const X=0.01+xmax*i/(n-1);
+    const Y=slope*X;
+    const Z=sign*Math.sqrt(Math.max(0,X*Y));
+    pts.push([X,Y,Z]);
+  }
+  return pts;
+}
+
+function coneRayByAngle(sign, theta, xmax, n=120){
+  // Parametrize the physical part of C=0 by
+  // X=s^2 cos^2(theta), Y=s^2 sin^2(theta), Z=±s^2 sin(theta)cos(theta).
+  // This makes the cone read visually as a ruled surface instead of isolated lines.
+  const pts=[];
+  const c=Math.cos(theta), s=Math.sin(theta);
+  const denom=Math.max(0.04, c*c);
+  const sMax=Math.sqrt(xmax/denom);
+  for(let i=0;i<n;i++){
+    const u=sMax*i/(n-1);
+    const X=u*u*c*c;
+    const Y=u*u*s*s;
+    const Z=sign*u*u*s*c;
+    pts.push([X,Y,Z]);
+  }
+  return pts;
+}
+
+function coneCrossSection(sign, u, n=160){
+  const pts=[];
+  for(let i=0;i<n;i++){
+    const theta=0.02+(Math.PI/2-0.04)*i/(n-1);
+    const c=Math.cos(theta), s=Math.sin(theta);
+    pts.push([u*u*c*c, u*u*s*s, sign*u*u*s*c]);
+  }
+  return pts;
+}
+
+function drawConeRibbon(ctx, canvas, basis, scale, offset, sign, thetaA, thetaB, xmax, color, alpha){
+  const rayA=coneRayByAngle(sign,thetaA,xmax,72);
+  const rayB=coneRayByAngle(sign,thetaB,xmax,72);
+  const poly=[];
+  for(const p of rayA) poly.push(p);
+  for(let i=rayB.length-1;i>=0;i--) poly.push(rayB[i]);
+  ctx.save();
+  ctx.globalAlpha=alpha;
+  ctx.fillStyle=color;
+  ctx.beginPath();
+  let started=false;
+  for(const p of poly){
+    const [x,y]=project3(p,basis,canvas,scale,offset);
+    if(!started){ctx.moveTo(x,y); started=true;} else ctx.lineTo(x,y);
+  }
+  ctx.closePath();
+  ctx.fill();
+  ctx.restore();
+}
+function conePoint(sign, theta, u){
+  const X = Math.max(0.001, u*Math.cos(theta));
+  const Y = Math.max(0.001, u*Math.sin(theta));
+  return [X, Y, sign*Math.sqrt(Math.max(0, X*Y))];
+}
+function drawSurfaceStrip(ctx, canvas, basis, scale, offset, curveA, curveB, color, alpha){
+  if(!curveA.length || !curveB.length) return;
+  ctx.save();
+  ctx.globalAlpha = alpha;
+  ctx.fillStyle = color;
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 0.6;
+  ctx.beginPath();
+  let started=false;
+  for(const p of curveA){
+    const [x,y]=project3(p,basis,canvas,scale,offset);
+    if(!started){ctx.moveTo(x,y); started=true;} else ctx.lineTo(x,y);
+  }
+  for(let i=curveB.length-1;i>=0;i--){
+    const [x,y]=project3(curveB[i],basis,canvas,scale,offset);
+    ctx.lineTo(x,y);
+  }
+  ctx.closePath();
+  ctx.fill();
+  ctx.globalAlpha = Math.min(1, alpha+.10);
+  ctx.stroke();
+  ctx.restore();
+}
+function drawConeRibbon(ctx, canvas, basis, scale, offset, sign, thetaA, thetaB, umax, color, alpha){
+  const p1=[], p2=[];
+  for(let i=0;i<=80;i++){
+    const u = 0.02 + umax*i/80;
+    p1.push(conePoint(sign, thetaA, u));
+    p2.push(conePoint(sign, thetaB, u));
+  }
+  drawSurfaceStrip(ctx, canvas, basis, scale, offset, p1, p2, color, alpha);
+}
+function coneCrossSection(sign, u, n=150){
+  const pts=[];
+  for(let i=0;i<n;i++){
+    const theta = 0.04 + (Math.PI/2-0.08)*i/(n-1);
+    pts.push(conePoint(sign, theta, u));
+  }
+  return pts;
+}
+function casimirPoint(C, sign, theta, u){
+  // Parametrize the positive-quadrant sheet XY-Z²=C by X=u exp(theta), Y=u exp(-theta).
+  const X = u*Math.exp(theta);
+  const Y = u*Math.exp(-theta);
+  const Z = sign*Math.sqrt(Math.max(0, u*u-C));
+  return [X,Y,Z];
+}
+function drawCasimirRibbon(ctx, canvas, basis, scale, offset, C, sign, thetaA, thetaB, uMin, uMax, color, alpha){
+  const p1=[], p2=[];
+  for(let i=0;i<=100;i++){
+    const u = uMin + (uMax-uMin)*i/100;
+    p1.push(casimirPoint(C, sign, thetaA, u));
+    p2.push(casimirPoint(C, sign, thetaB, u));
+  }
+  drawSurfaceStrip(ctx, canvas, basis, scale, offset, p1, p2, color, alpha);
+}
+function casimirCrossSection(C, sign, u, thetaMin, thetaMax, n=150){
+  const pts=[];
+  for(let i=0;i<n;i++){
+    const theta = thetaMin + (thetaMax-thetaMin)*i/(n-1);
+    pts.push(casimirPoint(C, sign, theta, u));
+  }
+  return pts;
+}
+
+function energyCurvePoints(model, zSign=1, n=240){
+  const pts=[]; const Xmax=Math.min(model.Xcut*0.92, Math.max(5, model.Xhi*1.3));
+  for(let i=0;i<n;i++){
+    const X=0.015+Xmax*i/(n-1); const Y=model.n0*model.n0-model.alpha*X-model.H*model.H; if(Y<0) continue;
+    const rad=X*Y-model.C; if(rad>=-1e-8) pts.push([X,Y,zSign*Math.sqrt(Math.max(0,rad))]);
+  }
+  return pts;
+}
+
+function drawVariety3D(){
+  if(!model)return; const ctx=vctx, canvas=varietyCanvas; clearCanvas(ctx,canvas); const basis=cameraBasis();
+  const Xmax=Math.min(model.Xcut*0.55, Math.max(3.0, model.Xhi*1.25)); const Ymax=Math.max(1.2, model.n0*model.n0-model.H*model.H+0.4, model.C/Math.max(0.05,Math.min(model.Xlo,0.5))+0.5);
+  const scale=Math.min(canvas.width/(Xmax+Ymax+2.2), canvas.height/(Math.max(Xmax,Ymax)+3.0)); const offset={x:canvas.width*0.43,y:canvas.height*0.58};
+
+  // axes
+  drawPolyline3(ctx,canvas,[[0,0,0],[Xmax,0,0]],basis,scale,offset,"#ffffff",1.5,.55);
+  drawPolyline3(ctx,canvas,[[0,0,0],[0,Ymax,0]],basis,scale,offset,"#ffffff",1.5,.55);
+  drawPolyline3(ctx,canvas,[[0,0,-1.5],[0,0,1.5]],basis,scale,offset,"#ffffff",1.5,.55);
+  drawLabel3(ctx,canvas,[Xmax,0,0],basis,scale,offset,"X=r²"); drawLabel3(ctx,canvas,[0,Ymax,0],basis,scale,offset,"Y=p²"); drawLabel3(ctx,canvas,[0,0,1.5],basis,scale,offset,"Z");
+
+  // Z=0 plane grid
+  for(let i=0;i<=6;i++){const x=Xmax*i/6; drawPolyline3(ctx,canvas,[[x,0,0],[x,Ymax,0]],basis,scale,offset,"#a7f3d0",1,.18);}
+  for(let j=0;j<=6;j++){const y=Ymax*j/6; drawPolyline3(ctx,canvas,[[0,y,0],[Xmax,y,0]],basis,scale,offset,"#a7f3d0",1,.18);}
+
+  // singular cone C=0: draw a more opaque filled surface first, then ruled lines on top.
+  // The surface is rendered as several translucent ribbons because this canvas view is a lightweight 3D projection.
+  const coneAngles = [0.04,0.18,0.34,0.52,0.72,0.96,1.20,1.40,Math.PI/2-0.04];
+  for(let i=0;i<coneAngles.length-1;i++){
+    drawConeRibbon(ctx, canvas, basis, scale, offset, 1, coneAngles[i], coneAngles[i+1], Xmax, "#fca5a5", .34);
+    drawConeRibbon(ctx, canvas, basis, scale, offset, -1, coneAngles[i], coneAngles[i+1], Xmax, "#fb7185", .24);
+  }
+  for(const u of [0.45,0.70,0.95,1.20,1.45,1.70]){
+    drawPolyline3(ctx,canvas,coneCrossSection(1,u,150),basis,scale,offset,"#fecaca",1.4,.42);
+    drawPolyline3(ctx,canvas,coneCrossSection(-1,u,150),basis,scale,offset,"#fecaca",1.4,.30);
+  }
+  for(const slope of [0.08,0.16,0.32,0.65,1.2,2.1]){
+    drawPolyline3(ctx,canvas,coneMeridian(1,slope,Xmax,120),basis,scale,offset,"#fee2e2",2.2,.70);
+    drawPolyline3(ctx,canvas,coneMeridian(-1,slope,Xmax,120),basis,scale,offset,"#fecaca",2.0,.52);
+  }
+
+  // current Casimir level C=C0: make the two sheets Z>0 and Z<0 visibly appear as surfaces.
+  if(model.C>1e-7){
+    const thetaMin = -1.05;
+    const thetaMax = 1.05;
+    const thetaBands = 8;
+    const uMin = Math.sqrt(model.C) + 0.01;
+    const uMax = Math.max(uMin + 0.35, Math.min(4.8, Math.sqrt(Math.max(model.C,0)) + Math.max(1.5, model.Xhi)));
+
+    for(let i=0;i<thetaBands;i++){
+      const a = thetaMin + (thetaMax-thetaMin)*i/thetaBands;
+      const b = thetaMin + (thetaMax-thetaMin)*(i+1)/thetaBands;
+      drawCasimirRibbon(ctx, canvas, basis, scale, offset, model.C, 1, a, b, uMin, uMax, "#38bdf8", .24);
+      drawCasimirRibbon(ctx, canvas, basis, scale, offset, model.C, -1, a, b, uMin, uMax, "#818cf8", .20);
+    }
+
+    // Add coordinate grid on both Casimir sheets so the two surfaces are visually explicit.
+    for(let i=0;i<=thetaBands;i++){
+      const th = thetaMin + (thetaMax-thetaMin)*i/thetaBands;
+      const upper=[], lower=[];
+      for(let k=0;k<=120;k++){
+        const u = uMin + (uMax-uMin)*k/120;
+        upper.push(casimirPoint(model.C, 1, th, u));
+        lower.push(casimirPoint(model.C, -1, th, u));
+      }
+      drawPolyline3(ctx,canvas,upper,basis,scale,offset,"#bae6fd",1.3,.55);
+      drawPolyline3(ctx,canvas,lower,basis,scale,offset,"#c7d2fe",1.2,.42);
+    }
+    for(const u of [uMin, uMin+(uMax-uMin)*.33, uMin+(uMax-uMin)*.66, uMax]){
+      drawPolyline3(ctx,canvas,casimirCrossSection(model.C,1,u,thetaMin,thetaMax,150),basis,scale,offset,"#7dd3fc",1.6,.58);
+      drawPolyline3(ctx,canvas,casimirCrossSection(model.C,-1,u,thetaMin,thetaMax,150),basis,scale,offset,"#a5b4fc",1.5,.46);
+    }
+  }
+
+  // energy curves on leaf
+  const ep=energyCurvePoints(model,1); const em=energyCurvePoints(model,-1);
+  drawPolyline3(ctx,canvas,ep,basis,scale,offset,"#c084fc",5,.25);
+  drawPolyline3(ctx,canvas,em,basis,scale,offset,"#c084fc",5,.18);
+  drawPolyline3(ctx,canvas,ep,basis,scale,offset,"#22d3ee",3.5,.95);
+  drawPolyline3(ctx,canvas,em,basis,scale,offset,"#22d3ee",3.5,.82);
+
+  // animated trajectory
+  const idx=Math.floor((currentPhase%1)*Math.max(1,model.path.length-1));
+  const pathSeg=model.path.slice(0,idx+1);
+  drawPolyline3(ctx,canvas,pathSeg,basis,scale,offset,"#fbbf24",4.5,.95);
+  const pt=model.path[idx]||model.path[0]||[0,0,0];
+  drawPoint3(ctx,canvas,pt,basis,scale,offset,"#f59e0b",8);
+
+  // roots at Z=0
+  for(const X of model.roots.positive){
+    const Y=model.n0*model.n0-model.alpha*X-model.H*model.H; if(Y>=0){ drawPoint3(ctx,canvas,[X,Y,0],basis,scale,offset,"#a7f3d0",6); drawLabel3(ctx,canvas,[X,Y,0],basis,scale,offset,"turn", "#d1fae5", 8,-6); }
+  }
+  drawPoint3(ctx,canvas,[0,0,0],basis,scale,offset,"#fca5a5",6); drawLabel3(ctx,canvas,[0,0,0],basis,scale,offset,"singular vertex", "#fecaca",8,16);
+
+  ctx.save(); ctx.fillStyle="#e9eef8"; ctx.font="19px system-ui, sans-serif"; ctx.fillText(`C₀=${model.C.toFixed(4)}  H₀=${model.H.toFixed(4)}  Δ=${model.roots.delta.toFixed(5)}`,18,30); ctx.fillStyle="#aab4c6"; ctx.font="15px system-ui, sans-serif"; ctx.fillText("red cone: C=0 singular Poisson variety · blue: selected Casimir leaf · cyan: energy intersection",18,54); ctx.restore();
+}
+
+function plotPadding(pad=44){return typeof pad==="number"?{left:pad,right:pad,top:pad,bottom:pad}:{left:pad.left??44,right:pad.right??44,top:pad.top??44,bottom:pad.bottom??44}}
+function makePlotMapper(canvas,xmin,xmax,ymin,ymax,pad=44){const p=plotPadding(pad); return (x,y)=>[p.left+(x-xmin)/(xmax-xmin)*(canvas.width-p.left-p.right), canvas.height-p.bottom-(y-ymin)/(ymax-ymin)*(canvas.height-p.top-p.bottom)];}
+function drawAxes2D(ctx,canvas,xmin,xmax,ymin,ymax,xLabel,yLabel,pad=44){
+  const p=plotPadding(pad), map=makePlotMapper(canvas,xmin,xmax,ymin,ymax,p), left=p.left,right=canvas.width-p.right,top=p.top,bottom=canvas.height-p.bottom;
+  ctx.save(); ctx.strokeStyle="rgba(255,255,255,.15)"; ctx.fillStyle="#aab4c6"; ctx.font="15px system-ui, sans-serif"; ctx.lineWidth=1;
+  for(let i=0;i<=4;i++){const x=xmin+(xmax-xmin)*i/4; const [px]=map(x,ymin); ctx.beginPath(); ctx.moveTo(px,top); ctx.lineTo(px,bottom); ctx.stroke(); const label=x.toFixed(xmax-xmin>5?0:1); ctx.fillText(label,px-ctx.measureText(label).width/2,bottom+22);}
+  for(let i=0;i<=4;i++){const y=ymin+(ymax-ymin)*i/4; const [,py]=map(xmin,y); ctx.beginPath(); ctx.moveTo(left,py); ctx.lineTo(right,py); ctx.stroke(); const label=y.toFixed(ymax-ymin>4?0:2); ctx.fillText(label,left-ctx.measureText(label).width-8,py+5);}
+  if(ymin<0&&ymax>0){const [,zy]=map(xmin,0); ctx.strokeStyle="rgba(255,255,255,.45)"; ctx.beginPath(); ctx.moveTo(left,zy); ctx.lineTo(right,zy); ctx.stroke();}
+  ctx.strokeStyle="rgba(255,255,255,.55)"; ctx.strokeRect(left,top,right-left,bottom-top); ctx.fillStyle="#dce6f7"; ctx.fillText(xLabel,canvas.width/2-ctx.measureText(xLabel).width/2,canvas.height-14); ctx.save(); ctx.translate(18,canvas.height/2+ctx.measureText(yLabel).width/2); ctx.rotate(-Math.PI/2); ctx.fillText(yLabel,0,0); ctx.restore(); ctx.restore();
+}
+function drawPolyline2D(ctx,points,color,width=2,alpha=1,dash=[]){ctx.save(); ctx.strokeStyle=color; ctx.lineWidth=width; ctx.globalAlpha=alpha; ctx.setLineDash(dash); ctx.beginPath(); let started=false; for(const [x,y] of points){if(!Number.isFinite(x)||!Number.isFinite(y)){started=false;continue;} if(!started){ctx.moveTo(x,y); started=true;}else ctx.lineTo(x,y);} ctx.stroke(); ctx.restore();}
+function drawPoint2D(ctx,x,y,color,r=6,stroke="#000"){ctx.save(); ctx.beginPath(); ctx.arc(x,y,r,0,TAU); ctx.fillStyle=color; ctx.fill(); if(stroke){ctx.lineWidth=2; ctx.strokeStyle=stroke; ctx.stroke();} ctx.restore();}
+
+function drawPolynomial(){
+  if(!model)return; const ctx=pctx, canvas=polyCanvas; clearCanvas(ctx,canvas);
+  const xmax=Math.min(model.Xcut*0.92, Math.max(3.0, model.Xhi*1.35, ...model.roots.positive.map(x=>x*1.3)));
+  let ymin=Infinity,ymax=-Infinity; const raw=[]; for(let i=0;i<=320;i++){const X=xmax*i/320; const y=FofX(X); raw.push([X,y]); ymin=Math.min(ymin,y); ymax=Math.max(ymax,y);} const span=Math.max(0.1,ymax-ymin); ymin-=span*.12; ymax+=span*.12;
+  const pad={left:58,right:22,top:58,bottom:62}; const map=makePlotMapper(canvas,0,xmax,ymin,ymax,pad); drawAxes2D(ctx,canvas,0,xmax,ymin,ymax,"X=r²","F(X)",pad);
+  drawPolyline2D(ctx,raw.map(([x,y])=>map(x,y)),"#22d3ee",3,.95);
+  for(const X of model.roots.positive){if(X<=xmax){const [px,py]=map(X,0); drawPoint2D(ctx,px,py,"#fbbf24",7);}}
+  const idx=Math.floor((currentPhase%1)*Math.max(1,model.radiusSeries.length-1)); const currentX=model.radiusSeries[idx]?.X ?? 0; const [cx]=map(currentX,ymin); drawPolyline2D(ctx,[[cx,pad.top],[cx,canvas.height-pad.bottom]],"#f59e0b",2,.8,[7,6]);
+  ctx.save(); ctx.fillStyle="#e9eef8"; ctx.font="20px system-ui, sans-serif"; ctx.fillText("Turning-point polynomial",pad.left,34); ctx.fillStyle="#aab4c6"; ctx.font="15px system-ui, sans-serif"; ctx.fillText("Positive roots of F(X)=0 are radial turning points.",pad.left,54); ctx.restore();
+}
+
+function drawRadius(){
+  if(!model)return; const ctx=rctx, canvas=radiusCanvas; clearCanvas(ctx,canvas);
+  const xmax=80; const rmax=Math.max(1.1, ...model.radiusSeries.map(s=>s.r))*1.12; const pad={left:58,right:24,top:58,bottom:62}; const map=makePlotMapper(canvas,0,xmax,0,rmax,pad); drawAxes2D(ctx,canvas,0,xmax,0,rmax,"z","r(z)",pad);
+  const pts=model.radiusSeries.map(s=>map(s.z,s.r)); drawPolyline2D(ctx,pts,"#60a5fa",2.8,.95);
+  for(const X of model.roots.positive){const r=Math.sqrt(X); if(r<=rmax){const [,y]=map(0,r); drawPolyline2D(ctx,[[pad.left,y],[canvas.width-pad.right,y]],"#fbbf24",1.6,.7,[8,6]);}}
+  const idx=Math.floor((currentPhase%1)*Math.max(1,model.radiusSeries.length-1)); const cur=model.radiusSeries[idx]||model.radiusSeries[0]; if(cur){const [x,y]=map(cur.z,cur.r); drawPoint2D(ctx,x,y,"#f59e0b",7);}
+  ctx.save(); ctx.fillStyle="#e9eef8"; ctx.font="20px system-ui, sans-serif"; ctx.fillText("Radial motion",pad.left,34); ctx.fillStyle="#aab4c6"; ctx.font="15px system-ui, sans-serif"; ctx.fillText("Dashed lines are predicted turning radii.",pad.left,54); ctx.restore();
+}
+
+function updateDiagnostics(){
+  if(!model)return; const idx=Math.floor((currentPhase%1)*Math.max(1,model.path.length-1)); const pt=model.path[idx]||[0,0,0]; const [X,Y,Z]=pt; const Ccheck=X*Y-Z*Z; const Hsq=model.n0*model.n0-model.alpha*X-Y;
+  const roots=model.roots.positive; const radii=roots.map(x=>Math.sqrt(x));
+  let status=""; if(model.regime==="guided") status='<span class="status-pill">guided: two positive roots</span>'; else if(model.regime==="critical") status='<span class="status-pill warn">critical/double root</span>'; else if(model.regime==="singular cone") status='<span class="status-pill warn">singular Poisson variety C=0</span>'; else status='<span class="status-pill warn">unguided/no two turning points</span>';
+  document.getElementById("metricStatus").innerHTML=status;
+  document.getElementById("metricLeaf").textContent = model.C<1e-6 ? "C=0 cone, singular at (0,0,0)" : `C=${model.C.toFixed(6)} regular Poisson leaf`;
+  document.getElementById("metricDelta").textContent = model.roots.delta.toFixed(8);
+  document.getElementById("metricRoots").textContent = roots.length ? roots.map(x=>x.toFixed(6)).join(", ") : "no positive roots";
+  document.getElementById("metricRadii").textContent = radii.length ? radii.map(x=>x.toFixed(6)).join(", ") : "–";
+  document.getElementById("metricPoint").textContent = `[${X.toFixed(4)}, ${Y.toFixed(4)}, ${Z.toFixed(4)}]`;
+  document.getElementById("metricCCheck").textContent = `${Ccheck.toFixed(8)}  selected ${model.C.toFixed(8)}`;
+  document.getElementById("metricHCheck").textContent = `${Math.sqrt(Math.max(0,Hsq)).toFixed(8)}  selected ${model.H.toFixed(8)}`;
+}
+
+function drawAll(){drawVariety3D(); drawPolynomial(); drawRadius(); updateDiagnostics();}
+function refreshModel(reset=false){model=computeModel(); if(reset) currentPhase=0; drawAll();}
+function animate(ts){if(!lastTimestamp)lastTimestamp=ts; const dt=Math.min(.05,(ts-lastTimestamp)/1000); lastTimestamp=ts; if(model&&playing) currentPhase=(currentPhase+model.speed*dt/TAU)%1; drawAll(); requestAnimationFrame(animate);}
+
+function setupCanvasDrag(){let dragging=false,lastX=0,lastY=0; varietyCanvas.addEventListener("pointerdown",ev=>{dragging=true; lastX=ev.clientX; lastY=ev.clientY; varietyCanvas.setPointerCapture(ev.pointerId);}); varietyCanvas.addEventListener("pointermove",ev=>{if(!dragging)return; const dx=ev.clientX-lastX, dy=ev.clientY-lastY; lastX=ev.clientX; lastY=ev.clientY; cameraYaw+=dx*.008; cameraPitch=clamp(cameraPitch+dy*.008,deg2rad(-70),deg2rad(70));}); varietyCanvas.addEventListener("pointerup",()=>dragging=false); varietyCanvas.addEventListener("pointercancel",()=>dragging=false);}
+function setupButtons(){document.getElementById("togglePlay").addEventListener("click",()=>{playing=!playing; document.getElementById("togglePlay").textContent=playing?"pause":"play";}); document.getElementById("resetParams").addEventListener("click",()=>applyPreset(DEFAULTS,"guided")); document.getElementById("resetView").addEventListener("click",()=>{cameraYaw=deg2rad(42); cameraPitch=deg2rad(24);}); document.getElementById("preset-guided").addEventListener("click",()=>applyPreset(DEFAULTS,"guided")); document.getElementById("preset-critical").addEventListener("click",()=>{
+  const n0=controls.n0.value, alpha=controls.alpha.value, H=1.30; const C=Math.pow(n0*n0-H*H,2)/(4*alpha); const obj={...CRITICAL, n0, alpha, energy:H, casimir:clamp(C,controls.casimir.min,controls.casimir.max)}; applyPreset(obj,"critical");
+}); document.getElementById("preset-singular").addEventListener("click",()=>applyPreset(SINGULAR,"singular"));}
+
+setupKnobs(); setupButtons(); setupCanvasDrag(); applyPreset(DEFAULTS,"guided"); requestAnimationFrame(animate);
+</script>
+</body>
+</html>

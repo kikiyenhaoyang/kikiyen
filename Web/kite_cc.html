@@ -1,0 +1,1238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Five-Body Kite Central Configuration Collapse — Learning Hub</title>
+<meta name="description" content="Five-Body Kite Central Configuration Collapse Simulator" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" crossorigin="anonymous"
+  onload="renderMathInElement(document.getElementById('main'),{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});"></script>
+
+<style>
+  :root{
+    --bg:#f6f7fb;
+    --fg:#18212f;
+    --muted:#5f6b7a;
+    --primary:#1d4ed8;
+    --primary-soft:#dbeafe;
+    --card:#ffffff;
+    --border:rgba(24,33,47,.12);
+    --ring:#93c5fd;
+    --maxw:1200px;
+    --shadow:0 12px 30px rgba(0,0,0,.08);
+  }
+
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#0b1220;
+      --fg:#e5edf7;
+      --muted:#9aa8ba;
+      --primary:#7cb3ff;
+      --primary-soft:#172554;
+      --card:#101a2c;
+      --border:rgba(255,255,255,.12);
+      --ring:#60a5fa;
+      --shadow:0 12px 30px rgba(0,0,0,.28);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; scroll-behavior:auto !important;}
+  }
+
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background:linear-gradient(180deg, var(--bg) 0%, color-mix(in oklab, var(--bg), #ffffff 8%) 100%);
+    color:var(--fg);
+    line-height:1.6;
+  }
+
+  a{color:var(--primary)}
+  .wrapper{max-width:var(--maxw); margin:0 auto; padding:0 18px}
+
+  .skip-link{
+    position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden;
+  }
+  .skip-link:focus{
+    position:fixed; left:16px; top:16px; width:auto; height:auto;
+    background:#000; color:#fff; padding:8px 12px; border-radius:8px; z-index:1000;
+  }
+
+  header{
+    position:sticky; top:0; z-index:50;
+    background:rgba(255,255,255,.72);
+    backdrop-filter:saturate(180%) blur(14px);
+    border-bottom:1px solid var(--border);
+  }
+  @media (prefers-color-scheme: dark){
+    header{background:rgba(11,18,32,.72)}
+  }
+
+  .topbar{
+    display:flex; align-items:center; justify-content:space-between; gap:16px;
+    padding:14px 0;
+  }
+  .brand h1{margin:0; font-size:1.2rem; line-height:1.1}
+  .brand p{margin:4px 0 0; color:var(--muted); font-size:.92rem}
+
+  .nav{
+    display:flex; gap:10px; flex-wrap:wrap;
+  }
+  .nav a{
+    text-decoration:none; color:inherit;
+    padding:8px 12px; border:1px solid var(--border); border-radius:999px;
+    background:color-mix(in oklab, var(--card), transparent 10%);
+  }
+  .nav a:hover{color:var(--primary); border-color:color-mix(in oklab, var(--primary), var(--border) 60%)}
+
+  main{padding:30px 0 50px}
+
+  .hero{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:24px;
+    box-shadow:var(--shadow);
+    padding:28px;
+    margin-bottom:22px;
+  }
+  .hero-badge{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:6px 12px; border-radius:999px; font-size:.9rem;
+    background:var(--primary-soft); color:var(--primary); font-weight:600;
+  }
+  .hero h2{
+    margin:14px 0 10px; font-size:clamp(1.8rem, 4vw, 3rem); line-height:1.1;
+  }
+  .hero p{
+    margin:0; max-width:820px; color:var(--muted); font-size:1.03rem;
+  }
+  .hero-grid{
+    display:grid; grid-template-columns:1.3fr .7fr; gap:18px; align-items:start; margin-top:20px;
+  }
+  .hero-card{
+    background:color-mix(in oklab, var(--card), var(--bg) 18%);
+    border:1px solid var(--border);
+    border-radius:18px; padding:18px;
+  }
+  .hero-card h3{margin:0 0 8px; font-size:1rem}
+  .hero-card p{margin:0; font-size:.95rem}
+
+  .formula-box{
+    font-size:.95rem;
+    overflow:auto;
+    margin-top:12px;
+    font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    background:color-mix(in oklab, var(--card), var(--bg) 22%);
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:12px;
+    white-space:pre-wrap;
+  }
+
+  .toolbar{
+    display:flex; gap:12px; flex-wrap:wrap; align-items:end; justify-content:space-between;
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:14px;
+    box-shadow:var(--shadow);
+    margin-bottom:18px;
+  }
+  .toolbar-group{
+    display:flex; gap:10px; flex-wrap:wrap; align-items:end;
+  }
+  .field{
+    display:flex; flex-direction:column; gap:6px;
+  }
+  .field label{
+    font-size:.88rem; color:var(--muted);
+  }
+  .toolbar input, .toolbar select, .toolbar button{
+    padding:10px 12px; border-radius:10px; border:1px solid var(--border);
+    background:var(--card); color:inherit; min-width:112px;
+    font:inherit;
+  }
+  .toolbar input:focus, .toolbar select:focus, .toolbar button:focus{
+    outline:3px solid var(--ring); outline-offset:2px;
+  }
+  .toolbar button{
+    cursor:pointer;
+    background:var(--primary);
+    color:white;
+    border-color:transparent;
+    font-weight:600;
+  }
+  .toolbar button:hover{filter:brightness(1.04)}
+
+  .status-bar{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin:0 0 18px;
+  }
+  .pill{
+    padding:8px 12px;
+    border-radius:999px;
+    border:1px solid var(--border);
+    background:var(--card);
+    box-shadow:var(--shadow);
+    font-size:.92rem;
+  }
+  .pill.ok{
+    background:color-mix(in oklab, #22c55e 18%, var(--card));
+    border-color:color-mix(in oklab, #22c55e 45%, var(--border));
+  }
+  .pill.warn{
+    background:color-mix(in oklab, #f59e0b 18%, var(--card));
+    border-color:color-mix(in oklab, #f59e0b 45%, var(--border));
+  }
+  .pill.bad{
+    background:color-mix(in oklab, #ef4444 14%, var(--card));
+    border-color:color-mix(in oklab, #ef4444 45%, var(--border));
+  }
+
+  .error-box{
+    display:none;
+    margin:0 0 18px;
+    padding:12px 14px;
+    border-radius:14px;
+    border:1px solid color-mix(in oklab, #ef4444 50%, var(--border));
+    background:color-mix(in oklab, #ef4444 10%, var(--card));
+    color:#991b1b;
+    box-shadow:var(--shadow);
+  }
+  @media (prefers-color-scheme: dark){
+    .error-box{color:#fecaca}
+  }
+
+  .sim-grid{
+    display:grid;
+    grid-template-columns:minmax(0, 1fr) 330px;
+    gap:18px;
+    align-items:start;
+  }
+
+  .stack{display:block}
+
+  .card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:20px;
+    box-shadow:var(--shadow);
+    overflow:hidden;
+  }
+  .card-head{
+    padding:16px 18px;
+    background:color-mix(in oklab, var(--primary-soft), var(--card) 35%);
+    border-bottom:1px solid var(--border);
+  }
+  .card-head h3{margin:0; font-size:1rem}
+  .card-body{padding:18px}
+
+  .panel-grid{
+    display:grid;
+    grid-template-columns:1.2fr 1fr;
+    gap:14px;
+    padding:18px;
+  }
+  .panel{
+    border:1px solid var(--border);
+    border-radius:16px;
+    overflow:hidden;
+    background:#000;
+  }
+  .panel:first-child{grid-row:span 2}
+  .panel-title{
+    padding:10px 12px;
+    background:rgba(255,255,255,.08);
+    color:#e9eef8;
+    font-size:.9rem;
+    border-bottom:1px solid rgba(255,255,255,.14);
+  }
+  canvas{
+    display:block;
+    width:100%;
+    height:auto;
+    background:#000;
+  }
+
+  .metric-list{display:grid; gap:12px}
+  .metric{
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:12px 14px;
+    background:color-mix(in oklab, var(--card), var(--bg) 18%);
+  }
+  .metric .label{
+    font-size:.84rem;
+    color:var(--muted);
+    margin-bottom:4px;
+  }
+  .metric .value{
+    font-weight:700;
+    font-size:1rem;
+    word-break:break-word;
+  }
+
+  .legend{display:grid; gap:10px}
+  .legend-row{
+    display:flex; align-items:center; gap:10px;
+    color:var(--muted);
+    font-size:.94rem;
+  }
+  .dot{width:12px; height:12px; border-radius:999px; display:inline-block}
+  .line{width:18px; height:0; border-top:2px solid; display:inline-block}
+  .arc-icon{
+    width:18px; height:12px; display:inline-block;
+    border:2px solid #ffd166;
+    border-bottom:none;
+    border-radius:18px 18px 0 0;
+  }
+
+  .table-wrap{
+    overflow-x:auto;
+    border:1px solid var(--border);
+    border-radius:16px;
+  }
+  table{
+    width:100%;
+    border-collapse:collapse;
+    min-width:760px;
+    background:var(--card);
+  }
+  th, td{
+    padding:12px 14px;
+    text-align:left;
+    vertical-align:top;
+    border-bottom:1px solid var(--border);
+  }
+  th{
+    background:color-mix(in oklab, var(--primary-soft), var(--card) 28%);
+    color:var(--fg);
+    font-size:.92rem;
+  }
+  tr:last-child td{border-bottom:0}
+  td:first-child{
+    font-weight:700;
+    white-space:nowrap;
+  }
+  code{
+    font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size:.9em;
+    padding:.12em .35em;
+    border-radius:6px;
+    background:color-mix(in oklab, var(--primary-soft), var(--card) 45%);
+    color:var(--primary);
+  }
+
+  footer{padding:26px 0 40px; color:var(--muted)}
+  footer .footer-card{
+    border:1px solid var(--border);
+    background:var(--card);
+    border-radius:18px;
+    padding:18px;
+    text-align:center;
+    box-shadow:var(--shadow);
+  }
+
+  @media (max-width: 1060px){
+    .hero-grid{grid-template-columns:1fr}
+    .sim-grid{grid-template-columns:1fr}
+    .topbar{flex-direction:column; align-items:flex-start}
+  }
+  @media (max-width: 820px){
+    .panel-grid{grid-template-columns:1fr}
+    .panel:first-child{grid-row:auto}
+  }
+  @media (max-width: 720px){
+    .toolbar{align-items:stretch}
+    .toolbar-group{width:100%}
+    .field{flex:1 1 130px}
+    .toolbar input, .toolbar select, .toolbar button{min-width:unset; width:100%}
+  }
+</style>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to main content</a>
+
+  <header>
+    <div class="wrapper topbar">
+      <div class="brand">
+        <h1>Kite Central Configuration Collapse</h1>
+        <p>Supplementary material for the five-body kite central configuration collapse model</p>
+      </div>
+      <nav class="nav" aria-label="Primary">
+        <a href="research.html">Back to Research</a>
+        <a href="#overview">Overview</a>
+        <a href="#simulator">Simulator</a>
+        <a href="#results">Results</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="wrapper" tabindex="-1">
+    <section class="hero" id="overview">
+      <span class="hero-badge">Kite with Three Degrees of Freedom</span>
+      <h2>Five-Body Kite Central Configuration Collapse</h2>
+      <p>
+        This simulator lets you explore the collapse of a five-body kite central configuration by changing the key parameters and viewing the resulting animation. You can adjust the angles θ, φ, and δ to see how they affect the geometry and the admissible domain, and you can choose different collapse centers and powers to compare different collapse behaviors. Angle markers are drawn directly on the configuration panels.
+      </p>
+
+      <div class="hero-grid">
+        <div class="hero-card">
+          <h3>Model</h3>
+          <p>
+            Five masses lie at positions <code>q₁, q₂, q₃, q₄, q₅</code>, with <code>q₂</code> and <code>q₄</code> placed symmetrically about the x-axis. The default normalization is <code>m₂ = m₄ = 1</code>.
+          </p>
+          <div class="formula-box">r13 = 1
+r12 = sin(δ) / sin(δ + θ)
+r23 = sin(θ) / sin(δ + θ)
+r35 = [sin(θ)/sin(δ+θ)] · [sin(φ)/sin(π-δ+φ)]
+α = 1 + r35
+m = P⁻¹ Q [γ, β, β + 2α - 2]ᵀ</div>
+        </div>
+
+        <div class="hero-card">
+          <h3>Animation rules</h3>
+          <p>
+            Each frame is uniformly scaled by <code>ρ(t) = (1 - t)^p</code>. You can collapse toward the center of mass (<code>com</code>) or the geometric centroid (<code>centroid</code>). You can also switch the complete body-body graph on or off and adjust the playback speed and number of frames.
+          </p>
+          <div class="formula-box">τ = k / (N - 1)
+ρ = (1 - τ)^p
+pts(τ) = center + ρ · (finalPts - center)</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="toolbar" aria-label="Simulation controls">
+      <div class="toolbar-group">
+        <div class="field">
+          <label for="thetaInput">theta θ</label>
+          <input id="thetaInput" type="number" step="0.1" value="45" />
+        </div>
+        <div class="field">
+          <label for="phiInput">phi φ</label>
+          <input id="phiInput" type="number" step="0.1" value="13" />
+        </div>
+        <div class="field">
+          <label for="deltaInput">delta δ</label>
+          <input id="deltaInput" type="number" step="0.1" value="31" />
+        </div>
+        <div class="field">
+          <label for="angleUnit">angle unit</label>
+          <select id="angleUnit">
+            <option value="deg" selected>deg</option>
+            <option value="rad">rad</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="collapseCenter">collapse center</label>
+          <select id="collapseCenter">
+            <option value="com" selected>com</option>
+            <option value="centroid">centroid</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="toolbar-group">
+        <div class="field">
+          <label for="collapsePower">collapse power p</label>
+          <input id="collapsePower" type="number" step="0.05" value="0.6667" min="0.05" />
+        </div>
+        <div class="field">
+          <label for="nframesInput">number of frames</label>
+          <input id="nframesInput" type="number" step="1" value="90" min="2" />
+        </div>
+        <div class="field">
+          <label for="delayInput">frame delay [ms]</label>
+          <input id="delayInput" type="number" step="1" value="40" min="10" />
+        </div>
+        <div class="field">
+          <label for="applyAdmissible">admissible check</label>
+          <select id="applyAdmissible">
+            <option value="true" selected>true</option>
+            <option value="false">false</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="showCompleteGraph">show complete graph</label>
+          <select id="showCompleteGraph">
+            <option value="true" selected>true</option>
+            <option value="false">false</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="simulateBtn"> </label>
+          <button id="simulateBtn" class="btn-primary" type="button">run again</button>
+        </div>
+        <div class="field">
+          <label for="playPauseBtn"> </label>
+          <button id="playPauseBtn" type="button">pause</button>
+        </div>
+        <div class="field">
+          <label for="resetBtn"> </label>
+          <button id="resetBtn" type="button">reset</button>
+        </div>
+      </div>
+    </section>
+
+    <div class="status-bar">
+      <div class="pill" id="geometryPill">geometry: –</div>
+      <div class="pill" id="admissiblePill">admissible: –</div>
+      <div class="pill" id="centerPill">center: –</div>
+      <div class="pill" id="progressPill">progress: –</div>
+    </div>
+
+    <div class="error-box" id="errorBox" role="alert"></div>
+
+    <section class="sim-grid" id="simulator">
+      <div class="card">
+        <div class="card-head">
+          <h3>Animation panels</h3>
+        </div>
+        <div class="panel-grid">
+          <div class="panel">
+            <div class="panel-title">Kite collapse animation</div>
+            <canvas id="mainCanvas" width="860" height="760" aria-label="Kite collapse animation"></canvas>
+          </div>
+          <div class="panel">
+            <div class="panel-title">Final configuration</div>
+            <canvas id="finalCanvas" width="640" height="360" aria-label="Final configuration"></canvas>
+          </div>
+          <div class="panel">
+            <div class="panel-title">Collapse scale ρ(τ)</div>
+            <canvas id="rhoCanvas" width="640" height="360" aria-label="Collapse scale curve"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <div class="stack">
+        <div class="card" id="results">
+          <div class="card-head">
+            <h3>Diagnostics</h3>
+          </div>
+          <div class="card-body">
+            <div class="metric-list">
+              <div class="metric"><div class="label">angles</div><div class="value" id="metricAngles">–</div></div>
+              <div class="metric"><div class="label">alpha / beta / gamma</div><div class="value" id="metricABG">–</div></div>
+              <div class="metric"><div class="label">det(P)</div><div class="value" id="metricDetP">–</div></div>
+              <div class="metric"><div class="label">masses</div><div class="value" id="metricMasses">–</div></div>
+              <div class="metric"><div class="label">current rho</div><div class="value" id="metricRho">–</div></div>
+              <div class="metric"><div class="label">distances</div><div class="value" id="metricDistances">–</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:18px;">
+          <div class="card-head">
+            <h3>Legend</h3>
+          </div>
+          <div class="card-body">
+            <div class="legend">
+              <div class="legend-row"><span class="line" style="border-color:#cfd7e3"></span> Body-body edges</div>
+              <div class="legend-row"><span class="line" style="border-color:#8e98a8"></span> Symmetry axis y = 0</div>
+              <div class="legend-row"><span class="dot" style="background:#ffe178"></span> Collapse center</div>
+              <div class="legend-row"><span class="dot" style="background:#1971d8"></span> Positive mass</div>
+              <div class="legend-row"><span class="dot" style="background:#dc4c3f"></span> Negative mass</div>
+              <div class="legend-row"><span class="dot" style="background:#c59d19"></span> Near-zero mass</div>
+              <div class="legend-row"><span class="arc-icon"></span> Angle markers: θ, φ, δ</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" style="margin-top:22px;">
+      <div class="card-head">
+        <h3>Parameter notes</h3>
+      </div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Parameter</th>
+                <th>Main effect</th>
+                <th>Related condition</th>
+                <th>Animation impact</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>θ</code></td>
+                <td>Controls the angle that <code>q₂</code> and <code>q₄</code> make with the x-axis, which affects <code>r23</code> and the upper/lower vertex positions.</td>
+                <td>Must satisfy <code>θ &gt; 0</code> and <code>δ + θ &lt; π</code>.</td>
+                <td>Changes the kite height and the left-right opening of the shape.</td>
+              </tr>
+              <tr>
+                <td><code>φ</code></td>
+                <td>Controls the right-side geometry and <code>r35</code>, so it directly affects <code>α</code> and <code>m₅</code>.</td>
+                <td>Must satisfy <code>0 &lt; φ &lt; δ</code>.</td>
+                <td>Changes the position of <code>q₅</code> and the collapse shape on the right side.</td>
+              </tr>
+              <tr>
+                <td><code>δ</code></td>
+                <td>Controls the left-half geometry and the admissible-domain test.</td>
+                <td>Chapter 3 also requires <code>π/6 &lt; δ &lt; π/2</code> inside the admissible domain.</td>
+                <td>Changes the overall configuration and the admissibility flag.</td>
+              </tr>
+              <tr>
+                <td><code>collapse center</code></td>
+                <td>Chooses either the center of mass or the geometric centroid.</td>
+                <td>If the total mass is nearly zero and <code>com</code> is selected, the code automatically falls back to the centroid.</td>
+                <td>Determines the point toward which the animation collapses.</td>
+              </tr>
+              <tr>
+                <td><code>collapse power p</code></td>
+                <td>Controls the shrinking rate in <code>ρ = (1 - τ)^p</code>.</td>
+                <td><code>p &gt; 0</code></td>
+                <td>Smaller <code>p</code> slows the early stage; larger <code>p</code> accelerates the later stage.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrapper">
+      <div class="footer-card">
+      Five-body kite central configuration simulation.
+      </div>
+    </div>
+  </footer>
+
+<script>
+(() => {
+  const TAU = Math.PI * 2;
+  const EPS = 1e-12;
+
+  const mainCanvas = document.getElementById('mainCanvas');
+  const finalCanvas = document.getElementById('finalCanvas');
+  const rhoCanvas = document.getElementById('rhoCanvas');
+  const mainCtx = mainCanvas.getContext('2d');
+  const finalCtx = finalCanvas.getContext('2d');
+  const rhoCtx = rhoCanvas.getContext('2d');
+
+  const thetaInput = document.getElementById('thetaInput');
+  const phiInput = document.getElementById('phiInput');
+  const deltaInput = document.getElementById('deltaInput');
+  const angleUnit = document.getElementById('angleUnit');
+  const collapseCenter = document.getElementById('collapseCenter');
+  const collapsePower = document.getElementById('collapsePower');
+  const nframesInput = document.getElementById('nframesInput');
+  const delayInput = document.getElementById('delayInput');
+  const applyAdmissible = document.getElementById('applyAdmissible');
+  const showCompleteGraph = document.getElementById('showCompleteGraph');
+  const simulateBtn = document.getElementById('simulateBtn');
+  const playPauseBtn = document.getElementById('playPauseBtn');
+  const resetBtn = document.getElementById('resetBtn');
+  const errorBox = document.getElementById('errorBox');
+
+  const geometryPill = document.getElementById('geometryPill');
+  const admissiblePill = document.getElementById('admissiblePill');
+  const centerPill = document.getElementById('centerPill');
+  const progressPill = document.getElementById('progressPill');
+
+  const metricAngles = document.getElementById('metricAngles');
+  const metricABG = document.getElementById('metricABG');
+  const metricDetP = document.getElementById('metricDetP');
+  const metricMasses = document.getElementById('metricMasses');
+  const metricRho = document.getElementById('metricRho');
+  const metricDistances = document.getElementById('metricDistances');
+
+  let sim = null;
+  let frameIndex = 0;
+  let playing = true;
+  let lastTick = 0;
+
+  function deg2rad(x){ return x * Math.PI / 180; }
+  function rad2deg(x){ return x * 180 / Math.PI; }
+  function cot(x){ return Math.cos(x) / Math.sin(x); }
+  function fmt(x, digits = 6){ return Number.isFinite(x) ? Number(x).toFixed(digits) : '–'; }
+  function fmtExp(x){ return Number.isFinite(x) ? Number(x).toExponential(6) : '–'; }
+  function sum(arr){ return arr.reduce((a,b) => a+b, 0); }
+  function lerp(a,b,t){ return a + (b-a)*t; }
+
+  function showError(msg){
+    errorBox.style.display = 'block';
+    errorBox.textContent = msg;
+  }
+  function hideError(){
+    errorBox.style.display = 'none';
+    errorBox.textContent = '';
+  }
+
+  function parseInputs(){
+    return {
+      thetaIn: Number(thetaInput.value),
+      phiIn: Number(phiInput.value),
+      deltaIn: Number(deltaInput.value),
+      angleUnit: angleUnit.value,
+      collapseCenter: collapseCenter.value,
+      collapsePower: Number(collapsePower.value),
+      nframes: Math.max(2, Math.round(Number(nframesInput.value))),
+      delayMs: Math.max(10, Number(delayInput.value)),
+      applyAdmissibleCheck: applyAdmissible.value === 'true',
+      showCompleteGraph: showCompleteGraph.value === 'true'
+    };
+  }
+
+  function convertAngles(thetaIn, phiIn, deltaIn, unit){
+    if (unit === 'deg') {
+      return { theta: deg2rad(thetaIn), phi: deg2rad(phiIn), delta: deg2rad(deltaIn) };
+    }
+    if (unit === 'rad') {
+      return { theta: thetaIn, phi: phiIn, delta: deltaIn };
+    }
+    throw new Error("angle unit must be 'deg' or 'rad'.");
+  }
+
+  function det3(M){
+    return M[0][0]*(M[1][1]*M[2][2] - M[1][2]*M[2][1])
+         - M[0][1]*(M[1][0]*M[2][2] - M[1][2]*M[2][0])
+         + M[0][2]*(M[1][0]*M[2][1] - M[1][1]*M[2][0]);
+  }
+
+  function solve3x3(A, b){
+    const d = det3(A);
+    if (Math.abs(d) < 1e-12) throw new Error('det(P) is nearly zero. This is the degenerate case discussed in Chapter 3.');
+    const A1 = [[b[0],A[0][1],A[0][2]],[b[1],A[1][1],A[1][2]],[b[2],A[2][1],A[2][2]]];
+    const A2 = [[A[0][0],b[0],A[0][2]],[A[1][0],b[1],A[1][2]],[A[2][0],b[2],A[2][2]]];
+    const A3 = [[A[0][0],A[0][1],b[0]],[A[1][0],A[1][1],b[1]],[A[2][0],A[2][1],b[2]]];
+    return [det3(A1)/d, det3(A2)/d, det3(A3)/d];
+  }
+
+  function assertClose(a, b, tol, msg){
+    if (Math.abs(a - b) > tol * Math.max(1, Math.abs(a), Math.abs(b))) {
+      throw new Error(msg);
+    }
+  }
+
+  function norm2(a, b){
+    return Math.hypot(a[0] - b[0], a[1] - b[1]);
+  }
+
+  function massColor(m){
+    if (m > 1e-10) return { face:'#1971d8', edge:'#0b325f' };
+    if (m < -1e-10) return { face:'#dc4c3f', edge:'#5f160f' };
+    return { face:'#c59d19', edge:'#5a4608' };
+  }
+
+  function solveChapter3(theta, phi, delta, doAdmissibleCheck){
+    const den13 = Math.sin(delta + theta);
+    const den35 = Math.sin(Math.PI - delta + phi);
+
+    if (!(theta > 0 && phi > 0 && delta > 0)) {
+      throw new Error('theta, phi, and delta must all be positive.');
+    }
+    if (!(phi < delta)) {
+      throw new Error('The Chapter 3 geometry requires phi < delta.');
+    }
+    if (!(delta + theta < Math.PI)) {
+      throw new Error('The Chapter 3 geometry requires delta + theta < pi.');
+    }
+    if (Math.abs(den13) < EPS || Math.abs(den35) < EPS) {
+      throw new Error('The denominator sin(delta + theta) or sin(pi - delta + phi) is too small.');
+    }
+
+    const r13 = 1;
+    const r12 = Math.sin(delta) / den13;
+    const r14 = r12;
+    const r23 = Math.sin(theta) / den13;
+    const r34 = r23;
+    const r35 = (Math.sin(theta) / den13) * (Math.sin(phi) / den35);
+    const alpha = 1 + r35;
+    const r15 = alpha;
+    const r25 = (Math.sin(theta) / den13) * (Math.sin(Math.PI - delta) / den35);
+    const r45 = r25;
+    const r24 = 2 * Math.sin(theta) * Math.sin(delta) / den13;
+
+    const Rij = [r12,r13,r14,r15,r23,r24,r25,r34,r35,r45];
+    if (Rij.some(v => !Number.isFinite(v) || v <= 0) || alpha <= 1 + EPS) {
+      throw new Error('The computed distances are invalid. Please check the angles.');
+    }
+
+    const beta = 2 * cot(delta) / (cot(delta) + cot(theta));
+    const gamma = 2 * cot(theta) / (cot(delta) + cot(theta));
+
+    const S12 = r12 ** -3, S13 = r13 ** -3, S14 = r14 ** -3, S15 = r15 ** -3;
+    const S23 = r23 ** -3, S24 = r24 ** -3, S25 = r25 ** -3;
+    const S34 = r34 ** -3, S35 = r35 ** -3, S45 = r45 ** -3;
+
+    const S31 = S13, S32 = S23, S41 = S14, S42 = S24, S43 = S34;
+
+    const P = [
+      [0,                   (S31 - S32),                   alpha * (S15 - S25)],
+      [(S12 - S13),         0,                             (1 - alpha) * (S25 - S35)],
+      [alpha * (S12 - S15), (alpha - 1) * (S32 - S35),    0]
+    ];
+
+    const Qdiag = [S42 - S41, S43 - S42, S45 - S42];
+    const rhs = [
+      Qdiag[0] * gamma,
+      Qdiag[1] * beta,
+      Qdiag[2] * (beta + 2 * alpha - 2)
+    ];
+
+    const detP = det3(P);
+    if (Math.abs(detP) < 1e-12) {
+      throw new Error('det(P) is nearly zero. This is the degenerate case discussed in Chapter 3.');
+    }
+
+    const m = solve3x3(P, rhs);
+    const masses = { m1:m[0], m2:1, m3:m[1], m4:1, m5:m[2] };
+
+    const q1 = [0, 0];
+    const q3 = [1, 0];
+    const q5 = [alpha, 0];
+    const q2 = [r12 * Math.cos(theta), r12 * Math.sin(theta)];
+    const q4 = [q2[0], -q2[1]];
+
+    assertClose(norm2(q1, q2), r12, 1e-8, 'r12 mismatch');
+    assertClose(norm2(q2, q3), r23, 1e-8, 'r23 mismatch');
+    assertClose(norm2(q2, q5), r25, 1e-8, 'r25 mismatch');
+    assertClose(norm2(q4, q5), r45, 1e-8, 'r45 mismatch');
+    assertClose(norm2(q2, q4), r24, 1e-8, 'r24 mismatch');
+
+    let inAdm = true;
+    if (doAdmissibleCheck) {
+      const upperTheta = phi/2 - delta/2 + Math.PI/2;
+      if (!(delta > Math.PI/6 && delta < Math.PI/2)) inAdm = false;
+      if (delta >= Math.PI/3) {
+        if (!(phi > 0 && phi < delta - Math.PI/6)) inAdm = false;
+      } else {
+        if (!(phi > 0 && phi < delta/2)) inAdm = false;
+      }
+      if (!(theta > Math.PI/6 && theta < upperTheta)) inAdm = false;
+    }
+
+    return {
+      validGeometry: true,
+      inAdmissibleDomain: inAdm,
+      angles: { theta, phi, delta },
+      distances: { alpha, beta, gamma, r12, r13, r14, r15, r23, r24, r25, r34, r35, r45 },
+      masses,
+      massVector: m,
+      positions: { q1, q2, q3, q4, q5 },
+      P,
+      rhs,
+      detP
+    };
+  }
+
+  function buildSimulation(){
+    const params = parseInputs();
+    if (!(params.collapsePower > 0)) throw new Error('collapse power must be greater than 0.');
+
+    const { theta, phi, delta } = convertAngles(params.thetaIn, params.phiIn, params.deltaIn, params.angleUnit);
+    const out = solveChapter3(theta, phi, delta, params.applyAdmissibleCheck);
+
+    const names = ['q₁','q₂','q₃','q₄','q₅'];
+    const points = [out.positions.q1, out.positions.q2, out.positions.q3, out.positions.q4, out.positions.q5];
+    const masses = [out.masses.m1, out.masses.m2, out.masses.m3, out.masses.m4, out.masses.m5];
+    const totalMass = sum(masses);
+
+    let center = [0,0];
+    let centerMode = 'geometric centroid';
+    if (params.collapseCenter === 'com') {
+      if (Math.abs(totalMass) > 1e-12) {
+        center = [
+          points.reduce((acc,p,i) => acc + p[0] * masses[i], 0) / totalMass,
+          points.reduce((acc,p,i) => acc + p[1] * masses[i], 0) / totalMass
+        ];
+        centerMode = 'center of mass';
+      } else {
+        center = [sum(points.map(p => p[0]))/points.length, sum(points.map(p => p[1]))/points.length];
+        centerMode = 'geometric centroid (fallback: total mass ≈ 0)';
+      }
+    } else {
+      center = [sum(points.map(p => p[0]))/points.length, sum(points.map(p => p[1]))/points.length];
+      centerMode = 'geometric centroid';
+    }
+
+    const centeredPoints = points.map(p => [p[0] - center[0], p[1] - center[1]]);
+    const minX = Math.min(...points.map(p => p[0]));
+    const maxX = Math.max(...points.map(p => p[0]));
+    const minY = Math.min(...points.map(p => p[1]));
+    const maxY = Math.max(...points.map(p => p[1]));
+    const xpad = 0.2 * Math.max(1, maxX - minX);
+    const ypad = 0.35 * Math.max(1, Math.max(...points.map(p => Math.abs(p[1] - center[1]))));
+
+    return {
+      params,
+      out,
+      names,
+      points,
+      masses,
+      totalMass,
+      center,
+      centerMode,
+      centeredPoints,
+      maxAbsMass: Math.max(1e-12, ...masses.map(m => Math.abs(m))),
+      xlim: [minX - xpad, maxX + xpad],
+      ylim: [minY - ypad, maxY + ypad]
+    };
+  }
+
+  function clearCanvas(ctx, canvas){
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = '#000';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  }
+
+  function makeMapper(canvas, xlim, ylim, pad = 40){
+    const width = canvas.width - 2 * pad;
+    const height = canvas.height - 2 * pad;
+    return function map(pt){
+      const x = pad + (pt[0] - xlim[0]) / (xlim[1] - xlim[0]) * width;
+      const y = canvas.height - pad - (pt[1] - ylim[0]) / (ylim[1] - ylim[0]) * height;
+      return [x,y];
+    };
+  }
+
+  function drawLine(ctx, map, a, b, color, width = 1, alpha = 1, dash = []){
+    const [x1,y1] = map(a), [x2,y2] = map(b);
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    ctx.strokeStyle = color;
+    ctx.lineWidth = width;
+    ctx.setLineDash(dash);
+    ctx.beginPath();
+    ctx.moveTo(x1,y1);
+    ctx.lineTo(x2,y2);
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  function drawPoint(ctx, map, p, radius, fill, stroke = '#000'){
+    const [x,y] = map(p);
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(x, y, radius, 0, TAU);
+    ctx.fillStyle = fill;
+    ctx.fill();
+    ctx.strokeStyle = stroke;
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    ctx.restore();
+    return [x,y];
+  }
+
+  function normalizeAngle(a){
+    while (a <= -Math.PI) a += TAU;
+    while (a > Math.PI) a -= TAU;
+    return a;
+  }
+
+  function drawAngleMarker(ctx, map, vertex, fromPt, toPt, label, radius = 26, color = '#ffd166'){
+    const [vx, vy] = map(vertex);
+    const [fx, fy] = map(fromPt);
+    const [tx, ty] = map(toPt);
+
+    let a1 = Math.atan2(fy - vy, fx - vx);
+    let a2 = Math.atan2(ty - vy, tx - vx);
+    let diff = normalizeAngle(a2 - a1);
+
+    if (Math.abs(diff) < 0.08) return;
+    if (Math.abs(diff) > Math.PI) diff = diff > 0 ? diff - TAU : diff + TAU;
+
+    const end = a1 + diff;
+    const ccw = diff < 0;
+
+    ctx.save();
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    ctx.arc(vx, vy, radius, a1, end, ccw);
+    ctx.stroke();
+
+    const mid = a1 + diff / 2;
+    const lx = vx + Math.cos(mid) * (radius + 18);
+    const ly = vy + Math.sin(mid) * (radius + 18);
+
+    ctx.fillStyle = color;
+    ctx.font = 'italic 20px Times New Roman, serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(label, lx, ly);
+    ctx.restore();
+  }
+
+  function drawAngleMarkers(ctx, map, pts, isMainPanel = false){
+    const radius = isMainPanel ? 34 : 24;
+    drawAngleMarker(ctx, map, pts[0], pts[2], pts[1], 'θ', radius, '#ffd166');
+    drawAngleMarker(ctx, map, pts[2], pts[4], pts[1], 'δ', radius, '#ffd166');
+    drawAngleMarker(ctx, map, pts[1], pts[2], pts[4], 'φ', radius, '#ffd166');
+  }
+
+  function edgesFor(showComplete){
+    if (showComplete) {
+      const out = [];
+      for (let i = 0; i < 5; i++) for (let j = i + 1; j < 5; j++) out.push([i,j]);
+      return out;
+    }
+    return [[0,1],[1,2],[2,3],[3,0],[0,2],[2,4],[1,4],[3,4]];
+  }
+
+  function currentState(){
+    if (!sim) return null;
+    const tau = frameIndex / Math.max(1, sim.params.nframes - 1);
+    const rho = Math.max((1 - tau) ** sim.params.collapsePower, 0);
+    const pts = sim.centeredPoints.map(p => [sim.center[0] + rho * p[0], sim.center[1] + rho * p[1]]);
+    return { tau, rho, pts };
+  }
+
+  function drawMain(){
+    clearCanvas(mainCtx, mainCanvas);
+    if (!sim) return;
+
+    const st = currentState();
+    const map = makeMapper(mainCanvas, sim.xlim, sim.ylim, 52);
+    const edges = edgesFor(sim.params.showCompleteGraph);
+
+    mainCtx.save();
+    for (let i = 0; i <= 8; i++) {
+      const x = lerp(sim.xlim[0], sim.xlim[1], i / 8);
+      drawLine(mainCtx, map, [x, sim.ylim[0]], [x, sim.ylim[1]], 'rgba(255,255,255,.08)', 1);
+    }
+    for (let i = 0; i <= 8; i++) {
+      const y = lerp(sim.ylim[0], sim.ylim[1], i / 8);
+      drawLine(mainCtx, map, [sim.xlim[0], y], [sim.xlim[1], y], 'rgba(255,255,255,.08)', 1);
+    }
+    mainCtx.restore();
+
+    drawLine(mainCtx, map, [sim.xlim[0], 0], [sim.xlim[1], 0], '#8e98a8', 2, .9, [8,6]);
+
+    for (const [a,b] of edges) {
+      drawLine(mainCtx, map, st.pts[a], st.pts[b], '#cfd7e3', sim.params.showCompleteGraph ? 1.3 : 1.8, .85);
+    }
+
+    drawAngleMarkers(mainCtx, map, st.pts, true);
+
+    const [cx, cy] = drawPoint(mainCtx, map, sim.center, 9, '#ffe178', '#000');
+    mainCtx.save();
+    mainCtx.fillStyle = '#f5f7fb';
+    mainCtx.font = '15px system-ui, sans-serif';
+    mainCtx.fillText('collapse center', cx + 10, cy - 10);
+    mainCtx.restore();
+
+    for (let i = 0; i < st.pts.length; i++) {
+      const mass = sim.masses[i];
+      const colors = massColor(mass);
+      const radius = 12 + 28 * Math.sqrt(Math.abs(mass) / sim.maxAbsMass + 1e-12);
+      const [x,y] = drawPoint(mainCtx, map, st.pts[i], radius, colors.face, colors.edge);
+      const offsetY = st.pts[i][1] >= 0 ? -14 : 20;
+      mainCtx.save();
+      mainCtx.fillStyle = '#f5f7fb';
+      mainCtx.font = '15px system-ui, sans-serif';
+      mainCtx.fillText(`${sim.names[i]}  m=${mass.toFixed(4)}`, x + 12, y + offsetY);
+      mainCtx.restore();
+    }
+
+    mainCtx.save();
+    mainCtx.fillStyle = '#e9eef8';
+    mainCtx.font = '18px system-ui, sans-serif';
+    mainCtx.fillText(`theta=${rad2deg(sim.out.angles.theta).toFixed(3)}°, phi=${rad2deg(sim.out.angles.phi).toFixed(3)}°, delta=${rad2deg(sim.out.angles.delta).toFixed(3)}°`, 18, 30);
+    mainCtx.font = '17px system-ui, sans-serif';
+    mainCtx.fillStyle = '#aab4c6';
+    mainCtx.fillText(`rho=(1-t)^${sim.params.collapsePower.toFixed(4)} = ${st.rho.toFixed(5)},  det(P)=${sim.out.detP.toExponential(4)}`, 18, 56);
+    mainCtx.fillText(`collapse about ${sim.centerMode}; admissible=${sim.out.inAdmissibleDomain ? 1 : 0}`, 18, 82);
+    mainCtx.restore();
+  }
+
+  function drawFinal(){
+    clearCanvas(finalCtx, finalCanvas);
+    if (!sim) return;
+    const map = makeMapper(finalCanvas, sim.xlim, sim.ylim, 42);
+    const edges = edgesFor(sim.params.showCompleteGraph);
+
+    drawLine(finalCtx, map, [sim.xlim[0], 0], [sim.xlim[1], 0], '#8e98a8', 2, .9, [8,6]);
+    for (const [a,b] of edges) {
+      drawLine(finalCtx, map, sim.points[a], sim.points[b], '#d4dcea', sim.params.showCompleteGraph ? 1.1 : 1.7, .9);
+    }
+
+    drawAngleMarkers(finalCtx, map, sim.points, false);
+    drawPoint(finalCtx, map, sim.center, 8, '#ffe178', '#000');
+
+    for (let i = 0; i < sim.points.length; i++) {
+      const mass = sim.masses[i];
+      const colors = massColor(mass);
+      const radius = 9 + 22 * Math.sqrt(Math.abs(mass) / sim.maxAbsMass + 1e-12);
+      const [x,y] = drawPoint(finalCtx, map, sim.points[i], radius, colors.face, colors.edge);
+      finalCtx.save();
+      finalCtx.fillStyle = '#f5f7fb';
+      finalCtx.font = '14px system-ui, sans-serif';
+      finalCtx.fillText(sim.names[i], x + 10, y - 8);
+      finalCtx.restore();
+    }
+
+    finalCtx.save();
+    finalCtx.fillStyle = '#e9eef8';
+    finalCtx.font = '18px system-ui, sans-serif';
+    finalCtx.fillText('Final kite configuration', 18, 28);
+    finalCtx.font = '16px system-ui, sans-serif';
+    finalCtx.fillStyle = '#aab4c6';
+    finalCtx.fillText(`alpha=${sim.out.distances.alpha.toFixed(5)}, center=${sim.centerMode}`, 18, 52);
+    finalCtx.restore();
+  }
+
+  function drawRho(){
+    clearCanvas(rhoCtx, rhoCanvas);
+    if (!sim) return;
+
+    const pad = { left:54, right:24, top:34, bottom:48 };
+    const plotW = rhoCanvas.width - pad.left - pad.right;
+    const plotH = rhoCanvas.height - pad.top - pad.bottom;
+    const map = (tau, rho) => [pad.left + tau * plotW, rhoCanvas.height - pad.bottom - rho * plotH];
+
+    rhoCtx.save();
+    rhoCtx.strokeStyle = 'rgba(255,255,255,.15)';
+    rhoCtx.fillStyle = '#aab4c6';
+    rhoCtx.font = '15px system-ui, sans-serif';
+    for (let i = 0; i <= 4; i++) {
+      const x = i / 4;
+      const [px] = map(x, 0);
+      rhoCtx.beginPath(); rhoCtx.moveTo(px, pad.top); rhoCtx.lineTo(px, rhoCanvas.height - pad.bottom); rhoCtx.stroke();
+      rhoCtx.fillText(x.toFixed(2), px - 12, rhoCanvas.height - 18);
+    }
+    for (let i = 0; i <= 4; i++) {
+      const y = i / 4;
+      const [,py] = map(0, y);
+      rhoCtx.beginPath(); rhoCtx.moveTo(pad.left, py); rhoCtx.lineTo(rhoCanvas.width - pad.right, py); rhoCtx.stroke();
+      rhoCtx.fillText(y.toFixed(2), 12, py + 5);
+    }
+    rhoCtx.strokeStyle = 'rgba(255,255,255,.55)';
+    rhoCtx.strokeRect(pad.left, pad.top, plotW, plotH);
+    rhoCtx.restore();
+
+    const pts = [];
+    for (let i = 0; i <= 240; i++) {
+      const tau = i / 240;
+      const rho = Math.max((1 - tau) ** sim.params.collapsePower, 0);
+      pts.push(map(tau, rho));
+    }
+
+    rhoCtx.save();
+    rhoCtx.strokeStyle = '#8ab4ff';
+    rhoCtx.lineWidth = 3;
+    rhoCtx.beginPath();
+    rhoCtx.moveTo(pts[0][0], pts[0][1]);
+    for (let i = 1; i < pts.length; i++) rhoCtx.lineTo(pts[i][0], pts[i][1]);
+    rhoCtx.stroke();
+    rhoCtx.restore();
+
+    const st = currentState();
+    const [cx, cy] = map(st.tau, st.rho);
+    rhoCtx.save();
+    rhoCtx.beginPath();
+    rhoCtx.arc(cx, cy, 7, 0, TAU);
+    rhoCtx.fillStyle = '#ffb347';
+    rhoCtx.fill();
+    rhoCtx.lineWidth = 2;
+    rhoCtx.strokeStyle = '#000';
+    rhoCtx.stroke();
+    rhoCtx.fillStyle = '#e9eef8';
+    rhoCtx.font = '18px system-ui, sans-serif';
+    rhoCtx.fillText('Collapse scale curve', 18, 28);
+    rhoCtx.font = '16px system-ui, sans-serif';
+    rhoCtx.fillStyle = '#aab4c6';
+    rhoCtx.fillText(`tau=${st.tau.toFixed(4)}, rho=${st.rho.toFixed(5)}, p=${sim.params.collapsePower.toFixed(4)}`, 18, 52);
+    rhoCtx.fillText('x: normalized time τ,   y: collapse scale ρ', 18, 74);
+    rhoCtx.restore();
+  }
+
+  function updateMetrics(){
+    if (!sim) return;
+    const st = currentState();
+    const angles = sim.out.angles;
+    metricAngles.textContent = `${rad2deg(angles.theta).toFixed(4)}°, ${rad2deg(angles.phi).toFixed(4)}°, ${rad2deg(angles.delta).toFixed(4)}°`;
+    metricABG.textContent = `α=${fmt(sim.out.distances.alpha, 6)}, β=${fmt(sim.out.distances.beta, 6)}, γ=${fmt(sim.out.distances.gamma, 6)}`;
+    metricDetP.textContent = fmtExp(sim.out.detP);
+    metricMasses.textContent = `m1=${fmt(sim.out.masses.m1, 6)}, m2=${fmt(sim.out.masses.m2, 6)}, m3=${fmt(sim.out.masses.m3, 6)}, m4=${fmt(sim.out.masses.m4, 6)}, m5=${fmt(sim.out.masses.m5, 6)}`;
+    metricRho.textContent = `frame ${frameIndex + 1}/${sim.params.nframes}, tau=${fmt(st.tau, 4)}, rho=${fmt(st.rho, 6)}`;
+    metricDistances.textContent = `r12=${fmt(sim.out.distances.r12, 5)}, r23=${fmt(sim.out.distances.r23, 5)}, r24=${fmt(sim.out.distances.r24, 5)}, r25=${fmt(sim.out.distances.r25, 5)}, r35=${fmt(sim.out.distances.r35, 5)}, r15=${fmt(sim.out.distances.r15, 5)}`;
+
+    geometryPill.className = `pill ${sim.out.validGeometry ? 'ok' : 'bad'}`;
+    geometryPill.textContent = `geometry: ${sim.out.validGeometry ? 'valid' : 'invalid'}`;
+
+    admissiblePill.className = `pill ${sim.out.inAdmissibleDomain ? 'ok' : 'warn'}`;
+    admissiblePill.textContent = `admissible: ${sim.out.inAdmissibleDomain ? 'inside domain' : 'outside domain'}`;
+
+    centerPill.className = 'pill';
+    centerPill.textContent = `center: ${sim.centerMode}`;
+
+    progressPill.className = 'pill';
+    progressPill.textContent = `progress: ${(100 * st.tau).toFixed(1)}%`;
+  }
+
+  function renderAll(){
+    drawMain();
+    drawFinal();
+    drawRho();
+    updateMetrics();
+  }
+
+  function simulateAndRender(){
+    hideError();
+    sim = buildSimulation();
+    frameIndex = 0;
+    playing = true;
+    playPauseBtn.textContent = 'pause';
+    renderAll();
+  }
+
+  function animationLoop(ts){
+    if (!lastTick) lastTick = ts;
+    if (sim && playing && ts - lastTick >= sim.params.delayMs) {
+      frameIndex = (frameIndex + 1) % sim.params.nframes;
+      lastTick = ts;
+      renderAll();
+    }
+    requestAnimationFrame(animationLoop);
+  }
+
+  simulateBtn.addEventListener('click', () => {
+    try {
+      simulateAndRender();
+    } catch (err) {
+      showError(err.message || String(err));
+    }
+  });
+
+  playPauseBtn.addEventListener('click', () => {
+    playing = !playing;
+    playPauseBtn.textContent = playing ? 'pause' : 'play';
+  });
+
+  resetBtn.addEventListener('click', () => {
+    frameIndex = 0;
+    renderAll();
+  });
+
+  [thetaInput, phiInput, deltaInput, angleUnit, collapseCenter, collapsePower, nframesInput, delayInput, applyAdmissible, showCompleteGraph].forEach(el => {
+    el.addEventListener('change', () => {
+      try {
+        simulateAndRender();
+      } catch (err) {
+        showError(err.message || String(err));
+      }
+    });
+  });
+
+  try {
+    simulateAndRender();
+  } catch (err) {
+    showError(err.message || String(err));
+  }
+
+  requestAnimationFrame(animationLoop);
+})();
+</script>
+</body>
+</html>

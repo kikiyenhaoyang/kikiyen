@@ -279,7 +279,35 @@
     color: #000 !important;
   }
 }
+/* 卡片網格（書籍 & 筆記共用） */
+    .card-grid{
+      display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap:16px; margin: 0 auto; max-width:1100px;
+    }
+    .text-card{
+      background:var(--card); border:1px solid rgba(0,0,0,0.12); border-radius:12px; text-align:left; padding:16px;
+      transition: transform .2s, box-shadow .2s, border-color .2s;
+    }
+    .text-card:hover{ transform: translateY(-4px); box-shadow: 0 8px 16px rgba(0,0,0,.12); border-color: rgba(0,0,0,0.18); }
+    .solution-link{ text-decoration:none; color:inherit; display:block; height:100%; }
+    .book-title{
+      color:inherit; font-size:1.05rem; margin:0 0 8px; font-weight:700; line-height:1.35;
+      display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;
+    }
+    .book-author{ font-size:.95rem; color:var(--muted); margin:0 0 4px; }
+    .book-detail{ font-size:.85rem; color:var(--muted); margin:0; }
 
+    .tag{ display:inline-block; font-size:.75rem; padding:2px 8px; border-radius:999px; border:1px solid rgba(0,0,0,0.15); color:var(--muted); margin-bottom:8px; }
+
+    footer{ padding:28px 0 36px; border-top:1px solid rgba(0,0,0,0.1); margin-top:36px; }
+    .logos{ display:flex; justify-content:center; align-items:center; gap:28px; }
+    .logos img{ height:80px; width:auto; }
+
+    .notes-subheading{
+      margin: 24px 0 8px;
+      font-size: 1.4rem;
+      font-weight: 600;
+    }
   </style>
 </head>
 
@@ -326,16 +354,16 @@
         <div>
           <h2 class="page-title">Research Interests</h2>
           <p class="lead">
-            My research spans statistical physics, celestial mechanics, dynamical systems, and mathematical physics. I study the
-            statistical properties of complex and stochastic dynamical systems (e.g., epidemic and ecological models),
-            and N-body problems in celestial mechanics—stability, symmetry, ergodicity and statistical properties,
-            and phase-transition-like phenomena. I’m also interested in connections between statistical physics
-            and number theory/data science.
+            My research spans statistical physics, celestial mechanics, dynamical systems, and mathematical physics.
+             I investigate the statistical behavior of complex and stochastic dynamical systems—such as epidemic and ecological models—and 
+             study physical systems, particularly celestial mechanics and statistical physics,
+              utilizing the mathematical structures of differential geometry and algebraic geometry. I am also interested in the interfaces between statistical physics,
+ data science, and number theory.
           </p>
           <ul class="key-bullets">
             <li><strong>Stochastic dynamics:</strong> spectra, mixing, universality, rare events</li>
             <li><strong>Celestial mechanics:</strong> N-body stability, central configurations, symmetry, ergodicity</li>
-            <li><strong>Bridges:</strong> statistical physics × number theory/data science</li>
+            <li><strong>Bridges:</strong> statistical physics/dynamical system × number theory/data science</li>
           </ul>
         </div>
 
@@ -503,6 +531,39 @@
   })();
 </script>
 
+<h2 class="page-title">Related Simulation of Research</h2>
+
+ <div class="card-grid">
+        <article class="text-card">
+          <a href="kite_cc.html" class="solution-link">
+            <p class="tag">Interactive Simulator</p>
+            <h3 class="book-title" style="color: white;">Five-body Kite Central Configurations</h3>
+            <p class="book-detail"> Numerical simulation and visualization of the paper 
+              "Five-body Kite Central Configurations With Three Degrees of Freedom."</p>
+          </a>
+        </article>
+        <article class="text-card">
+          <a href="poisson_systems.html" class="solution-link">
+            <p class="tag">Interactive Simulator</p>
+            <h3 class="book-title" style="color: white;">Visualizations of Poisson Systems</h3>
+            <p class="book-detail">Intriguing physical applications of Poisson systems.</p>
+          </a>
+        </article>
+         <article class="text-card">
+          <a href="classical_spin.html" class="solution-link">
+            <p class="tag">Interactive Simulator</p>
+            <h3 class="book-title" style="color: white;">Visualizations of Classical Spin Systems</h3>
+            <p class="book-detail">Intriguing physical applications of classical spin Poisson system.</p>
+          </a>
+        </article>
+         <article class="text-card">
+          <a href="poisson_variety_grin.html" class="solution-link">
+            <p class="tag">Interactive Simulator</p>
+            <h3 class="book-title" style="color: white;">Visualizations of Poisson Systems</h3>
+            <p class="book-detail">Intriguing physical applications of optical Poisson systems.</p>
+          </a>
+        </article>
+</div>
       <h2 class="page-title">Current Research Areas</h2>
       <div class="card-grid">
         <article class="research-card">

@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Poisson Systems — Harmonic Oscillator & Prey–Predator</title>
+<meta name="description" content="Interactive Poisson systems simulator for the harmonic oscillator and Lotka–Volterra prey–predator model." />
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" crossorigin="anonymous"
+  onload="renderMathInElement(document.getElementById('main'),{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});"></script>
+
+<style>
+  :root{
+    --bg:#f6f7fb;
+    --fg:#18212f;
+    --muted:#5f6b7a;
+    --primary:#1d4ed8;
+    --primary-soft:#dbeafe;
+    --accent:#f59e0b;
+    --good:#22c55e;
+    --danger:#ef4444;
+    --card:#ffffff;
+    --border:rgba(24,33,47,.12);
+    --ring:#93c5fd;
+    --maxw:1260px;
+    --shadow:0 12px 30px rgba(0,0,0,.08);
+    --code:#0f172a;
+  }
+
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#0b1220;
+      --fg:#e5edf7;
+      --muted:#9aa8ba;
+      --primary:#7cb3ff;
+      --primary-soft:#172554;
+      --accent:#fbbf24;
+      --good:#86efac;
+      --danger:#fca5a5;
+      --card:#101a2c;
+      --border:rgba(255,255,255,.12);
+      --ring:#60a5fa;
+      --shadow:0 12px 30px rgba(0,0,0,.28);
+      --code:#e5edf7;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; scroll-behavior:auto !important;}
+  }
+
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background:linear-gradient(180deg, var(--bg) 0%, color-mix(in oklab, var(--bg), #ffffff 8%) 100%);
+    color:var(--fg);
+    line-height:1.6;
+  }
+  a{color:var(--primary)}
+  code{
+    font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    padding:.12em .35em;
+    border-radius:6px;
+    background:color-mix(in oklab, var(--primary-soft), var(--card) 45%);
+    color:var(--primary);
+  }
+
+  .wrapper{max-width:var(--maxw); margin:0 auto; padding:0 18px}
+  .skip-link{position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden;}
+  .skip-link:focus{
+    position:fixed; left:16px; top:16px; width:auto; height:auto;
+    background:#000; color:#fff; padding:8px 12px; border-radius:8px; z-index:1000;
+  }
+
+  header{
+    position:sticky; top:0; z-index:50;
+    background:rgba(255,255,255,.72);
+    backdrop-filter:saturate(180%) blur(14px);
+    border-bottom:1px solid var(--border);
+  }
+  @media (prefers-color-scheme: dark){header{background:rgba(11,18,32,.72)}}
+
+  .topbar{display:flex; align-items:center; justify-content:space-between; gap:16px; padding:14px 0;}
+  .brand h1{margin:0; font-size:1.16rem; line-height:1.1;}
+  .brand p{margin:4px 0 0; color:var(--muted); font-size:.92rem;}
+  .nav{display:flex; gap:10px; flex-wrap:wrap;}
+  .nav a{
+    text-decoration:none; color:inherit;
+    padding:8px 12px; border:1px solid var(--border); border-radius:999px;
+    background:color-mix(in oklab, var(--card), transparent 10%);
+  }
+
+  main{padding:30px 0 50px}
+  .hero{
+    background:var(--card); border:1px solid var(--border); border-radius:24px;
+    box-shadow:var(--shadow); padding:28px; margin-bottom:22px;
+  }
+  .hero-badge{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:6px 12px; border-radius:999px; font-size:.9rem;
+    background:var(--primary-soft); color:var(--primary); font-weight:800;
+  }
+  .hero h2{margin:14px 0 10px; font-size:clamp(1.72rem, 4vw, 3rem); line-height:1.1;}
+  .hero p{margin:0; max-width:920px; color:var(--muted); font-size:1.03rem;}
+  .hero-grid{display:grid; grid-template-columns:1fr 1fr; gap:18px; align-items:stretch; margin-top:20px;}
+  .hero-card{
+    background:color-mix(in oklab, var(--card), var(--bg) 18%);
+    border:1px solid var(--border); border-radius:18px; padding:18px;
+  }
+  .hero-card h3{margin:0 0 8px; font-size:1rem}
+  .formula{
+    font-size:.96rem; overflow:auto; margin-top:12px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    background:color-mix(in oklab, var(--card), var(--bg) 22%);
+    border:1px solid var(--border); border-radius:12px; padding:12px;
+    color:var(--code);
+  }
+
+  .models-grid{display:grid; grid-template-columns:1fr; gap:22px;}
+  .model-card{
+    background:var(--card); border:1px solid var(--border); border-radius:22px;
+    box-shadow:var(--shadow); overflow:hidden;
+  }
+  .model-head{
+    display:flex; align-items:flex-start; justify-content:space-between; gap:16px; flex-wrap:wrap;
+    padding:17px 20px;
+    background:color-mix(in oklab, var(--primary-soft), var(--card) 35%);
+    border-bottom:1px solid var(--border);
+  }
+  .model-head h3{margin:0; font-size:1.12rem}
+  .model-head p{margin:4px 0 0; color:var(--muted); max-width:780px;}
+  .model-body{
+    display:grid; grid-template-columns:minmax(0,1fr) 360px;
+    gap:18px; padding:18px; align-items:start;
+  }
+  .canvas-grid{
+    display:grid; grid-template-columns:1fr 1fr; gap:14px;
+  }
+  .plot-panel{
+    border:1px solid var(--border); border-radius:16px; overflow:hidden; background:#000; min-width:0;
+  }
+  .plot-panel.main{grid-row:auto}
+  .panel-title{
+    padding:10px 12px; background:rgba(255,255,255,.08); color:#e9eef8;
+    font-size:.9rem; border-bottom:1px solid rgba(255,255,255,.14);
+  }
+  canvas{display:block; width:100%; height:auto; background:#000;}
+
+  .side-stack{display:grid; gap:16px}
+  .card{
+    background:color-mix(in oklab, var(--card), var(--bg) 6%);
+    border:1px solid var(--border); border-radius:18px; overflow:hidden;
+  }
+  .card-head{
+    padding:13px 15px;
+    background:color-mix(in oklab, var(--primary-soft), var(--card) 40%);
+    border-bottom:1px solid var(--border);
+  }
+  .card-head h4{margin:0; font-size:1rem}
+  .card-body{padding:15px}
+
+  .control-grid{display:grid; gap:13px}
+  .control-row{display:grid; grid-template-columns:1fr auto; gap:10px; align-items:center;}
+  .control-row label{font-weight:800; font-size:.92rem;}
+  .control-row .value{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; color:var(--primary); font-weight:800;}
+  input[type="range"]{width:100%; accent-color:var(--primary);}
+  .control-note{margin:8px 0 0; font-size:.86rem; color:var(--muted);}
+  .button-row{display:flex; gap:10px; flex-wrap:wrap; margin-top:14px;}
+  button.action{
+    cursor:pointer; border:1px solid var(--border); border-radius:12px; padding:10px 12px;
+    background:var(--primary); color:white; font:inherit; font-weight:800;
+  }
+  button.action.secondary{background:var(--card); color:var(--fg)}
+  button.action:focus{outline:3px solid var(--ring); outline-offset:2px}
+
+  .metric-list{display:grid; gap:10px}
+  .metric{
+    border:1px solid var(--border); border-radius:14px; padding:11px 13px;
+    background:color-mix(in oklab, var(--card), var(--bg) 18%);
+  }
+  .metric .label{font-size:.82rem; color:var(--muted); margin-bottom:3px;}
+  .metric .value{font-weight:800; font-size:.96rem; word-break:break-word;}
+  .status-pill{
+    display:inline-flex; align-items:center; gap:6px; padding:4px 9px; border-radius:999px;
+    background:color-mix(in oklab, var(--good), transparent 84%); color:color-mix(in oklab, var(--good), var(--fg) 30%);
+    border:1px solid color-mix(in oklab, var(--good), transparent 60%); font-weight:800;
+  }
+  .warn-pill{
+    background:color-mix(in oklab, var(--danger), transparent 84%);
+    color:color-mix(in oklab, var(--danger), var(--fg) 30%);
+    border-color:color-mix(in oklab, var(--danger), transparent 60%);
+  }
+
+
+
+  .mini-grid{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px;}
+  .mini-box{
+    border:1px solid var(--border); border-radius:14px; padding:10px 12px;
+    background:color-mix(in oklab, var(--card), var(--bg) 20%);
+  }
+  .mini-box .mini-label{font-size:.78rem; color:var(--muted); margin-bottom:3px;}
+  .mini-box .mini-value{font-weight:850; font-size:.94rem; word-break:break-word;}
+  .reading-list{display:grid; gap:9px; margin:0; padding:0; list-style:none;}
+  .reading-list li{
+    border:1px solid var(--border); border-radius:13px; padding:10px 12px;
+    background:color-mix(in oklab, var(--card), var(--bg) 18%);
+    color:var(--muted); font-size:.91rem;
+  }
+  .reading-list strong{color:var(--fg)}
+  .insight-text{margin:10px 0 0; color:var(--muted); font-size:.9rem;}
+
+  .legend{display:grid; gap:9px}
+  .legend-row{display:flex; align-items:center; gap:10px; color:var(--muted); font-size:.92rem;}
+  .dot{width:12px; height:12px; border-radius:999px; display:inline-block}
+  .line{width:22px; height:0; border-top:3px solid; display:inline-block}
+
+  .table-section{margin-top:22px;}
+  .table-wrap{overflow-x:auto; border:1px solid var(--border); border-radius:16px;}
+  table{width:100%; border-collapse:collapse; min-width:820px; background:var(--card);}
+  th,td{padding:12px 14px; text-align:left; vertical-align:top; border-bottom:1px solid var(--border);}
+  th{background:color-mix(in oklab, var(--primary-soft), var(--card) 28%); color:var(--fg); font-size:.92rem;}
+  tr:last-child td{border-bottom:0}
+  td:first-child{font-weight:800; white-space:nowrap;}
+  .relation-note{margin:12px 0 0; color:var(--muted); font-size:.92rem;}
+
+  footer{padding:26px 0 40px; color:var(--muted)}
+  footer .footer-card{
+    border:1px solid var(--border); background:var(--card); border-radius:18px;
+    padding:18px; text-align:center; box-shadow:var(--shadow);
+  }
+
+  @media (max-width: 1120px){
+    .model-body{grid-template-columns:1fr}
+    .hero-grid{grid-template-columns:1fr}
+  }
+  @media (max-width: 840px){
+    .canvas-grid{grid-template-columns:1fr}
+    .plot-panel.main{grid-row:auto}
+  }
+</style>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to main content</a>
+
+  <header>
+    <div class="wrapper topbar">
+      <div class="brand">
+        <h1>Poisson Systems Simulator</h1>
+        <p>@ NTHU 2026 spring · harmonic oscillator + prey–predator model</p>
+      </div>
+      <nav class="nav" aria-label="Primary">
+        <a href="research.html">Back to <em>Research</em></a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="wrapper" tabindex="-1">
+    <section class="hero" id="overview">
+      <span class="hero-badge">Poisson Geometry Learning Hub</span>
+      <h2>Poisson dynamics for the harmonic oscillator and the prey–predator model</h2>
+      <p>
+       There are two basic Poisson systems demonstrated in this webpage. The first is the harmonic oscillator with the canonical Poisson bracket. The second is the Lotka–Volterra prey–predator model with the noncanonical bracket $J(x,y)=xy\begin{pmatrix}0&1\\-1&0\end{pmatrix}$. Both models show a phase portrait, vector field, trajectory, and time trace in fixed-scale animation windows.
+      </p>
+      <div class="hero-grid">
+        <div class="hero-card">
+          <h3>Canonical harmonic oscillator</h3>
+          <p>
+            $$z=(q,p),\quad J=\begin{pmatrix}0&1\\-1&0\end{pmatrix},\quad H(q,p)=\frac12(p^2+\omega^2q^2).$$
+            Hamiltonian equation $\dot z=J\nabla H$ gives $\dot q=p,\ \dot p=-\omega^2 q$. Energy level sets are ellipses in phase space.
+          </p>
+        </div>
+        <div class="hero-card">
+          <h3>Lotka–Volterra as a Poisson system</h3>
+          <p>
+            $$J(x,y)=xy\begin{pmatrix}0&1\\-1&0\end{pmatrix},\quad
+            H=\gamma\ln x-\delta x+\alpha\ln y-\beta y.$$
+            Then $\dot x=x(\alpha-\beta y),\ \dot y=y(\delta x-\gamma)$, and the coexistence equilibrium is $(x^*,y^*)=(\gamma/\delta,\alpha/\beta)$.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="models-grid" id="simulator">
+      <article class="model-card" id="oscillator">
+        <div class="model-head">
+          <div>
+            <h3>1. Harmonic oscillator — canonical Poisson system</h3>
+            <p>Drag the sliders to change $\omega$, initial condition, and visual speed. The yellow ellipse is the Hamiltonian level set selected by the initial energy.</p>
+          </div>
+        </div>
+        <div class="model-body">
+          <div class="canvas-grid">
+            <div class="plot-panel main">
+              <div class="panel-title">Phase space: vector field, Hamiltonian level set, trajectory, and current state</div>
+              <canvas id="hoPhaseCanvas" width="760" height="760" aria-label="Harmonic oscillator phase portrait"></canvas>
+            </div>
+            <div class="plot-panel">
+              <div class="panel-title">Time trace: q(t) and p(t)</div>
+              <canvas id="hoTimeCanvas" width="760" height="760" aria-label="Harmonic oscillator time trace"></canvas>
+            </div>
+          </div>
+
+          <div class="side-stack">
+            <div class="card">
+              <div class="card-head"><h4>Controls</h4></div>
+              <div class="card-body">
+                <div class="control-grid" id="hoControls"></div>
+                <div class="button-row">
+                  <button id="hoToggle" class="action" type="button">pause</button>
+                  <button id="hoReset" class="action secondary" type="button">reset oscillator</button>
+                </div>
+                </div>
+            </div>
+
+            <div class="card">
+              <div class="card-head"><h4>Poisson structure</h4></div>
+              <div class="card-body">
+                <div class="metric-list">
+                  <div class="metric"><div class="label">symplectic leaf</div><div class="value"><span class="status-pill">whole phase plane</span></div></div>
+                  <div class="metric"><div class="label">current state z=(q,p)</div><div class="value" id="hoMetricState">–</div></div>
+                  <div class="metric"><div class="label">Poisson tensor</div><div class="value"><code>J = [[0,1],[-1,0]]</code></div></div>
+                  <div class="metric"><div class="label">Hamiltonian</div><div class="value"><code>H = 1/2(p² + ω²q²)</code></div></div>
+                  <div class="metric"><div class="label">equations</div><div class="value"><code>q̇ = p, ṗ = −ω²q</code></div></div>
+                  <div class="metric"><div class="label">equilibrium and level sets</div><div class="value">center at <code>(0,0)</code>; orbits are closed ellipses.</div></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-head"><h4>Live interpretation</h4></div>
+              <div class="card-body">
+                <div class="metric-list">
+                  <div class="metric"><div class="label">selected energy level</div><div class="value" id="hoMetricEnergy">–</div></div>
+                  <div class="metric"><div class="label">period</div><div class="value" id="hoMetricPeriod">–</div></div>
+                  <div class="metric"><div class="label">turning points</div><div class="value" id="hoMetricTurning">–</div></div>
+                  <div class="metric"><div class="label">instantaneous vector field</div><div class="value" id="hoMetricVector">–</div></div>
+                </div>
+                <p class="insight-text">Read the phase portrait as follows: the yellow ellipse is fixed by the initial energy, the purple curve is the simulated orbit from the current run, and the orange point moves along the same level set.</p>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-head"><h4>Legend</h4></div>
+              <div class="card-body">
+                <div class="legend">
+                  <div class="legend-row"><span class="line" style="border-color:#38bdf8"></span> Vector field $\dot z=J\nabla H$</div>
+                  <div class="legend-row"><span class="line" style="border-color:#fbbf24"></span> Hamiltonian level set</div>
+                  <div class="legend-row"><span class="line" style="border-color:#c084fc"></span> Full numerical trajectory</div>
+                  <div class="legend-row"><span class="dot" style="background:#f59e0b"></span> Current point</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="model-card" id="predator">
+        <div class="model-head">
+          <div>
+            <h3>2. Prey–predator / Lotka–Volterra — noncanonical Poisson system</h3>
+            <p>Use the controls to change growth, predation, predator death, conversion, initial populations, and speed. The nullclines cross at the coexistence equilibrium.</p>
+          </div>
+        </div>
+        <div class="model-body">
+          <div class="canvas-grid">
+            <div class="plot-panel main">
+              <div class="panel-title">Positive quadrant phase portrait: vector field, nullclines, trajectory, and current state</div>
+              <canvas id="lvPhaseCanvas" width="760" height="760" aria-label="Lotka Volterra phase portrait"></canvas>
+            </div>
+            <div class="plot-panel">
+              <div class="panel-title">Time trace: prey x(t) and predator y(t)</div>
+              <canvas id="lvTimeCanvas" width="760" height="760" aria-label="Lotka Volterra time trace"></canvas>
+            </div>
+          </div>
+
+          <div class="side-stack">
+            <div class="card">
+              <div class="card-head"><h4>Controls</h4></div>
+              <div class="card-body">
+                <div class="control-grid" id="lvControls"></div>
+                <div class="button-row">
+                  <button id="lvToggle" class="action" type="button">pause</button>
+                  <button id="lvReset" class="action secondary" type="button">reset prey–predator</button>
+                </div>
+                <p class="control-note">The slider ranges are intentionally conservative. Internally, the simulation uses $u=\ln x,\ v=\ln y$ so populations stay positive; a fixed safety envelope and fixed phase-axis ranges prevent extreme values from breaking or resizing the display. The time trace keeps the full curve from t=0.</p>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-head"><h4>Poisson structure</h4></div>
+              <div class="card-body">
+                <div class="metric-list">
+                  <div class="metric"><div class="label">symplectic leaf</div><div class="value"><span class="status-pill">positive quadrant x&gt;0, y&gt;0</span></div></div>
+                  <div class="metric"><div class="label">current state (x,y)</div><div class="value" id="lvMetricState">–</div></div>
+                  <div class="metric"><div class="label">Poisson tensor</div><div class="value"><code>J(x,y)=xy [[0,1],[-1,0]]</code></div></div>
+                  <div class="metric"><div class="label">Hamiltonian</div><div class="value"><code>H = γ ln x − δx + α ln y − βy</code></div></div>
+                  <div class="metric"><div class="label">equations</div><div class="value"><code>ẋ=x(α−βy), ẏ=y(δx−γ)</code></div></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-head"><h4>Equilibrium & nullclines</h4></div>
+              <div class="card-body">
+                <div class="metric-list">
+                  <div class="metric"><div class="label">coexistence equilibrium</div><div class="value" id="lvMetricEq">–</div></div>
+                  <div class="metric"><div class="label">prey nullcline</div><div class="value"><code>y = α/β</code> <span id="lvMetricYNull">–</span></div></div>
+                  <div class="metric"><div class="label">predator nullcline</div><div class="value"><code>x = γ/δ</code> <span id="lvMetricXNull">–</span></div></div>
+                  <div class="metric"><div class="label">phase portrait reading</div><div class="value">closed population cycles surround the coexistence point.</div></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-head"><h4>Reading the phase portrait</h4></div>
+              <div class="card-body">
+                <div class="metric-list">
+                  <div class="metric"><div class="label">current population trend</div><div class="value" id="lvMetricTrend">–</div></div>
+                  <div class="metric"><div class="label">current vector field</div><div class="value" id="lvMetricVector">–</div></div>
+                  <div class="metric"><div class="label">active parameter set</div><div class="value" id="lvMetricParams">–</div></div>
+                </div>
+                <ul class="reading-list" style="margin-top:10px;">
+                  <li><strong>Below</strong> the horizontal nullcline <code>y=α/β</code>, prey increases; above it, prey decreases.</li>
+                  <li><strong>Right</strong> of the vertical nullcline <code>x=γ/δ</code>, predators increase; left of it, predators decrease.</li>
+                  <li>The simulation is run in <code>u=ln x, v=ln y</code>, so the positive quadrant is respected during playback.</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-head"><h4>Legend</h4></div>
+              <div class="card-body">
+                <div class="legend">
+                  <div class="legend-row"><span class="line" style="border-color:#38bdf8"></span> Vector field</div>
+                  <div class="legend-row"><span class="line" style="border-color:#86efac"></span> Nullcline $x=\gamma/\delta$</div>
+                  <div class="legend-row"><span class="line" style="border-color:#f472b6"></span> Nullcline $y=\alpha/\beta$</div>
+                  <div class="legend-row"><span class="line" style="border-color:#c084fc"></span> Full numerical trajectory</div>
+                  <div class="legend-row"><span class="dot" style="background:#f59e0b"></span> Current population state</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section class="model-card table-section" id="summary">
+      <div class="model-head">
+        <div>
+          <h3>Poisson-system summary</h3>
+          <p>Both examples have the same geometric form $\dot z=J(z)\nabla H(z)$, but one is canonical and one is noncanonical.</p>
+        </div>
+      </div>
+      <div style="padding:18px;">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Model</th>
+                <th scope="col">Poisson tensor</th>
+                <th scope="col">Hamiltonian</th>
+                <th scope="col">Equations of motion</th>
+                <th scope="col">Geometric interpretation</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Harmonic oscillator</td>
+                <td><code>J = [[0,1],[-1,0]]</code></td>
+                <td><code>H = 1/2(p² + ω²q²)</code></td>
+                <td><code>q̇ = p, ṗ = −ω²q</code></td>
+                <td>Energy ellipses in the full $(q,p)$ plane; every orbit is periodic except the origin.</td>
+              </tr>
+              <tr>
+                <td>Prey–predator / Lotka–Volterra</td>
+                <td><code>J(x,y)=xy [[0,1],[-1,0]]</code></td>
+                <td><code>H = γ ln x − δx + α ln y − βy</code></td>
+                <td><code>ẋ = x(α−βy), ẏ = y(δx−γ)</code></td>
+                <td>Closed level curves around the coexistence equilibrium inside the positive quadrant; axes are degeneracy boundaries.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="relation-note">Tip: try increasing oscillator $\omega$ to squeeze the energy ellipse horizontally; then increase prey–predator $\beta$ to move the predator nullcline downward and change the orbit shape. The prey–predator ranges are limited to keep the trajectories readable and numerically safe. The time traces are cumulative, so they are not cleared during playback.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrapper">
+      <div class="footer-card">
+        Theoretical Mechanics Learning Hub · Poisson brackets, Hamiltonian dynamics, harmonic oscillator, and Lotka–Volterra dynamics.
+      </div>
+    </div>
+  </footer>
+
+<script>
+const TAU = 2 * Math.PI;
+const LV_MIN_POP = 0.08;
+const LV_MAX_POP = 6.00;
+const HO_Q_LIMIT = 3.0;
+const HO_P_LIMIT = 8.5;
+const HO_TIME_LIMIT = 8.5;
+const TIME_WINDOW = 25;
+const LV_MIN_LOG = Math.log(LV_MIN_POP);
+const LV_MAX_LOG = Math.log(LV_MAX_POP);
+
+function clamp(x, lo, hi){ return Math.min(hi, Math.max(lo, x)); }
+function fmt(x, digits=3){ return Number.isFinite(x) ? x.toFixed(digits) : "–"; }
+function clearCanvas(ctx, canvas){
+  const g = ctx.createLinearGradient(0,0,0,canvas.height);
+  g.addColorStop(0,"#020617");
+  g.addColorStop(1,"#000000");
+  ctx.fillStyle = g;
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+}
+function plotPadding(pad=44){
+  if (typeof pad === "number") return {left:pad,right:pad,top:pad,bottom:pad};
+  return {left:pad.left??44,right:pad.right??44,top:pad.top??44,bottom:pad.bottom??44};
+}
+function makePlotMapper(canvas, xmin, xmax, ymin, ymax, pad=44){
+  const p = plotPadding(pad);
+  return function(x,y){
+    const px = p.left + (x-xmin)/(xmax-xmin) * (canvas.width-p.left-p.right);
+    const py = canvas.height - p.bottom - (y-ymin)/(ymax-ymin) * (canvas.height-p.top-p.bottom);
+    return [px,py];
+  };
+}
+function drawAxes2D(ctx, canvas, xmin, xmax, ymin, ymax, xLabel, yLabel, pad=44){
+  const p = plotPadding(pad);
+  const map = makePlotMapper(canvas,xmin,xmax,ymin,ymax,p);
+  const left=p.left, right=canvas.width-p.right, top=p.top, bottom=canvas.height-p.bottom;
+  ctx.save();
+  ctx.strokeStyle = "rgba(255,255,255,.14)";
+  ctx.fillStyle = "#aab4c6";
+  ctx.font = "15px system-ui, sans-serif";
+  ctx.lineWidth = 1;
+
+  for (let i=0;i<=4;i++){
+    const x = xmin + (xmax-xmin)*i/4;
+    const [px] = map(x,ymin);
+    ctx.beginPath(); ctx.moveTo(px,top); ctx.lineTo(px,bottom); ctx.stroke();
+    const label = x.toFixed(Math.abs(xmax-xmin) > 8 ? 0 : 1);
+    ctx.fillText(label, px-ctx.measureText(label).width/2, bottom+22);
+  }
+  for (let i=0;i<=4;i++){
+    const y = ymin + (ymax-ymin)*i/4;
+    const [,py] = map(xmin,y);
+    ctx.beginPath(); ctx.moveTo(left,py); ctx.lineTo(right,py); ctx.stroke();
+    const label = y.toFixed(Math.abs(ymax-ymin) > 8 ? 0 : 1);
+    ctx.fillText(label, left-ctx.measureText(label).width-8, py+5);
+  }
+  ctx.strokeStyle = "rgba(255,255,255,.55)";
+  ctx.strokeRect(left,top,right-left,bottom-top);
+  ctx.fillStyle = "#dce6f7";
+  ctx.fillText(xLabel, canvas.width/2-ctx.measureText(xLabel).width/2, canvas.height-14);
+  ctx.save();
+  ctx.translate(18, canvas.height/2 + ctx.measureText(yLabel).width/2);
+  ctx.rotate(-Math.PI/2); ctx.fillText(yLabel,0,0); ctx.restore();
+  ctx.restore();
+}
+function drawPolyline2D(ctx, points, color, width=2, alpha=1, dash=[]){
+  ctx.save();
+  ctx.strokeStyle=color; ctx.lineWidth=width; ctx.globalAlpha=alpha; ctx.setLineDash(dash);
+  ctx.beginPath();
+  let started=false;
+  for (const pt of points){
+    const x = pt[0], y = pt[1];
+    if (!Number.isFinite(x) || !Number.isFinite(y)) { started=false; continue; }
+    if (!started) { ctx.moveTo(x,y); started=true; }
+    else ctx.lineTo(x,y);
+  }
+  ctx.stroke(); ctx.restore();
+}
+function drawPoint2D(ctx,x,y,color,r=6,stroke="#000"){
+  ctx.save(); ctx.beginPath(); ctx.arc(x,y,r,0,TAU); ctx.fillStyle=color; ctx.fill();
+  if (stroke){ ctx.lineWidth=2; ctx.strokeStyle=stroke; ctx.stroke(); }
+  ctx.restore();
+}
+
+function decimateSeries(items, maxPoints=2200){
+  // Keep the complete history in memory, but draw a thinned copy when the page runs for a long time.
+  // This prevents slow rendering while preserving the full visible curve from t=0 to the current time.
+  if (items.length <= maxPoints) return items;
+  const step = Math.ceil(items.length / maxPoints);
+  const out = [];
+  for (let i=0; i<items.length; i += step) out.push(items[i]);
+  const last = items[items.length - 1];
+  if (out[out.length - 1] !== last) out.push(last);
+  return out;
+}
+function drawArrow2D(ctx, x1, y1, x2, y2, color, width=1.8, alpha=.75){
+  const dx = x2-x1, dy=y2-y1;
+  const len = Math.hypot(dx,dy);
+  if (!Number.isFinite(len) || len < 3) return;
+  const ux=dx/len, uy=dy/len;
+  const head=Math.min(10, Math.max(6, len*.32));
+  const wing=head*.55;
+  ctx.save();
+  ctx.globalAlpha=alpha; ctx.strokeStyle=color; ctx.fillStyle=color; ctx.lineWidth=width; ctx.lineCap="round";
+  ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(x2,y2);
+  ctx.lineTo(x2-head*ux-wing*uy, y2-head*uy+wing*ux);
+  ctx.lineTo(x2-head*ux+wing*uy, y2-head*uy-wing*ux);
+  ctx.closePath(); ctx.fill();
+  ctx.restore();
+}
+function rk4Step(state, dt, rhs){
+  const k1 = rhs(state);
+  const k2 = rhs(state.map((v,i)=>v + 0.5*dt*k1[i]));
+  const k3 = rhs(state.map((v,i)=>v + 0.5*dt*k2[i]));
+  const k4 = rhs(state.map((v,i)=>v + dt*k3[i]));
+  return state.map((v,i)=>v + dt*(k1[i] + 2*k2[i] + 2*k3[i] + k4[i]) / 6);
+}
+function integrateSubsteps(state, totalDt, maxStep, rhs, post){
+  const n = Math.max(1, Math.ceil(Math.abs(totalDt) / maxStep));
+  const dt = totalDt / n;
+  let s = state;
+  for (let i=0; i<n; i++){
+    s = rk4Step(s, dt, rhs);
+    if (post) s = post(s);
+  }
+  return s;
+}
+function makeSlider(container, id, label, min, max, step, value, unit, onChange){
+  const wrap = document.createElement("div");
+  wrap.className = "control-item";
+  wrap.innerHTML = `
+    <div class="control-row">
+      <label for="${id}">${label}</label>
+      <span class="value" id="${id}Value"></span>
+    </div>
+    <input id="${id}" type="range" min="${min}" max="${max}" step="${step}" value="${value}" />
+  `;
+  container.appendChild(wrap);
+  const input = document.getElementById(id);
+  const output = document.getElementById(id+"Value");
+  const update = () => {
+    const v = parseFloat(input.value);
+    const decimals = String(step).includes(".") ? Math.min(3, String(step).split(".")[1].length) : 0;
+    output.textContent = `${v.toFixed(decimals)}${unit}`;
+    onChange(v);
+  };
+  input.addEventListener("input", update);
+  update();
+  return input;
+}
+
+const ho = {
+  canvas: {
+    phase: document.getElementById("hoPhaseCanvas"),
+    time: document.getElementById("hoTimeCanvas")
+  },
+  ctx: {},
+  params: {omega:1.25, q0:1.25, p0:0.35, speed:1.0},
+  state: [1.25,0.35],
+  time: 0,
+  H0: 0,
+  history: [],
+  trail: [],
+  playing: true
+};
+ho.ctx.phase = ho.canvas.phase.getContext("2d");
+ho.ctx.time = ho.canvas.time.getContext("2d");
+
+const lv = {
+  canvas: {
+    phase: document.getElementById("lvPhaseCanvas"),
+    time: document.getElementById("lvTimeCanvas")
+  },
+  ctx: {},
+  params: {alpha:1.20, beta:0.90, gamma:1.00, delta:0.85, x0:1.55, y0:0.85, speed:0.80},
+  // Internal state is (u,v) = (ln x, ln y). This keeps x and y positive.
+  state: [Math.log(1.55), Math.log(0.85)],
+  time: 0,
+  H0: 0,
+  history: [],
+  trail: [],
+  orbitPreview: [],
+  playing: true
+};
+lv.ctx.phase = lv.canvas.phase.getContext("2d");
+lv.ctx.time = lv.canvas.time.getContext("2d");
+
+function hoRhsFactory(){
+  const w = ho.params.omega;
+  return (s) => [s[1], -w*w*s[0]];
+}
+function hoHamiltonian(s){
+  const w = ho.params.omega;
+  return 0.5*(s[1]*s[1] + w*w*s[0]*s[0]);
+}
+function hoReset(){
+  ho.state = [ho.params.q0, ho.params.p0];
+  ho.time = 0;
+  ho.H0 = hoHamiltonian(ho.state);
+  ho.history = [];
+  ho.trail = [];
+  for (let i=0; i<80; i++) hoPushHistory();
+}
+function hoPushHistory(){
+  const H = hoHamiltonian(ho.state);
+  ho.history.push({t:ho.time, q:ho.state[0], p:ho.state[1], H});
+  ho.trail.push([ho.state[0], ho.state[1]]);
+  // Keep the full trace from t=0. Nothing is removed during playback.
+}
+function hoStep(dt){
+  const rhs = hoRhsFactory();
+  ho.state = integrateSubsteps(ho.state, dt*ho.params.speed, 0.012, rhs);
+  ho.time += dt*ho.params.speed;
+  hoPushHistory();
+}
+function hoScale(){
+  // Fixed view: the drawing frame no longer zooms while the animation is playing.
+  return {xmin:-HO_Q_LIMIT, xmax:HO_Q_LIMIT, ymin:-HO_P_LIMIT, ymax:HO_P_LIMIT};
+}
+function drawHoPhase(){
+  const ctx = ho.ctx.phase, canvas = ho.canvas.phase;
+  clearCanvas(ctx, canvas);
+  const r = hoScale();
+  const pad = {left:62,right:28,top:58,bottom:62};
+  const map = makePlotMapper(canvas,r.xmin,r.xmax,r.ymin,r.ymax,pad);
+  drawAxes2D(ctx, canvas, r.xmin,r.xmax,r.ymin,r.ymax, "q", "p", pad);
+
+  const w = ho.params.omega;
+  const arrowPts = [];
+  for (let i=0;i<=14;i++){
+    for (let j=0;j<=14;j++){
+      const q = r.xmin + (r.xmax-r.xmin)*i/14;
+      const p = r.ymin + (r.ymax-r.ymin)*j/14;
+      const v = [p, -w*w*q];
+      const n = Math.hypot(v[0], v[1]);
+      if (n < 1e-5) continue;
+      const [x,y] = map(q,p);
+      const len = 15 * clamp(n / (Math.max(1, r.xmax-r.xmin)), .35, 1.1);
+      arrowPts.push([x,y,x + len*v[0]/n, y - len*v[1]/n]);
+    }
+  }
+  for (const a of arrowPts) drawArrow2D(ctx, a[0],a[1],a[2],a[3], "#38bdf8", 1.4, .42);
+
+  const H = Math.max(ho.H0, 1e-7);
+  const qAmp = Math.sqrt(2*H) / w;
+  const pAmp = Math.sqrt(2*H);
+  const ellipse = [];
+  for (let i=0;i<=360;i++){
+    const th = TAU*i/360;
+    ellipse.push(map(qAmp*Math.cos(th), pAmp*Math.sin(th)));
+  }
+  drawPolyline2D(ctx, ellipse, "#fbbf24", 3.4, .95);
+
+  const trailPx = decimateSeries(ho.trail, 2600).map(([q,p])=>map(q,p));
+  drawPolyline2D(ctx, trailPx, "#c084fc", 3.0, .86);
+
+  const [qx,py] = map(ho.state[0], ho.state[1]);
+  drawPoint2D(ctx, qx, py, "#f59e0b", 8);
+
+  ctx.save();
+  ctx.fillStyle = "#e9eef8";
+  ctx.font = "20px system-ui, sans-serif";
+  ctx.fillText("Canonical Poisson oscillator", pad.left, 34);
+  ctx.font = "15px system-ui, sans-serif";
+  ctx.fillStyle = "#aab4c6";
+  ctx.fillText(`ω = ${fmt(w,2)}; fixed view: q ∈ [−${HO_Q_LIMIT}, ${HO_Q_LIMIT}], p ∈ [−${HO_P_LIMIT}, ${HO_P_LIMIT}]`, pad.left, 54);
+  ctx.restore();
+}
+function drawHoTime(){
+  const ctx = ho.ctx.time, canvas = ho.canvas.time;
+  clearCanvas(ctx, canvas);
+  const hist = decimateSeries(ho.history);
+  const tNow = ho.history.length ? ho.history[ho.history.length-1].t : 0;
+  const tmin = 0;
+  const tmax = Math.max(TIME_WINDOW, tNow);
+  const pad = {left:58,right:24,top:54,bottom:60};
+  const map = makePlotMapper(canvas,tmin,tmax,-HO_TIME_LIMIT,HO_TIME_LIMIT,pad);
+  drawAxes2D(ctx, canvas, tmin, tmax, -HO_TIME_LIMIT, HO_TIME_LIMIT, "time from start", "q, p", pad);
+  drawPolyline2D(ctx, hist.map(h=>map(h.t,h.q)), "#60a5fa", 2.4, .9);
+  drawPolyline2D(ctx, hist.map(h=>map(h.t,h.p)), "#f472b6", 2.4, .9);
+  ctx.save();
+  ctx.fillStyle = "#60a5fa"; ctx.font = "16px system-ui, sans-serif"; ctx.fillText("q", canvas.width-78, 30);
+  ctx.fillStyle = "#f472b6"; ctx.fillText("p", canvas.width-42, 30);
+  ctx.restore();
+}
+function updateHoDiagnostics(){
+  const q = ho.state[0];
+  const p = ho.state[1];
+  const w = ho.params.omega;
+  const H = hoHamiltonian(ho.state);
+  const period = TAU / w;
+  const qTurn = Math.sqrt(Math.max(0, 2*H)) / w;
+  const pTurn = Math.sqrt(Math.max(0, 2*H));
+  const dq = p;
+  const dp = -w*w*q;
+  document.getElementById("hoMetricState").textContent = `[${fmt(q,4)}, ${fmt(p,4)}]`;
+  document.getElementById("hoMetricEnergy").textContent = `H = ${fmt(H,5)}; level: 1/2(p² + ω²q²)`;
+  document.getElementById("hoMetricPeriod").textContent = `T = 2π/ω = ${fmt(period,3)} time units`;
+  document.getElementById("hoMetricTurning").textContent = `q = ±${fmt(qTurn,3)}, p = ±${fmt(pTurn,3)}`;
+  document.getElementById("hoMetricVector").textContent = `q̇ = ${fmt(dq,3)}, ṗ = ${fmt(dp,3)}`;
+}
+
+function lvClampLogState(s){
+  return [clamp(s[0], LV_MIN_LOG, LV_MAX_LOG), clamp(s[1], LV_MIN_LOG, LV_MAX_LOG)];
+}
+function lvXY(s=lv.state){
+  const safe = lvClampLogState(s);
+  return [Math.exp(safe[0]), Math.exp(safe[1])];
+}
+function lvRhsFactory(){
+  const {alpha,beta,gamma,delta} = lv.params;
+  return (uv) => {
+    const [x,y] = lvXY(uv);
+    return [alpha - beta*y, delta*x - gamma];
+  };
+}
+function lvVectorFieldXY(x,y){
+  const {alpha,beta,gamma,delta} = lv.params;
+  return [x*(alpha - beta*y), y*(delta*x - gamma)];
+}
+function lvHamiltonian(s){
+  const {alpha,beta,gamma,delta} = lv.params;
+  const [u,v] = lvClampLogState(s);
+  const x = Math.exp(u);
+  const y = Math.exp(v);
+  return gamma*u - delta*x + alpha*v - beta*y;
+}
+function lvPost(s){
+  // Last-resort display-safety envelope. With the restricted sliders it should rarely be touched.
+  return lvClampLogState(s);
+}
+function lvReset(){
+  const x0 = clamp(lv.params.x0, LV_MIN_POP, LV_MAX_POP);
+  const y0 = clamp(lv.params.y0, LV_MIN_POP, LV_MAX_POP);
+  lv.state = [Math.log(x0), Math.log(y0)];
+  lv.time = 0;
+  lv.H0 = lvHamiltonian(lv.state);
+  lv.history = [];
+  lv.trail = [];
+  lvComputeOrbitPreview();
+  for (let i=0; i<80; i++) lvPushHistory();
+}
+function lvPushHistory(){
+  const [x,y] = lvXY(lv.state);
+  const H = lvHamiltonian(lv.state);
+  lv.history.push({t:lv.time, x, y, H});
+  lv.trail.push([x, y]);
+  // Keep the full trace from t=0. Nothing is removed during playback.
+}
+function lvStep(dt){
+  const rhs = lvRhsFactory();
+  lv.state = integrateSubsteps(lv.state, dt*lv.params.speed, 0.0025, rhs, lvPost);
+  lv.time += dt*lv.params.speed;
+  lvPushHistory();
+}
+function lvEquilibrium(){
+  return [lv.params.gamma/lv.params.delta, lv.params.alpha/lv.params.beta];
+}
+function lvScale(){
+  // Fixed positive-quadrant view. The safe envelope is 0 <= x,y <= LV_MAX_POP.
+  return {xmin:0, xmax:LV_MAX_POP, ymin:0, ymax:LV_MAX_POP};
+}
+function lvComputeOrbitPreview(){
+  const rhs = lvRhsFactory();
+  let s = [Math.log(clamp(lv.params.x0, LV_MIN_POP, LV_MAX_POP)), Math.log(clamp(lv.params.y0, LV_MIN_POP, LV_MAX_POP))];
+  const pts = [];
+  const dt = 0.010;
+  for (let i=0; i<3200; i++){
+    if (i % 4 === 0) pts.push(lvXY(s));
+    s = integrateSubsteps(s, dt, 0.0025, rhs, lvPost);
+  }
+  lv.orbitPreview = pts;
+}
+function drawLvPhase(){
+  const ctx = lv.ctx.phase, canvas = lv.canvas.phase;
+  clearCanvas(ctx, canvas);
+  const r = lvScale();
+  const pad = {left:62,right:28,top:58,bottom:62};
+  const map = makePlotMapper(canvas,r.xmin,r.xmax,r.ymin,r.ymax,pad);
+  drawAxes2D(ctx, canvas, r.xmin,r.xmax,r.ymin,r.ymax, "prey x", "predator y", pad);
+
+  for (let i=1;i<=14;i++){
+    for (let j=1;j<=14;j++){
+      const x = r.xmin + (r.xmax-r.xmin)*i/15;
+      const y = r.ymin + (r.ymax-r.ymin)*j/15;
+      const v = lvVectorFieldXY(x,y);
+      const n = Math.hypot(v[0],v[1]);
+      if (n < 1e-6) continue;
+      const [px,py] = map(x,y);
+      const len = 15 * clamp(n / 3.2, .35, 1.15);
+      drawArrow2D(ctx, px, py, px + len*v[0]/n, py - len*v[1]/n, "#38bdf8", 1.4, .42);
+    }
+  }
+
+  const [xe,ye] = lvEquilibrium();
+  if (xe >= r.xmin && xe <= r.xmax){
+    const p1 = map(xe,r.ymin), p2 = map(xe,r.ymax);
+    drawPolyline2D(ctx, [p1,p2], "#86efac", 3, .72, [10,7]);
+  }
+  if (ye >= r.ymin && ye <= r.ymax){
+    const p1 = map(r.xmin,ye), p2 = map(r.xmax,ye);
+    drawPolyline2D(ctx, [p1,p2], "#f472b6", 3, .72, [10,7]);
+  }
+
+  if (lv.orbitPreview.length) {
+    drawPolyline2D(ctx, lv.orbitPreview.map(([x,y])=>map(x,y)), "#fbbf24", 2.2, .55);
+  }
+  drawPolyline2D(ctx, decimateSeries(lv.trail, 2600).map(([x,y])=>map(x,y)), "#c084fc", 3.0, .88);
+  const [xNow,yNow] = lvXY(lv.state);
+  const [sx,sy] = map(xNow, yNow);
+  drawPoint2D(ctx, sx, sy, "#f59e0b", 8);
+  const [ex,ey] = map(xe,ye);
+  drawPoint2D(ctx, ex, ey, "#e9eef8", 5, "#000");
+
+  ctx.save();
+  ctx.fillStyle = "#e9eef8";
+  ctx.font = "20px system-ui, sans-serif";
+  ctx.fillText("Lotka–Volterra Poisson dynamics", pad.left, 34);
+  ctx.font = "15px system-ui, sans-serif";
+  ctx.fillStyle = "#aab4c6";
+  ctx.fillText(`equilibrium = (${fmt(xe,2)}, ${fmt(ye,2)}); fixed view: 0 ≤ x,y ≤ ${LV_MAX_POP}`, pad.left, 54);
+  ctx.restore();
+}
+function drawLvTime(){
+  const ctx = lv.ctx.time, canvas = lv.canvas.time;
+  clearCanvas(ctx, canvas);
+  const hist = decimateSeries(lv.history);
+  const tNow = lv.history.length ? lv.history[lv.history.length-1].t : 0;
+  const tmin = 0;
+  const tmax = Math.max(TIME_WINDOW, tNow);
+  const pad = {left:58,right:24,top:54,bottom:60};
+  const map = makePlotMapper(canvas,tmin,tmax,0,LV_MAX_POP,pad);
+  drawAxes2D(ctx, canvas, tmin, tmax, 0, LV_MAX_POP, "time from start", "x, y", pad);
+  drawPolyline2D(ctx, hist.map(h=>map(h.t,h.x)), "#60a5fa", 2.4, .9);
+  drawPolyline2D(ctx, hist.map(h=>map(h.t,h.y)), "#f472b6", 2.4, .9);
+  ctx.save();
+  ctx.fillStyle = "#60a5fa"; ctx.font = "16px system-ui, sans-serif"; ctx.fillText("x prey", canvas.width-116, 30);
+  ctx.fillStyle = "#f472b6"; ctx.fillText("y pred.", canvas.width-62, 30);
+  ctx.restore();
+}
+function updateLvDiagnostics(){
+  const eq = lvEquilibrium();
+  const [x,y] = lvXY(lv.state);
+  const {alpha,beta,gamma,delta} = lv.params;
+  const [dx,dy] = lvVectorFieldXY(x,y);
+  const preyTrend = y < eq[1] ? "prey increasing" : (y > eq[1] ? "prey decreasing" : "prey balanced");
+  const predatorTrend = x > eq[0] ? "predators increasing" : (x < eq[0] ? "predators decreasing" : "predators balanced");
+  const nearEnvelope = x <= LV_MIN_POP*1.03 || y <= LV_MIN_POP*1.03 || x >= LV_MAX_POP*.97 || y >= LV_MAX_POP*.97;
+  const pill = document.querySelector("#predator .metric .status-pill");
+  pill.classList.toggle("warn-pill", nearEnvelope);
+  pill.textContent = nearEnvelope ? "positive quadrant, safety envelope active" : "positive quadrant x>0, y>0";
+  document.getElementById("lvMetricState").textContent = `[${fmt(x,4)}, ${fmt(y,4)}]`;
+  document.getElementById("lvMetricEq").textContent = `[${fmt(eq[0],4)}, ${fmt(eq[1],4)}]`;
+  document.getElementById("lvMetricXNull").textContent = `= ${fmt(eq[0],4)}`;
+  document.getElementById("lvMetricYNull").textContent = `= ${fmt(eq[1],4)}`;
+  document.getElementById("lvMetricTrend").textContent = `${preyTrend}; ${predatorTrend}`;
+  document.getElementById("lvMetricVector").textContent = `ẋ = ${fmt(dx,3)}, ẏ = ${fmt(dy,3)}`;
+  document.getElementById("lvMetricParams").textContent = `α=${fmt(alpha,2)}, β=${fmt(beta,2)}, γ=${fmt(gamma,2)}, δ=${fmt(delta,2)}`;
+}
+
+function setupControls(){
+  const hoC = document.getElementById("hoControls");
+  makeSlider(hoC, "hoOmega", "angular frequency ω", 0.30, 3.00, 0.01, ho.params.omega, "", v=>{ho.params.omega=v; hoReset();});
+  makeSlider(hoC, "hoQ0", "initial q₀", -2.50, 2.50, 0.01, ho.params.q0, "", v=>{ho.params.q0=v; hoReset();});
+  makeSlider(hoC, "hoP0", "initial p₀", -2.50, 2.50, 0.01, ho.params.p0, "", v=>{ho.params.p0=v; hoReset();});
+  makeSlider(hoC, "hoSpeed", "visual speed", 0.10, 3.00, 0.01, ho.params.speed, "×", v=>{ho.params.speed=v;});
+
+  const lvC = document.getElementById("lvControls");
+  makeSlider(lvC, "lvAlpha", "prey growth α", 0.70, 1.70, 0.01, lv.params.alpha, "", v=>{lv.params.alpha=v; lvReset();});
+  makeSlider(lvC, "lvBeta", "predation β", 0.65, 1.35, 0.01, lv.params.beta, "", v=>{lv.params.beta=v; lvReset();});
+  makeSlider(lvC, "lvGamma", "predator death γ", 0.70, 1.70, 0.01, lv.params.gamma, "", v=>{lv.params.gamma=v; lvReset();});
+  makeSlider(lvC, "lvDelta", "conversion δ", 0.65, 1.35, 0.01, lv.params.delta, "", v=>{lv.params.delta=v; lvReset();});
+  makeSlider(lvC, "lvX0", "initial prey x₀", 0.45, 2.80, 0.01, lv.params.x0, "", v=>{lv.params.x0=v; lvReset();});
+  makeSlider(lvC, "lvY0", "initial predator y₀", 0.45, 2.80, 0.01, lv.params.y0, "", v=>{lv.params.y0=v; lvReset();});
+  makeSlider(lvC, "lvSpeed", "visual speed", 0.10, 1.40, 0.01, lv.params.speed, "×", v=>{lv.params.speed=v;});
+
+  document.getElementById("hoToggle").addEventListener("click", () => {
+    ho.playing = !ho.playing;
+    document.getElementById("hoToggle").textContent = ho.playing ? "pause" : "play";
+  });
+  document.getElementById("hoReset").addEventListener("click", hoReset);
+
+  document.getElementById("lvToggle").addEventListener("click", () => {
+    lv.playing = !lv.playing;
+    document.getElementById("lvToggle").textContent = lv.playing ? "pause" : "play";
+  });
+  document.getElementById("lvReset").addEventListener("click", lvReset);
+}
+function drawAll(){
+  drawHoPhase();
+  drawHoTime();
+  updateHoDiagnostics();
+  drawLvPhase();
+  drawLvTime();
+  updateLvDiagnostics();
+}
+
+let lastTimestamp = 0;
+function animate(timestamp){
+  if (!lastTimestamp) lastTimestamp = timestamp;
+  const dt = Math.min(0.04, (timestamp - lastTimestamp) / 1000);
+  lastTimestamp = timestamp;
+
+  if (ho.playing) hoStep(dt);
+  if (lv.playing) lvStep(dt);
+
+  drawAll();
+  requestAnimationFrame(animate);
+}
+
+setupControls();
+hoReset();
+lvReset();
+drawAll();
+requestAnimationFrame(animate);
+</script>
+</body>
+</html>
