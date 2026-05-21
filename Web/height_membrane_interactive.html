@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Height Membrane — Dimer / AF Ising Interactive</title>
+<meta name="description" content="Triangular-lattice anti-ferromagnetic Ising model mapped to dimers and a height-model membrane: an interactive HTML visualization." />
+<meta property="og:title" content="Height Membrane — Dimer / AF Ising Interactive" />
+<meta property="og:description" content="Use rotary knobs to adjust roughness, tilt, discretization and animation speed for a height-model membrane." />
+<meta property="og:type" content="website" />
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" crossorigin="anonymous"
+  onload="renderMathInElement(document.getElementById('main'),{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});"></script>
+
+<style>
+  :root{
+    --bg:#f6f7fb;
+    --fg:#18212f;
+    --muted:#5f6b7a;
+    --primary:#0f766e;
+    --primary-soft:#ccfbf1;
+    --accent:#f59e0b;
+    --good:#22c55e;
+    --card:#ffffff;
+    --border:rgba(24,33,47,.12);
+    --ring:#5eead4;
+    --maxw:1220px;
+    --shadow:0 12px 30px rgba(0,0,0,.08);
+    --code:#0f172a;
+  }
+
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#071314;
+      --fg:#e5f4f1;
+      --muted:#9bb5b0;
+      --primary:#5eead4;
+      --primary-soft:#134e4a;
+      --accent:#fbbf24;
+      --good:#86efac;
+      --card:#0d1f20;
+      --border:rgba(255,255,255,.12);
+      --ring:#2dd4bf;
+      --shadow:0 12px 30px rgba(0,0,0,.32);
+      --code:#e5f4f1;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; scroll-behavior:auto !important;}
+  }
+
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background:linear-gradient(180deg, var(--bg) 0%, color-mix(in oklab, var(--bg), #ffffff 8%) 100%);
+    color:var(--fg);
+    line-height:1.6;
+  }
+  a{color:var(--primary)}
+  .wrapper{max-width:var(--maxw); margin:0 auto; padding:0 18px}
+
+  .skip-link{position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden;}
+  .skip-link:focus{
+    position:fixed; left:16px; top:16px; width:auto; height:auto;
+    background:#000; color:#fff; padding:8px 12px; border-radius:8px; z-index:1000;
+  }
+
+  header{
+    position:sticky; top:0; z-index:50;
+    background:rgba(255,255,255,.72);
+    backdrop-filter:saturate(180%) blur(14px);
+    border-bottom:1px solid var(--border);
+  }
+  @media (prefers-color-scheme: dark){header{background:rgba(7,19,20,.72)}}
+
+  .topbar{display:flex; align-items:center; justify-content:space-between; gap:16px; padding:14px 0;}
+  .brand h1{margin:0; font-size:1.16rem; line-height:1.1;}
+  .brand p{margin:4px 0 0; color:var(--muted); font-size:.92rem;}
+  .nav{display:flex; gap:10px; flex-wrap:wrap;}
+  .nav a{
+    text-decoration:none; color:inherit;
+    padding:8px 12px; border:1px solid var(--border); border-radius:999px;
+    background:color-mix(in oklab, var(--card), transparent 10%);
+  }
+  .nav a:hover{color:var(--primary); border-color:color-mix(in oklab, var(--primary), var(--border) 60%)}
+
+  main{padding:30px 0 50px}
+  .hero{
+    background:var(--card); border:1px solid var(--border); border-radius:24px;
+    box-shadow:var(--shadow); padding:28px; margin-bottom:22px;
+  }
+  .hero-badge{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:6px 12px; border-radius:999px; font-size:.9rem;
+    background:var(--primary-soft); color:var(--primary); font-weight:800;
+  }
+  .hero h2{margin:14px 0 10px; font-size:clamp(1.75rem, 4vw, 3rem); line-height:1.1;}
+  .hero p{margin:0; max-width:900px; color:var(--muted); font-size:1.03rem;}
+  .hero-grid{display:grid; grid-template-columns:1.22fr .78fr; gap:18px; align-items:start; margin-top:20px;}
+  .hero-card{
+    background:color-mix(in oklab, var(--card), var(--bg) 18%);
+    border:1px solid var(--border); border-radius:18px; padding:18px;
+  }
+  .hero-card h3{margin:0 0 8px; font-size:1rem}
+  .formula{
+    font-size:.96rem; overflow:auto; margin-top:12px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    background:color-mix(in oklab, var(--card), var(--bg) 22%);
+    border:1px solid var(--border); border-radius:12px; padding:12px;
+    color:var(--code);
+  }
+
+  .sim-grid{display:grid; grid-template-columns:minmax(0,1fr) 350px; gap:18px; align-items:start;}
+  .card{
+    background:var(--card); border:1px solid var(--border); border-radius:20px;
+    box-shadow:var(--shadow); overflow:hidden;
+  }
+  .card + .card{margin-top:18px}
+  .card-head{
+    padding:16px 18px;
+    background:color-mix(in oklab, var(--primary-soft), var(--card) 35%);
+    border-bottom:1px solid var(--border);
+  }
+  .card-head h3{margin:0; font-size:1rem;}
+  .card-body{padding:18px}
+
+  .panel-grid{display:grid; grid-template-columns:1.15fr 1fr; gap:14px; padding:18px;}
+  .panel{border:1px solid var(--border); border-radius:16px; overflow:hidden; background:#000; min-width:0;}
+  .panel:first-child{grid-row:span 2}
+  .panel-title{
+    padding:10px 12px; background:rgba(255,255,255,.08); color:#e9eef8;
+    font-size:.9rem; border-bottom:1px solid rgba(255,255,255,.14);
+  }
+  canvas{display:block; width:100%; height:auto; background:#000; touch-action:none;}
+
+  .knob-grid{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+  .knob-card{
+    border:1px solid var(--border); border-radius:16px; padding:12px;
+    background:color-mix(in oklab, var(--card), var(--bg) 16%);
+    min-width:0;
+  }
+  .knob-card.invariant{
+    border-color:color-mix(in oklab, var(--primary), var(--border) 55%);
+    background:linear-gradient(180deg, color-mix(in oklab, var(--primary-soft), var(--card) 38%), color-mix(in oklab, var(--card), var(--bg) 16%));
+  }
+  .knob{
+    --angle:0deg;
+    --filled:135deg;
+    position:relative; width:104px; height:104px; margin:0 auto 8px; border-radius:50%;
+    border:1px solid rgba(255,255,255,.16);
+    background:
+      radial-gradient(circle at 50% 50%, #111827 0 47%, transparent 48%),
+      conic-gradient(from 225deg, #2dd4bf 0 var(--filled), rgba(255,255,255,.12) var(--filled) 270deg, transparent 270deg 360deg),
+      radial-gradient(circle at 35% 28%, #334155 0%, #111827 58%, #020617 100%);
+    box-shadow:inset 0 4px 18px rgba(255,255,255,.08), inset 0 -10px 20px rgba(0,0,0,.45), 0 10px 20px rgba(0,0,0,.16);
+    cursor:grab; user-select:none;
+  }
+  .knob:active{cursor:grabbing}
+  .knob:focus{outline:3px solid var(--ring); outline-offset:3px}
+  .knob::after{
+    content:""; position:absolute; inset:21px; border-radius:50%;
+    background:radial-gradient(circle at 35% 28%, #475569, #111827 58%, #020617);
+    border:1px solid rgba(255,255,255,.15);
+  }
+  .needle{
+    position:absolute; z-index:2; left:50%; top:17px; width:4px; height:37px; border-radius:4px;
+    background:#f8fafc; transform-origin:50% 35px; transform:translateX(-50%) rotate(var(--angle));
+    box-shadow:0 0 10px rgba(255,255,255,.45);
+  }
+  .knob-dot{
+    position:absolute; z-index:3; left:50%; top:50%; width:10px; height:10px; border-radius:50%;
+    transform:translate(-50%,-50%); background:#f8fafc;
+  }
+  .knob-label{font-size:.86rem; color:var(--muted); text-align:center; line-height:1.25; min-height:2.2em;}
+  .knob-value{text-align:center; font-weight:800; font-size:1.05rem; margin-top:4px;}
+  .knob-hint{font-size:.78rem; text-align:center; color:var(--muted); margin-top:4px;}
+
+  .button-row{display:flex; gap:10px; flex-wrap:wrap; margin-top:14px;}
+  button.action{
+    cursor:pointer; border:1px solid var(--border); border-radius:12px; padding:10px 12px;
+    background:var(--primary); color:white; font:inherit; font-weight:800;
+  }
+  button.action.secondary{background:var(--card); color:var(--fg)}
+  button.action:focus{outline:3px solid var(--ring); outline-offset:2px}
+
+  .metric-list{display:grid; gap:12px}
+  .metric{
+    border:1px solid var(--border); border-radius:14px; padding:12px 14px;
+    background:color-mix(in oklab, var(--card), var(--bg) 18%);
+  }
+  .metric .label{font-size:.84rem; color:var(--muted); margin-bottom:4px;}
+  .metric .value{font-weight:800; font-size:1rem; word-break:break-word;}
+  .status-pill{
+    display:inline-flex; align-items:center; gap:6px; padding:4px 9px; border-radius:999px;
+    background:color-mix(in oklab, var(--good), transparent 84%); color:color-mix(in oklab, var(--good), var(--fg) 30%);
+    border:1px solid color-mix(in oklab, var(--good), transparent 60%); font-weight:800;
+  }
+
+  .legend{display:grid; gap:10px}
+  .legend-row{display:flex; align-items:center; gap:10px; color:var(--muted); font-size:.94rem;}
+  .dot{width:12px; height:12px; border-radius:999px; display:inline-block}
+  .line{width:22px; height:0; border-top:3px solid; display:inline-block}
+
+  .relation-table-section{margin-top:22px;}
+  .relation-intro{margin:0 0 14px; color:var(--muted);}
+  .table-wrap{overflow-x:auto; border:1px solid var(--border); border-radius:16px;}
+  .relation-table{width:100%; border-collapse:collapse; min-width:820px; background:var(--card);}
+  .relation-table th,.relation-table td{padding:12px 14px; text-align:left; vertical-align:top; border-bottom:1px solid var(--border);}
+  .relation-table th{background:color-mix(in oklab, var(--primary-soft), var(--card) 28%); color:var(--fg); font-size:.92rem;}
+  .relation-table tr:last-child td{border-bottom:0}
+  .relation-table td:first-child{font-weight:800; white-space:nowrap;}
+  .relation-table code{
+    font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size:.9em;
+    padding:.12em .35em; border-radius:6px;
+    background:color-mix(in oklab, var(--primary-soft), var(--card) 45%); color:var(--primary);
+  }
+  .relation-note{margin:12px 0 0; color:var(--muted); font-size:.92rem;}
+
+  footer{padding:26px 0 40px; color:var(--muted)}
+  footer .footer-card{
+    border:1px solid var(--border); background:var(--card); border-radius:18px;
+    padding:18px; text-align:center; box-shadow:var(--shadow);
+  }
+
+  @media (max-width: 1080px){
+    .hero-grid{grid-template-columns:1fr}
+    .sim-grid{grid-template-columns:1fr}
+    .topbar{flex-direction:column; align-items:flex-start}
+  }
+  @media (max-width: 820px){
+    .panel-grid{grid-template-columns:1fr}
+    .panel:first-child{grid-row:auto}
+  }
+  @media (max-width: 520px){
+    .knob-grid{grid-template-columns:1fr}
+    .hero{padding:20px}
+  }
+</style>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to main content</a>
+
+  <header>
+    <div class="wrapper topbar">
+      <div class="brand">
+        <h1>Height Membrane from Dimers</h1>
+        <p>@ NTHU 2026 spring · triangular AF Ising → dimer → height model</p>
+      </div>
+      <nav class="nav" aria-label="Primary">
+        <a href="research.html">Back to <em>Research</em></a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="wrapper" tabindex="-1">
+    <section class="hero" id="overview">
+      <span class="hero-badge">Frustrated Magnetism Learning Hub</span>
+      <h2>Height-model membrane with roughness and cube-surface knobs</h2>
+      <p>
+        The triangular-lattice anti-ferromagnetic Ising ground states obey the one-frustrated-bond rule. Marking each frustrated bond gives a honeycomb dimer covering, and each dimer covering can be re-read as a discrete height surface: a membrane made from projected cube faces.
+      </p>
+      <div class="hero-grid">
+        <div class="hero-card">
+          <h3>Effective height intuition</h3>
+          <p>
+            Instead of tracking every spin, this page animates a height field $h(x,y)$. The stiffness knob suppresses short-wavelength modes, so the surface becomes smoother. Turning on discretization makes the surface closer to a stepped cube membrane.
+          </p>
+          <div class="formula">
+            $$\text{AF Ising ground states}\quad \longleftrightarrow\quad \text{honeycomb dimers}\quad \longleftrightarrow\quad h(x,y)$$
+            $$S_{\rm eff}[h]\;\propto\;\frac{\kappa}{2}\int d^2x\,|\nabla h(x,y)|^2$$
+            $$\text{large }\kappa \Rightarrow \text{smoother membrane},\qquad \nabla h \text{ measures the local tilt.}$$
+          </div>
+        </div>
+        <div class="hero-card">
+          <h3>How to use</h3>
+          <p>
+            Drag a knob, use the mouse wheel over it, or focus it and press arrow keys. Drag the main membrane panel to rotate the camera. The discrete knob continuously morphs the Gaussian height field into an integer stepped surface.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="sim-grid" id="simulator">
+      <div class="card">
+        <div class="card-head">
+          <h3>Membrane visualization</h3>
+        </div>
+        <div class="panel-grid">
+          <div class="panel">
+            <div class="panel-title">3D height membrane h(x,y). Drag to rotate. Cyan grid = membrane mesh; amber ridge = moving highlighted height contour.</div>
+            <canvas id="heightCanvas" width="760" height="760" aria-label="3D height membrane animation"></canvas>
+          </div>
+          <div class="panel">
+            <div class="panel-title">Gradient map: local roughness |∇h|</div>
+            <canvas id="slopeCanvas" width="640" height="420" aria-label="height gradient heat map"></canvas>
+          </div>
+          <div class="panel">
+            <div class="panel-title">Middle cut through the membrane</div>
+            <canvas id="cutCanvas" width="640" height="420" aria-label="height cross section"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <div class="stack">
+        <div class="card" id="controls">
+          <div class="card-head">
+            <h3>Rotary controls</h3>
+          </div>
+          <div class="card-body">
+            <div class="knob-grid">
+              <div class="knob-card invariant">
+                <div id="knob-amplitude" class="knob" tabindex="0" role="slider" aria-label="height amplitude"><span class="needle"></span><span class="knob-dot"></span></div>
+                <div class="knob-label">height scale<br><code>A</code></div>
+                <div class="knob-value" id="value-amplitude">–</div>
+                <div class="knob-hint">vertical membrane size</div>
+              </div>
+              <div class="knob-card invariant">
+                <div id="knob-stiffness" class="knob" tabindex="0" role="slider" aria-label="height stiffness kappa"><span class="needle"></span><span class="knob-dot"></span></div>
+                <div class="knob-label">stiffness<br><code>κ</code></div>
+                <div class="knob-value" id="value-stiffness">–</div>
+                <div class="knob-hint">larger κ → smoother h</div>
+              </div>
+              <div class="knob-card">
+                <div id="knob-tiltx" class="knob" tabindex="0" role="slider" aria-label="x tilt"><span class="needle"></span><span class="knob-dot"></span></div>
+                <div class="knob-label">x tilt<br><code>∂x h</code></div>
+                <div class="knob-value" id="value-tiltx">–</div>
+                <div class="knob-hint">global slope in x</div>
+              </div>
+              <div class="knob-card">
+                <div id="knob-tilty" class="knob" tabindex="0" role="slider" aria-label="y tilt"><span class="needle"></span><span class="knob-dot"></span></div>
+                <div class="knob-label">y tilt<br><code>∂y h</code></div>
+                <div class="knob-value" id="value-tilty">–</div>
+                <div class="knob-hint">global slope in y</div>
+              </div>
+              <div class="knob-card">
+                <div id="knob-discrete" class="knob" tabindex="0" role="slider" aria-label="discretization"><span class="needle"></span><span class="knob-dot"></span></div>
+                <div class="knob-label">cube-step mix<br><code>q</code></div>
+                <div class="knob-value" id="value-discrete">–</div>
+                <div class="knob-hint">0 continuous, 1 stepped</div>
+              </div>
+              <div class="knob-card">
+                <div id="knob-speed" class="knob" tabindex="0" role="slider" aria-label="animation speed"><span class="needle"></span><span class="knob-dot"></span></div>
+                <div class="knob-label">animation speed<br><code>ω</code></div>
+                <div class="knob-value" id="value-speed">–</div>
+                <div class="knob-hint">visual speed only</div>
+              </div>
+            </div>
+            <div class="button-row">
+              <button id="togglePlay" class="action" type="button">pause</button>
+              <button id="randomize" class="action secondary" type="button">new modes</button>
+              <button id="resetParams" class="action secondary" type="button">height defaults</button>
+              <button id="resetView" class="action secondary" type="button">reset view</button>
+            </div>
+            <p class="relation-note" style="margin-top:12px;">Read the geometry from back to front: surface height = membrane, slope map = local gradient cost, cut plot = one 1D slice of the same field.</p>
+          </div>
+        </div>
+
+        <div class="card" id="diagnostics">
+          <div class="card-head"><h3>Diagnostics</h3></div>
+          <div class="card-body">
+            <div class="metric-list">
+              <div class="metric"><div class="label">current surface type</div><div class="value" id="metricStatus">–</div></div>
+              <div class="metric"><div class="label">mean height ⟨h⟩</div><div class="value" id="metricMean">–</div></div>
+              <div class="metric"><div class="label">maximum absolute height Hmax</div><div class="value" id="metricHmax">–</div></div>
+              <div class="metric"><div class="label">root-mean-square slope</div><div class="value" id="metricSlope">–</div></div>
+              <div class="metric"><div class="label">effective entropy weight</div><div class="value" id="metricAction">–</div></div>
+              <div class="metric"><div class="label">camera</div><div class="value" id="metricCamera">–</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><h3>Legend</h3></div>
+          <div class="card-body">
+            <div class="legend">
+              <div class="legend-row"><span class="line" style="border-color:#2dd4bf"></span> Cyan mesh: projected height membrane</div>
+              <div class="legend-row"><span class="line" style="border-color:#fbbf24"></span> Amber moving contour: visual time marker</div>
+              <div class="legend-row"><span class="dot" style="background:#38bdf8"></span> Blue/teal faces: lower-to-middle heights</div>
+              <div class="legend-row"><span class="dot" style="background:#f59e0b"></span> Amber faces: higher heights</div>
+              <div class="legend-row"><span class="line" style="border-color:#c084fc"></span> Purple axis: height direction h</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card relation-table-section" id="parameter-summary">
+      <div class="card-head"><h3>Control–Height Model Summary</h3></div>
+      <div class="card-body">
+        <p class="relation-intro">
+          The controls are chosen to mirror the dimer-to-height interpretation: a microscopic dimer covering becomes a surface, and the long-distance theory mainly penalizes large gradients.
+        </p>
+        <div class="table-wrap">
+          <table class="relation-table">
+            <thead>
+              <tr>
+                <th scope="col">Control</th>
+                <th scope="col">Mathematical meaning</th>
+                <th scope="col">Visual effect</th>
+                <th scope="col">Physical interpretation</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Height scale <code>A</code></td>
+                <td>Multiplies the fluctuating part of <code>h(x,y)</code>.</td>
+                <td>Makes the membrane taller or flatter.</td>
+                <td>Represents how strongly the coarse-grained height wanders.</td>
+              </tr>
+              <tr>
+                <td>Stiffness <code>κ</code></td>
+                <td>Suppresses high Fourier modes, like the continuum weight <code>exp[-κ∫|∇h|²/2]</code>.</td>
+                <td>Large <code>κ</code> gives a smoother membrane; small <code>κ</code> gives a rougher membrane.</td>
+                <td>Encodes the entropy-driven preference for smaller height gradients.</td>
+              </tr>
+              <tr>
+                <td>Tilts <code>∂x h, ∂y h</code></td>
+                <td>Add a linear background slope to the height field.</td>
+                <td>Leans the whole membrane in x or y.</td>
+                <td>Useful proxy for different winding sectors of the dimer height.</td>
+              </tr>
+              <tr>
+                <td>Cube-step mix <code>q</code></td>
+                <td>Interpolates between continuous <code>h</code> and rounded integer heights.</td>
+                <td>At <code>q≈1</code>, the membrane becomes a stepped surface.</td>
+                <td>Reminds you that the microscopic dimer height is discrete before coarse graining.</td>
+              </tr>
+              <tr>
+                <td>Speed <code>ω</code></td>
+                <td>Moves phases of the Fourier modes in browser time.</td>
+                <td>Animates the membrane without changing the interpretation of each frame.</td>
+                <td>This is a visualization knob, not real Ising time evolution.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="relation-note">
+          Rule of thumb: <code>A</code> changes height range, <code>κ</code> controls roughness, tilts choose a global slope sector, and <code>q</code> reminds you of the discrete cube-surface origin.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrapper">
+      <div class="footer-card">
+        Frustrated Magnetism Learning Hub · triangular AF Ising, honeycomb dimers, and height-model membranes.
+      </div>
+    </div>
+  </footer>
+
+<script>
+const heightCanvas = document.getElementById("heightCanvas");
+const slopeCanvas = document.getElementById("slopeCanvas");
+const cutCanvas = document.getElementById("cutCanvas");
+const heightCtx = heightCanvas.getContext("2d");
+const slopeCtx = slopeCanvas.getContext("2d");
+const cutCtx = cutCanvas.getContext("2d");
+
+const TAU = 2 * Math.PI;
+const N = 46;
+const MODES = 34;
+
+const DEFAULTS = {
+  amplitude: 0.92,
+  stiffness: 1.65,
+  tiltx: 0.08,
+  tilty: -0.05,
+  discrete: 0.18,
+  speed: 1.00
+};
+
+const controls = {
+  amplitude: {min:0.05, max:1.80, step:0.01, value:DEFAULTS.amplitude, unit:"", digits:2, label:"height scale"},
+  stiffness: {min:0.30, max:3.20, step:0.01, value:DEFAULTS.stiffness, unit:"", digits:2, label:"stiffness"},
+  tiltx:     {min:-0.80, max:0.80, step:0.01, value:DEFAULTS.tiltx, unit:"", digits:2, label:"x tilt"},
+  tilty:     {min:-0.80, max:0.80, step:0.01, value:DEFAULTS.tilty, unit:"", digits:2, label:"y tilt"},
+  discrete:  {min:0.00, max:1.00, step:0.01, value:DEFAULTS.discrete, unit:"", digits:2, label:"discretization"},
+  speed:     {min:0.05, max:3.00, step:0.05, value:DEFAULTS.speed, unit:"×", digits:2, label:"speed"}
+};
+
+let modeSeed = 7;
+let modes = createModes(modeSeed);
+let field = null;
+let stats = null;
+let time = 0;
+let lastTimestamp = 0;
+let playing = true;
+let cameraYaw = Math.PI * 0.78;
+let cameraPitch = Math.PI * 0.23;
+
+function clamp(x, lo, hi){ return Math.min(hi, Math.max(lo, x)); }
+function lerp(a,b,t){ return a + (b-a)*t; }
+function deg(x){ return x * 180 / Math.PI; }
+function fmt(x, digits=3){ return Number.isFinite(x) ? x.toFixed(digits) : "–"; }
+function roundToStep(value, step){ return Math.round(value / step) * step; }
+function add(a,b){ return [a[0]+b[0], a[1]+b[1], a[2]+b[2]]; }
+function sub(a,b){ return [a[0]-b[0], a[1]-b[1], a[2]-b[2]]; }
+function mul(s,a){ return [s*a[0], s*a[1], s*a[2]]; }
+function dot(a,b){ return a[0]*b[0]+a[1]*b[1]+a[2]*b[2]; }
+function cross(a,b){ return [a[1]*b[2]-a[2]*b[1], a[2]*b[0]-a[0]*b[2], a[0]*b[1]-a[1]*b[0]]; }
+function norm(a){ return Math.hypot(a[0],a[1],a[2]); }
+function normalize(a){ const n = norm(a) || 1; return mul(1/n,a); }
+
+function mulberry32(a){
+  return function(){
+    let t = a += 0x6D2B79F5;
+    t = Math.imul(t ^ t >>> 15, t | 1);
+    t ^= t + Math.imul(t ^ t >>> 7, t | 61);
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+}
+
+function createModes(seed){
+  const rand = mulberry32(seed);
+  const list = [];
+  for (let k=0; k<MODES; k++) {
+    const mx = 1 + Math.floor(rand()*5);
+    const my = Math.floor(rand()*6);
+    const sx = rand() < .5 ? -1 : 1;
+    const sy = rand() < .5 ? -1 : 1;
+    list.push({
+      mx: sx * mx,
+      my: sy * my,
+      phase: TAU * rand(),
+      weight: 0.45 + 0.85 * rand(),
+      drift: (rand() < .5 ? -1 : 1) * (0.18 + 0.88 * rand())
+    });
+  }
+  return list;
+}
+
+function continuousHeight(x,y,t){
+  const A = controls.amplitude.value;
+  const kappa = controls.stiffness.value;
+  let h = controls.tiltx.value * x + controls.tilty.value * y;
+  let normFactor = 0;
+  for (const m of modes) {
+    const k2 = m.mx*m.mx + m.my*m.my;
+    const amp = m.weight / Math.pow(k2, 0.45 + 0.55*kappa);
+    h += A * amp * Math.sin(Math.PI * (m.mx*x + m.my*y) + m.phase + t*m.drift);
+    normFactor += amp;
+  }
+  if (normFactor > 0) h *= 1.7 / (0.65 + normFactor);
+  return h;
+}
+
+function computeField(){
+  const h = Array.from({length:N}, () => Array(N).fill(0));
+  let sum = 0;
+  let hmax = 0;
+  const q = controls.discrete.value;
+  const step = 0.22;
+  for (let j=0;j<N;j++) {
+    const y = -1 + 2*j/(N-1);
+    for (let i=0;i<N;i++) {
+      const x = -1 + 2*i/(N-1);
+      const raw = continuousHeight(x,y,time);
+      const stepped = Math.round(raw / step) * step;
+      const val = lerp(raw, stepped, q);
+      h[j][i] = val;
+      sum += val;
+      hmax = Math.max(hmax, Math.abs(val));
+    }
+  }
+
+  const mean = sum / (N*N);
+  let slope2 = 0, count = 0, action = 0;
+  for (let j=1;j<N-1;j++) {
+    for (let i=1;i<N-1;i++) {
+      const dx = (h[j][i+1]-h[j][i-1]) / (2*(2/(N-1)));
+      const dy = (h[j+1][i]-h[j-1][i]) / (2*(2/(N-1)));
+      const s2 = dx*dx + dy*dy;
+      slope2 += s2;
+      action += 0.5 * controls.stiffness.value * s2;
+      count++;
+    }
+  }
+  const rmsSlope = Math.sqrt(slope2 / Math.max(1,count));
+  return {h, mean, hmax, rmsSlope, action: action / Math.max(1,count)};
+}
+
+function cameraBasis(){
+  const view = normalize([Math.cos(cameraPitch)*Math.cos(cameraYaw), Math.cos(cameraPitch)*Math.sin(cameraYaw), Math.sin(cameraPitch)]);
+  const right = normalize([-Math.sin(cameraYaw), Math.cos(cameraYaw), 0]);
+  const up = normalize(cross(right, view));
+  return {view, right, up};
+}
+
+function project3(p, basis, canvas, scale){
+  return [
+    canvas.width/2 + dot(p,basis.right)*scale,
+    canvas.height/2 - dot(p,basis.up)*scale,
+    dot(p,basis.view)
+  ];
+}
+
+function colorFromHeight(z, zmin, zmax){
+  const t = clamp((z - zmin) / Math.max(1e-6, zmax-zmin), 0, 1);
+  let r,g,b;
+  if (t < .5) {
+    const u = t/.5;
+    r = Math.round(20 + 25*u);
+    g = Math.round(105 + 120*u);
+    b = Math.round(160 + 50*u);
+  } else {
+    const u = (t-.5)/.5;
+    r = Math.round(45 + 210*u);
+    g = Math.round(225 - 70*u);
+    b = Math.round(210 - 170*u);
+  }
+  return `rgb(${r},${g},${b})`;
+}
+
+function colorFromSlope(s, smax){
+  const t = clamp(s / Math.max(1e-6, smax), 0, 1);
+  const r = Math.round(9 + 245*Math.pow(t,1.4));
+  const g = Math.round(68 + 135*(1-Math.abs(t-.55)));
+  const b = Math.round(92 + 135*(1-t));
+  return `rgb(${r},${g},${b})`;
+}
+
+function clearCanvas(ctx, canvas){
+  const g = ctx.createLinearGradient(0,0,0,canvas.height);
+  g.addColorStop(0,"#021615");
+  g.addColorStop(1,"#000000");
+  ctx.fillStyle = g;
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+}
+
+function drawProjectedPolyline(ctx, canvas, points, basis, scale, color, width=1, alpha=1, dash=[]){
+  ctx.save();
+  ctx.strokeStyle = color;
+  ctx.globalAlpha = alpha;
+  ctx.lineWidth = width;
+  ctx.setLineDash(dash);
+  ctx.beginPath();
+  let started = false;
+  for (const p of points) {
+    const [x,y] = project3(p,basis,canvas,scale);
+    if (!Number.isFinite(x) || !Number.isFinite(y)) { started=false; continue; }
+    if (!started) { ctx.moveTo(x,y); started=true; }
+    else ctx.lineTo(x,y);
+  }
+  ctx.stroke();
+  ctx.restore();
+}
+
+function drawProjectedArrow(ctx, canvas, from, to, basis, scale, color, width=2, alpha=.85){
+  const [x1,y1] = project3(from,basis,canvas,scale);
+  const [x2,y2] = project3(to,basis,canvas,scale);
+  const dx = x2 - x1, dy = y2 - y1;
+  const len = Math.hypot(dx,dy);
+  if (!Number.isFinite(len) || len < 3) return;
+  const ux = dx/len, uy = dy/len;
+  const head = Math.min(13, Math.max(7, len*.25));
+  const wing = head*.56;
+  ctx.save();
+  ctx.globalAlpha = alpha;
+  ctx.strokeStyle = color;
+  ctx.fillStyle = color;
+  ctx.lineWidth = width;
+  ctx.lineCap = "round";
+  ctx.beginPath();
+  ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(x2,y2);
+  ctx.lineTo(x2-head*ux-wing*uy, y2-head*uy+wing*ux);
+  ctx.lineTo(x2-head*ux+wing*uy, y2-head*uy-wing*ux);
+  ctx.closePath(); ctx.fill();
+  ctx.restore();
+}
+
+function surfacePoint(i,j,hval){
+  const x = -1 + 2*i/(N-1);
+  const y = -1 + 2*j/(N-1);
+  return [x, y, hval];
+}
+
+function drawHeight3D(){
+  if (!field) return;
+  const ctx = heightCtx;
+  const canvas = heightCanvas;
+  clearCanvas(ctx, canvas);
+  const basis = cameraBasis();
+  const scale = Math.min(canvas.width, canvas.height) / 3.25;
+  const h = field.h;
+  const zmax = Math.max(0.35, field.hmax);
+  const zmin = -zmax;
+
+  const cells = [];
+  for (let j=0;j<N-1;j++) {
+    for (let i=0;i<N-1;i++) {
+      const p00 = surfacePoint(i,j,h[j][i]);
+      const p10 = surfacePoint(i+1,j,h[j][i+1]);
+      const p11 = surfacePoint(i+1,j+1,h[j+1][i+1]);
+      const p01 = surfacePoint(i,j+1,h[j+1][i]);
+      const center = mul(0.25, add(add(p00,p10), add(p11,p01)));
+      const n = normalize(cross(sub(p10,p00), sub(p01,p00)));
+      const light = normalize([-0.25,-0.55,0.95]);
+      const shade = 0.58 + 0.42 * Math.max(0, dot(n,light));
+      cells.push({pts:[p00,p10,p11,p01], depth:dot(center,basis.view), avg: center[2], shade});
+    }
+  }
+  cells.sort((a,b)=>a.depth-b.depth);
+
+  for (const cell of cells) {
+    ctx.save();
+    ctx.beginPath();
+    cell.pts.forEach((p,k)=>{
+      const [x,y] = project3(p,basis,canvas,scale);
+      if (k===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+    });
+    ctx.closePath();
+    ctx.fillStyle = colorFromHeight(cell.avg, zmin, zmax);
+    ctx.globalAlpha = 0.90 * cell.shade;
+    ctx.fill();
+    ctx.strokeStyle = "rgba(14,116,144,.30)";
+    ctx.lineWidth = 0.45;
+    ctx.globalAlpha = 0.35;
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  // Mesh lines
+  for (let j=0;j<N;j+=3) {
+    const pts = [];
+    for (let i=0;i<N;i++) pts.push(surfacePoint(i,j,h[j][i]));
+    drawProjectedPolyline(ctx, canvas, pts, basis, scale, "#2dd4bf", 1.1, .42);
+  }
+  for (let i=0;i<N;i+=3) {
+    const pts = [];
+    for (let j=0;j<N;j++) pts.push(surfacePoint(i,j,h[j][i]));
+    drawProjectedPolyline(ctx, canvas, pts, basis, scale, "#2dd4bf", 1.1, .42);
+  }
+
+  // Bounding base and height axis
+  const baseZ = -Math.max(0.9, zmax*1.08);
+  const corners = [[-1,-1,baseZ],[1,-1,baseZ],[1,1,baseZ],[-1,1,baseZ],[-1,-1,baseZ]];
+  drawProjectedPolyline(ctx, canvas, corners, basis, scale, "#ffffff", 1.3, .28, [8,6]);
+  drawProjectedArrow(ctx, canvas, [1.16,1.16,baseZ], [1.16,1.16,zmax*1.1], basis, scale, "#c084fc", 3, .9);
+
+  // Moving contour: a highlighted scan line, not physical time evolution.
+  const scan = Math.floor(((Math.sin(time*0.7)+1)/2) * (N-1));
+  const contour = [];
+  for (let i=0;i<N;i++) contour.push(surfacePoint(i,scan,h[scan][i]));
+  drawProjectedPolyline(ctx, canvas, contour, basis, scale, "#fbbf24", 4.2, .95);
+
+  // Labels and stats overlay
+  ctx.save();
+  ctx.fillStyle = "#e9eef8";
+  ctx.font = "19px system-ui, sans-serif";
+  ctx.fillText(`A = ${controls.amplitude.value.toFixed(2)},  κ = ${controls.stiffness.value.toFixed(2)},  q = ${controls.discrete.value.toFixed(2)}`, 18, 30);
+  ctx.fillStyle = "#aab4c6";
+  ctx.font = "16px system-ui, sans-serif";
+  ctx.fillText("Height membrane from the dimer / AF Ising height mapping. Drag to rotate.", 18, 54);
+  ctx.fillStyle = "#d8b4fe";
+  ctx.fillText("h", canvas.width - 70, 74);
+  ctx.restore();
+}
+
+function makePlotMapper(canvas, xmin, xmax, ymin, ymax, pad){
+  return function(x,y){
+    const px = pad.left + (x-xmin)/(xmax-xmin) * (canvas.width-pad.left-pad.right);
+    const py = canvas.height - pad.bottom - (y-ymin)/(ymax-ymin) * (canvas.height-pad.top-pad.bottom);
+    return [px,py];
+  };
+}
+
+function drawAxes2D(ctx, canvas, xmin, xmax, ymin, ymax, xLabel, yLabel, pad){
+  const map = makePlotMapper(canvas,xmin,xmax,ymin,ymax,pad);
+  const left=pad.left, right=canvas.width-pad.right, top=pad.top, bottom=canvas.height-pad.bottom;
+  ctx.save();
+  ctx.strokeStyle = "rgba(255,255,255,.15)";
+  ctx.fillStyle = "#aab4c6";
+  ctx.font = "15px system-ui, sans-serif";
+  ctx.lineWidth = 1;
+  for (let i=0;i<=4;i++){
+    const x = xmin + (xmax-xmin)*i/4;
+    const [px] = map(x,ymin);
+    ctx.beginPath(); ctx.moveTo(px,top); ctx.lineTo(px,bottom); ctx.stroke();
+    const label = x.toFixed(1);
+    ctx.fillText(label, px-ctx.measureText(label).width/2, bottom+22);
+  }
+  for (let i=0;i<=4;i++){
+    const y = ymin + (ymax-ymin)*i/4;
+    const [,py] = map(xmin,y);
+    ctx.beginPath(); ctx.moveTo(left,py); ctx.lineTo(right,py); ctx.stroke();
+    const label = y.toFixed(1);
+    ctx.fillText(label, left-ctx.measureText(label).width-8, py+5);
+  }
+  ctx.strokeStyle = "rgba(255,255,255,.55)";
+  ctx.strokeRect(left,top,right-left,bottom-top);
+  ctx.fillStyle = "#dce6f7";
+  ctx.fillText(xLabel, canvas.width/2-ctx.measureText(xLabel).width/2, canvas.height-14);
+  ctx.save();
+  ctx.translate(18, canvas.height/2 + ctx.measureText(yLabel).width/2);
+  ctx.rotate(-Math.PI/2); ctx.fillText(yLabel,0,0); ctx.restore();
+  ctx.restore();
+}
+
+function drawPolyline2D(ctx, points, color, width=2, alpha=1, dash=[]){
+  ctx.save();
+  ctx.strokeStyle=color; ctx.lineWidth=width; ctx.globalAlpha=alpha; ctx.setLineDash(dash);
+  ctx.beginPath();
+  let started=false;
+  for (const [x,y] of points){
+    if (!Number.isFinite(x) || !Number.isFinite(y)) { started=false; continue; }
+    if (!started) { ctx.moveTo(x,y); started=true; }
+    else ctx.lineTo(x,y);
+  }
+  ctx.stroke(); ctx.restore();
+}
+
+function drawSlopeMap(){
+  if (!field) return;
+  const ctx = slopeCtx, canvas = slopeCanvas;
+  clearCanvas(ctx, canvas);
+  const pad = {left:54,right:24,top:58,bottom:48};
+  const left = pad.left, top = pad.top, w = canvas.width-pad.left-pad.right, hpx = canvas.height-pad.top-pad.bottom;
+  const h = field.h;
+  let smax = 0;
+  const slopes = Array.from({length:N-2}, () => Array(N-2).fill(0));
+  for (let j=1;j<N-1;j++) for (let i=1;i<N-1;i++) {
+    const dx = (h[j][i+1]-h[j][i-1]) / (2*(2/(N-1)));
+    const dy = (h[j+1][i]-h[j-1][i]) / (2*(2/(N-1)));
+    const s = Math.hypot(dx,dy);
+    slopes[j-1][i-1] = s;
+    smax = Math.max(smax,s);
+  }
+  const cw = w/(N-2), ch = hpx/(N-2);
+  for (let j=0;j<N-2;j++) for (let i=0;i<N-2;i++) {
+    ctx.fillStyle = colorFromSlope(slopes[j][i], smax);
+    ctx.fillRect(left+i*cw, top+j*ch, Math.ceil(cw)+1, Math.ceil(ch)+1);
+  }
+  ctx.save();
+  ctx.strokeStyle = "rgba(255,255,255,.55)";
+  ctx.strokeRect(left,top,w,hpx);
+  ctx.fillStyle = "#e9eef8";
+  ctx.font = "20px system-ui, sans-serif";
+  ctx.fillText("Local gradient |∇h|", left, 34);
+  ctx.fillStyle = "#aab4c6";
+  ctx.font = "15px system-ui, sans-serif";
+  ctx.fillText(`bright = steep; RMS slope = ${field.rmsSlope.toFixed(3)}`, left, 54);
+  ctx.fillText("x", canvas.width/2, canvas.height-15);
+  ctx.save(); ctx.translate(18, canvas.height/2); ctx.rotate(-Math.PI/2); ctx.fillText("y",0,0); ctx.restore();
+  ctx.restore();
+}
+
+function drawCutPlot(){
+  if (!field) return;
+  const ctx = cutCtx, canvas = cutCanvas;
+  clearCanvas(ctx, canvas);
+  const pad = {left:58,right:24,top:58,bottom:62};
+  const ymax = Math.max(.65, field.hmax*1.18);
+  const ymin = -ymax;
+  const map = makePlotMapper(canvas,-1,1,ymin,ymax,pad);
+  drawAxes2D(ctx, canvas, -1, 1, ymin, ymax, "x", "h(x,0)", pad);
+  const mid = Math.floor(N/2);
+  const pts = [];
+  for (let i=0;i<N;i++) {
+    const x = -1 + 2*i/(N-1);
+    pts.push(map(x, field.h[mid][i]));
+  }
+  drawPolyline2D(ctx, pts, "#2dd4bf", 3, .95);
+  const zeroLine = [map(-1,0), map(1,0)];
+  drawPolyline2D(ctx, zeroLine, "#ffffff", 1.2, .25, [7,6]);
+  ctx.save();
+  ctx.fillStyle = "#e9eef8";
+  ctx.font = "20px system-ui, sans-serif";
+  ctx.fillText("Middle slice through membrane", pad.left, 34);
+  ctx.fillStyle = "#aab4c6";
+  ctx.font = "15px system-ui, sans-serif";
+  ctx.fillText(`Hmax = ${field.hmax.toFixed(3)},  mean = ${field.mean.toFixed(3)}`, pad.left, 54);
+  ctx.restore();
+}
+
+function updateDiagnostics(){
+  if (!field) return;
+  const q = controls.discrete.value;
+  const status = q > .72 ? "stepped cube-like membrane" : q < .28 ? "continuous Gaussian height field" : "mixed continuous / discrete surface";
+  document.getElementById("metricStatus").innerHTML = `<span class="status-pill">${status}</span>`;
+  document.getElementById("metricMean").textContent = field.mean.toFixed(6);
+  document.getElementById("metricHmax").textContent = field.hmax.toFixed(6);
+  document.getElementById("metricSlope").textContent = field.rmsSlope.toFixed(6);
+  document.getElementById("metricAction").textContent = `exp[-${field.action.toFixed(3)}]  proxy`;
+  document.getElementById("metricCamera").textContent = `yaw ${deg(cameraYaw).toFixed(1)}°, pitch ${deg(cameraPitch).toFixed(1)}°`;
+}
+
+function drawAll(){
+  field = computeField();
+  stats = field;
+  drawHeight3D();
+  drawSlopeMap();
+  drawCutPlot();
+  updateDiagnostics();
+}
+
+function setControl(id, raw, silent=false){
+  const cfg = controls[id];
+  const value = clamp(roundToStep(raw, cfg.step), cfg.min, cfg.max);
+  cfg.value = value;
+  updateKnob(id);
+  if (!silent) drawAll();
+}
+
+function updateKnob(id){
+  const cfg = controls[id];
+  const knob = document.getElementById(`knob-${id}`);
+  const valueEl = document.getElementById(`value-${id}`);
+  const pct = (cfg.value - cfg.min) / (cfg.max - cfg.min);
+  const angle = -135 + pct * 270;
+  knob.style.setProperty("--angle", `${angle}deg`);
+  knob.style.setProperty("--filled", `${pct * 270}deg`);
+  knob.setAttribute("aria-valuemin", cfg.min);
+  knob.setAttribute("aria-valuemax", cfg.max);
+  knob.setAttribute("aria-valuenow", cfg.value.toFixed(cfg.digits));
+  knob.setAttribute("aria-valuetext", `${cfg.value.toFixed(cfg.digits)}${cfg.unit}`);
+  valueEl.textContent = `${cfg.value.toFixed(cfg.digits)}${cfg.unit}`;
+}
+
+function setupKnobs(){
+  for (const id of Object.keys(controls)) {
+    const knob = document.getElementById(`knob-${id}`);
+    updateKnob(id);
+
+    let dragging = false;
+    function valueFromPointer(ev){
+      const rect = knob.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const dx = ev.clientX - cx;
+      const dy = ev.clientY - cy;
+      let angle = Math.atan2(dx, -dy) * 180 / Math.PI;
+      angle = clamp(angle, -135, 135);
+      const cfg = controls[id];
+      const pct = (angle + 135) / 270;
+      return cfg.min + pct * (cfg.max - cfg.min);
+    }
+
+    knob.addEventListener("pointerdown", ev => {
+      dragging = true;
+      knob.setPointerCapture(ev.pointerId);
+      setControl(id, valueFromPointer(ev));
+    });
+    knob.addEventListener("pointermove", ev => {
+      if (!dragging) return;
+      setControl(id, valueFromPointer(ev));
+    });
+    knob.addEventListener("pointerup", () => { dragging = false; });
+    knob.addEventListener("pointercancel", () => { dragging = false; });
+    knob.addEventListener("wheel", ev => {
+      ev.preventDefault();
+      const cfg = controls[id];
+      const delta = ev.deltaY < 0 ? cfg.step : -cfg.step;
+      setControl(id, cfg.value + delta);
+    }, {passive:false});
+    knob.addEventListener("keydown", ev => {
+      const cfg = controls[id];
+      let delta = 0;
+      if (ev.key === "ArrowRight" || ev.key === "ArrowUp") delta = cfg.step;
+      if (ev.key === "ArrowLeft" || ev.key === "ArrowDown") delta = -cfg.step;
+      if (ev.key === "PageUp") delta = cfg.step * 10;
+      if (ev.key === "PageDown") delta = -cfg.step * 10;
+      if (ev.key === "Home") { setControl(id, cfg.min); ev.preventDefault(); return; }
+      if (ev.key === "End") { setControl(id, cfg.max); ev.preventDefault(); return; }
+      if (delta !== 0) { setControl(id, cfg.value + delta); ev.preventDefault(); }
+    });
+  }
+}
+
+function resetParams(){
+  for (const [id, value] of Object.entries(DEFAULTS)) setControl(id, value, true);
+  drawAll();
+}
+
+function randomizeModes(){
+  modeSeed = (modeSeed * 1664525 + 1013904223) >>> 0;
+  modes = createModes(modeSeed);
+  drawAll();
+}
+
+function setupCanvasDrag(){
+  let dragging=false, lastX=0, lastY=0;
+  heightCanvas.addEventListener("pointerdown", ev => {
+    dragging=true; lastX=ev.clientX; lastY=ev.clientY; heightCanvas.setPointerCapture(ev.pointerId);
+  });
+  heightCanvas.addEventListener("pointermove", ev => {
+    if (!dragging) return;
+    const dx = ev.clientX - lastX;
+    const dy = ev.clientY - lastY;
+    lastX = ev.clientX; lastY = ev.clientY;
+    cameraYaw += dx * 0.008;
+    cameraPitch = clamp(cameraPitch + dy * 0.008, -1.15, 1.15);
+  });
+  heightCanvas.addEventListener("pointerup", () => dragging=false);
+  heightCanvas.addEventListener("pointercancel", () => dragging=false);
+}
+
+function setupButtons(){
+  const toggle = document.getElementById("togglePlay");
+  toggle.addEventListener("click", () => {
+    playing = !playing;
+    toggle.textContent = playing ? "pause" : "play";
+  });
+  document.getElementById("randomize").addEventListener("click", randomizeModes);
+  document.getElementById("resetParams").addEventListener("click", resetParams);
+  document.getElementById("resetView").addEventListener("click", () => {
+    cameraYaw = Math.PI * 0.78;
+    cameraPitch = Math.PI * 0.23;
+    drawAll();
+  });
+}
+
+function animate(timestamp){
+  if (!lastTimestamp) lastTimestamp = timestamp;
+  const dt = Math.min(0.05, (timestamp - lastTimestamp) / 1000);
+  lastTimestamp = timestamp;
+  if (playing) time += dt * controls.speed.value;
+  drawAll();
+  requestAnimationFrame(animate);
+}
+
+setupKnobs();
+setupButtons();
+setupCanvasDrag();
+drawAll();
+requestAnimationFrame(animate);
+</script>
+</body>
+</html>
