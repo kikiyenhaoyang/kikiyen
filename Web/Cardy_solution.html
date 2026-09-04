@@ -246,6 +246,14 @@
     })();
 
     // ====== 資料來源 ======
+    // 每章一張 Text 字卡；把 # 換成你的 Text 頁面網址即可。
+    const TEXTS = [
+      {ch:1, url:'https://kikiyenhaoyang.github.io/Lean-Formalization-for-Scaling-and-Renormalization-in-Statistical-Physics-by-John-Cardy/CardyChapterOne/SimpleModels.html'},
+      {ch:2, url:'#'},
+      {ch:3, url:'#'},
+      {ch:4, url:'#'},
+    ];
+
     const PROBLEMS = [
       // ch, problem, title(optional), url
       {ch:1, p:1, url:'https://kikiyenhaoyang.github.io/Lean-Formalization-for-Scaling-and-Renormalization-in-Statistical-Physics-by-John-Cardy/CardyChapterOne/cardy1_1.html'},
@@ -273,11 +281,29 @@
     ];
 
     // ====== 產生卡片 ======
-    function renderCards(list){
+    function renderCards(problemList, chapterFilter=''){
       // 先清空
       document.querySelectorAll('.book-grid').forEach(g=>g.innerHTML='');
-      // 依章節分組
-      for(const item of list){
+
+      // 每章最前面先放一張與 Problem 完全同樣樣式的 Text 連結字卡
+      for(const item of TEXTS){
+        if(chapterFilter && String(item.ch) !== String(chapterFilter)) continue;
+
+        const grid = document.querySelector(`.book-grid[data-chapter="${item.ch}"]`);
+        if(!grid) continue;
+
+        const card = document.createElement('article');
+        card.className = 'book-solution text-card';
+        card.innerHTML = `
+          <a class="solution-link" href="${item.url}">
+            <h3 class="book-title">Chapter ${item.ch}</h3>
+            <p class="book-detail">Text</p>
+          </a>`;
+        grid.appendChild(card);
+      }
+
+      // 再放 Problem 字卡
+      for(const item of problemList){
         const grid = document.querySelector(`.book-grid[data-chapter="${item.ch}"]`);
         if(!grid) continue;
         const card = document.createElement('article');
@@ -309,7 +335,7 @@
         const byKw = kw ? (`chapter ${x.ch} problem ${x.p} ${x.url}`.toLowerCase().includes(kw)) : true;
         return byC && byP && byKw;
       });
-      renderCards(filtered);
+      renderCards(filtered, c);
     }
     [q, chapSel, pnoSel].forEach(el=>el.addEventListener('input', applyFilter));
   </script>
