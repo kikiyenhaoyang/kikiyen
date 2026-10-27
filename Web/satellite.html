@@ -171,6 +171,12 @@
     font-weight:600;
   }
   .toolbar button:hover{filter:brightness(1.04)}
+  .field-hint{font-size:.8rem; color:var(--muted); max-width:280px}
+  .input-error{color:#b91c1c; font-weight:600; margin:8px 0 16px}
+  .toolbar input[aria-invalid="true"]{border-color:#b91c1c}
+  @media (prefers-color-scheme: dark){
+    .input-error{color:#fca5a5}
+  }
 
   .sim-grid{
     display:grid;
@@ -478,7 +484,8 @@
         </div>
         <div class="field">
           <label for="samples">time resolution</label>
-          <input id="samples" type="number" step="60" value="720" min="120" />
+          <input id="samples" type="number" step="1" value="720" min="120" max="10000" required aria-describedby="samplesHint simulationError" />
+          <span id="samplesHint" class="field-hint">120–10,000 samples per sidereal day. More samples refine timing; plotted paths use fewer points.</span>
         </div>
         <div class="field">
           <label for="restartBtn">　</label>
@@ -486,6 +493,8 @@
         </div>
       </div>
     </section>
+
+    <p id="simulationError" class="input-error" role="alert" hidden></p>
 
     <section class="sim-grid" id="simulator">
       <div class="card">
@@ -658,6 +667,9 @@ const A_GEO = Math.pow(MU / (OMEGA_E * OMEGA_E), 1 / 3);
 const SIDEREAL_DAY = 2 * Math.PI / OMEGA_E;
 const SAT_DISPLAY_RADIUS = 1.82;
 const TAU = 2 * Math.PI;
+const MIN_SAMPLES = 120;
+const MAX_SAMPLES = 10000;
+const MAX_PLOT_POINTS = 1440;
 
 let simData = null;
 let frameIndex = 0;
@@ -781,17 +793,27 @@ function satToDisplayPoint(rSatEcef, radius = SAT_DISPLAY_RADIUS){
   return mul(radius / norm(rSatEcef), rSatEcef);
 }
 
+function validateSamples(n){
+  if (!Number.isFinite(n) || !Number.isInteger(n)) {
+    throw new Error("Time resolution is required and must be a finite whole number (120–10,000 samples).");
+  }
+  if (n < MIN_SAMPLES || n > MAX_SAMPLES) {
+    throw new Error("Time resolution must be between 120 and 10,000 samples. Reduce higher values to keep the simulation responsive.");
+  }
+  return n;
+}
+
 function simulate(params){
+  // Reject invalid work sizes before allocating or calculating any orbit points.
+  const n = validateSamples(params.samples);
   const latObs = deg2rad(params.launchLatDeg);
   const lonObs = deg2rad(params.launchLonDeg);
   const satLon = deg2rad(params.satLonDeg);
   const inc = deg2rad(params.inclinationDeg);
   const e = params.eccentricity;
   const argp = deg2rad(params.argPerigeeDeg);
-  const n = params.samples;
 
   if (!Number.isFinite(e) || e < 0 || e >= 1) throw new Error("eccentricity must satisfy 0 <= e < 1");
-  if (n < 120) throw new Error("samples should be at least 120");
 
   const times = [];
   const satPositions = [];
@@ -802,6 +824,10 @@ function simulate(params){
   const visible = [];
   const skyX = [];
   const skyY = [];
+  let lonMin = Infinity, lonMax = -Infinity;
+  let latMin = Infinity, latMax = -Infinity;
+  let elMin = Infinity, elMax = -Infinity;
+  let maxLonDeviation = 0, visibleCount = 0;
 
   for (let i = 0; i < n; i++) {
     const t = SIDEREAL_DAY * i / (n - 1);
@@ -814,6 +840,14 @@ function simulate(params){
     const azDeg = rad2deg(look.az);
     const elDeg = rad2deg(look.el);
     const isVisible = elDeg > 0;
+    lonMin = Math.min(lonMin, lonDeg);
+    lonMax = Math.max(lonMax, lonDeg);
+    latMin = Math.min(latMin, latDeg);
+    latMax = Math.max(latMax, latDeg);
+    elMin = Math.min(elMin, elDeg);
+    elMax = Math.max(elMax, elDeg);
+    maxLonDeviation = Math.max(maxLonDeviation, Math.abs(wrap180(lonDeg - params.satLonDeg)));
+    if (isVisible) visibleCount++;
 
     times.push(t);
     satPositions.push(r);
@@ -834,22 +868,61 @@ function simulate(params){
     }
   }
 
-  const lonDeviation = subLon.map(x => Math.abs(wrap180(x - params.satLonDeg)));
-  const lonMargin = Math.max(3, 1.3 * Math.max(...lonDeviation));
-  const trackLatAbs = Math.max(...subLat.map(x => Math.abs(x)));
+  const lonMargin = Math.max(3, 1.3 * maxLonDeviation);
+  const trackLatAbs = Math.max(Math.abs(latMin), Math.abs(latMax));
   const observerLatAbs = Math.abs(params.launchLatDeg);
   const latMargin = Math.max(5, 1.2 * trackLatAbs, observerLatAbs + 5);
-  const visibleCount = visible.filter(Boolean).length;
 
-  return {
+  const data = {
     ...params,
     times, satPositions, subLat, subLon, azs, els, visible, skyX, skyY,
-    lonMin: Math.min(...subLon), lonMax: Math.max(...subLon),
-    latMin: Math.min(...subLat), latMax: Math.max(...subLat),
-    elMin: Math.min(...els), elMax: Math.max(...els),
+    lonMin, lonMax, latMin, latMax, elMin, elMax,
     lonMargin, latMargin, visibleFraction: visibleCount / n,
     nframes: n
   };
+  data.plot = buildPlotData(data);
+  return data;
+}
+
+function buildPlotData(data){
+  // Keep full-resolution diagnostics/animation, but bound repeated canvas work.
+  // Preserve extrema, longitude wraps and horizon crossings (including NaN gaps).
+  const indices = new Set();
+  const count = Math.min(data.nframes, MAX_PLOT_POINTS);
+  for (let j = 0; j < count; j++) {
+    indices.add(Math.round(j * (data.nframes - 1) / (count - 1)));
+  }
+  for (const values of [data.subLat, data.subLon, data.els]) {
+    let lo = 0, hi = 0;
+    for (let i = 1; i < values.length; i++) {
+      if (values[i] < values[lo]) lo = i;
+      if (values[i] > values[hi]) hi = i;
+    }
+    indices.add(lo);
+    indices.add(hi);
+  }
+  for (let i = 1; i < data.nframes; i++) {
+    if (data.visible[i] !== data.visible[i - 1] ||
+        Math.abs(data.subLon[i] - data.subLon[i - 1]) > 180) {
+      indices.add(i - 1);
+      indices.add(i);
+    }
+  }
+  const sorted = Array.from(indices).sort((a, b) => a - b);
+  return {
+    indices: sorted,
+    ground: sorted.map(i => latLonToUnit(data.subLat[i], data.subLon[i], 1.095)),
+    satellite: sorted.map(i => satToDisplayPoint(data.satPositions[i]))
+  };
+}
+
+function trailPoints(points, indices, k, currentPoint){
+  let end = 0;
+  while (end < indices.length && indices[end] <= k) end++;
+  const trail = points.slice(0, end);
+  // The moving tip always uses the exact simulation sample, even between plot points.
+  if (end === 0 || indices[end - 1] !== k) trail.push(currentPoint);
+  return trail;
 }
 
 function clearCanvas(ctx, canvas){
@@ -957,15 +1030,18 @@ function drawEarth(k, data){
   for (let lat = -90; lat <= 90; lat += 2) meridian.push(latLonToUnit(lat, data.satLonDeg, 1.045));
   drawProjectedPolyline(ctx, canvas, meridian, basis, "#ffdf6e", 2, 0.62);
 
-  const fullTrack = data.subLat.map((lat, i) => latLonToUnit(lat, data.subLon[i], 1.095));
+  const fullTrack = data.plot.ground;
   drawProjectedPolyline(ctx, canvas, fullTrack, basis, "#4da3ff", 2, 0.35);
 
-  const pathSoFar = fullTrack.slice(0, k + 1).map(p => mul(1.018, p));
+  const pathSoFar = trailPoints(fullTrack, data.plot.indices, k,
+    latLonToUnit(data.subLat[k], data.subLon[k], 1.095)).map(p => mul(1.018, p));
   drawProjectedPolyline(ctx, canvas, pathSoFar, basis, "#ffb347", 4, 0.96);
 
-  const satTrack = data.satPositions.map(r => satToDisplayPoint(r, SAT_DISPLAY_RADIUS));
+  const satTrack = data.plot.satellite;
   drawProjectedPolyline(ctx, canvas, satTrack, basis, "#b792ff", 2, 0.28);
-  drawProjectedPolyline(ctx, canvas, satTrack.slice(0, k + 1).map(p => mul(1.018, p)), basis, "#b792ff", 3, 0.88);
+  const satTrail = trailPoints(satTrack, data.plot.indices, k,
+    satToDisplayPoint(data.satPositions[k])).map(p => mul(1.018, p));
+  drawProjectedPolyline(ctx, canvas, satTrail, basis, "#b792ff", 3, 0.88);
 
   const subNow = latLonToUnit(data.subLat[k], data.subLon[k], 1.18);
   const satNow = satToDisplayPoint(data.satPositions[k], SAT_DISPLAY_RADIUS + 0.08);
@@ -1113,9 +1189,10 @@ function drawGroundTrack(k, data){
   ctx.fillText(obsLabel, obsLabelX, obsLabelY);
   ctx.restore();
 
-  const full = data.subLon.map((lon, i) => map(lon, data.subLat[i]));
+  const full = data.plot.indices.map(i => map(data.subLon[i], data.subLat[i]));
   drawPolyline2D(ctx, full, "#4da3ff", 2, 0.36);
-  drawPolyline2D(ctx, full.slice(0, k + 1), "#ffb347", 3, 0.95);
+  drawPolyline2D(ctx, trailPoints(full, data.plot.indices, k,
+    map(data.subLon[k], data.subLat[k])), "#ffb347", 3, 0.95);
 
   drawPoint2D(ctx, ...map(data.subLon[k], data.subLat[k]), "#ffb347", 6);
   drawPoint2D(ctx, ...map(data.satLonDeg, 0), "#ffdf6e", 5);
@@ -1158,9 +1235,10 @@ function drawSky(k, data){
   ctx.fillText("Zenith", cx - 20, cy + 4);
   ctx.restore();
 
-  const full = data.skyX.map((x, i) => Number.isFinite(x) ? mapSky(x, data.skyY[i]) : [NaN, NaN]);
+  const full = data.plot.indices.map(i => mapSky(data.skyX[i], data.skyY[i]));
   drawPolyline2D(ctx, full, "#4da3ff", 2, 0.36);
-  drawPolyline2D(ctx, full.slice(0, k + 1), "#ffb347", 3, 0.96);
+  drawPolyline2D(ctx, trailPoints(full, data.plot.indices, k,
+    mapSky(data.skyX[k], data.skyY[k])), "#ffb347", 3, 0.96);
 
   if (data.visible[k]) {
     drawPoint2D(ctx, ...mapSky(data.skyX[k], data.skyY[k]), "#ffb347", 6);
@@ -1206,11 +1284,16 @@ function readParams(){
     inclinationDeg: parseFloat(document.getElementById("inclination").value),
     eccentricity: parseFloat(document.getElementById("eccentricity").value),
     argPerigeeDeg: parseFloat(document.getElementById("argPerigee").value),
-    samples: parseInt(document.getElementById("samples").value, 10)
+    samples: document.getElementById("samples").valueAsNumber
   };
 }
 
 function startSimulation(){
+  const samplesInput = document.getElementById("samples");
+  const error = document.getElementById("simulationError");
+  error.hidden = true;
+  error.textContent = "";
+  samplesInput.removeAttribute("aria-invalid");
   try {
     simData = simulate(readParams());
     frameIndex = 0;
@@ -1218,7 +1301,13 @@ function startSimulation(){
     updateStats(simData);
     drawAll(0, simData);
   } catch (err) {
-    alert(err.message);
+    error.textContent = `${err.message} The previous simulation is unchanged.`;
+    error.hidden = false;
+    try { validateSamples(samplesInput.valueAsNumber); }
+    catch {
+      samplesInput.setAttribute("aria-invalid", "true");
+      samplesInput.focus();
+    }
   }
 }
 
