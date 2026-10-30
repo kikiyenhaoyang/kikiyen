@@ -49,7 +49,11 @@ async function main() {
         width:innerWidth,scroll:document.documentElement.scrollWidth,
         katexLoaded:typeof katex!=='undefined',
       }));
-      assert.ok(layout.scroll<=layout.width+1,JSON.stringify(layout));
+      await page.screenshot({path:path.join(artifacts,name+'-page.png'),fullPage:true});
+      // Mobile browsers can expand innerWidth to fit overflowing content.
+      // Comparing scrollWidth only with innerWidth would falsely pass that case.
+      assert.equal(layout.width,device.viewport.width,JSON.stringify(layout));
+      assert.ok(layout.scroll<=device.viewport.width+1,JSON.stringify(layout));
       assert.equal((await valid()).regime,'guided');
       await page.getByRole('button',{name:'pause',exact:true}).click();
       const paused=(await state()).phase;
