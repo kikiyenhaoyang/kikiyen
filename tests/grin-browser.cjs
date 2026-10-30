@@ -68,6 +68,17 @@ async function main() {
       // Comparing scrollWidth only with innerWidth would falsely pass that case.
       assert.equal(layout.width,device.viewport.width,JSON.stringify(layout));
       assert.ok(layout.scroll<=device.viewport.width+1,JSON.stringify(layout));
+      if(device.isMobile){
+        for(const selector of ['.formula','.table-wrap']){
+          const scrolled=await page.locator(selector).first().evaluate(el=>{
+            el.scrollLeft=100;
+            const offset=el.scrollLeft;
+            el.scrollLeft=0;
+            return offset;
+          });
+          assert.ok(scrolled>0,selector+' must remain horizontally scrollable');
+        }
+      }
       assert.equal((await valid()).regime,'guided');
       await page.getByRole('button',{name:'pause',exact:true}).click();
       const paused=(await state()).phase;

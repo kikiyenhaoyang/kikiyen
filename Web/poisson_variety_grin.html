@@ -58,6 +58,8 @@
   *{box-sizing:border-box}
   html,body{margin:0;padding:0}
   body{
+    /* Contain clipped math/table overflow without disabling their own scrolling. */
+    overflow-x:clip;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     background:linear-gradient(180deg, var(--bg) 0%, color-mix(in oklab, var(--bg), #ffffff 8%) 100%);
     color:var(--fg);
