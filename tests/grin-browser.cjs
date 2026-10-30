@@ -64,6 +64,25 @@ async function main() {
         })),
       }),device.viewport.width);
       await page.screenshot({path:path.join(artifacts,name+'-page.png'),fullPage:true});
+      if(layout.width!==device.viewport.width){
+        const candidates={
+          rootClip:'html{overflow-x:clip}',
+          mathContainingBlock:'.katex{position:relative}',
+          hiddenMathOnly:'.katex-mathml{display:none}',
+          displayMathScroll:'.katex-display{overflow:auto hidden}',
+          tableContainment:'.table-wrap{contain:inline-size}',
+        };
+        layout.candidates={};
+        for(const [key,content] of Object.entries(candidates)){
+          const style=await page.addStyleTag({content});
+          layout.candidates[key]=await page.evaluate(()=>({
+            width:innerWidth,scroll:document.documentElement.scrollWidth,
+            client:document.documentElement.clientWidth,body:document.body.scrollWidth,
+            visual:visualViewport.width,scale:visualViewport.scale,
+          }));
+          await style.evaluate(el=>el.remove());
+        }
+      }
       // Mobile browsers can expand innerWidth to fit overflowing content.
       // Comparing scrollWidth only with innerWidth would falsely pass that case.
       assert.equal(layout.width,device.viewport.width,JSON.stringify(layout));
