@@ -45,10 +45,18 @@ async function main() {
       const shot=async suffix=>{
         await page.locator('#simulator > .card').screenshot({path:path.join(artifacts,`${name}-${suffix}.png`)});
       };
-      const layout=await page.evaluate(()=>({
+      const layout=await page.evaluate(expectedWidth=>({
         width:innerWidth,scroll:document.documentElement.scrollWidth,
         katexLoaded:typeof katex!=='undefined',
-      }));
+        overflow:[...document.querySelectorAll('*')].filter(el=>{
+          const r=el.getBoundingClientRect();
+          return r.width>1 && r.right>expectedWidth+1;
+        }).slice(0,30).map(el=>({
+          tag:el.tagName,class:el.className,right:el.getBoundingClientRect().right,
+          parent:el.parentElement?.className,
+          parentOverflow:el.parentElement?getComputedStyle(el.parentElement).overflowX:null,
+        })),
+      }),device.viewport.width);
       await page.screenshot({path:path.join(artifacts,name+'-page.png'),fullPage:true});
       // Mobile browsers can expand innerWidth to fit overflowing content.
       // Comparing scrollWidth only with innerWidth would falsely pass that case.
