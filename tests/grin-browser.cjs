@@ -50,9 +50,15 @@ async function main() {
         katexLoaded:typeof katex!=='undefined',
         overflow:[...document.querySelectorAll('*')].filter(el=>{
           const r=el.getBoundingClientRect();
-          return r.width>1 && r.right>expectedWidth+1;
+          if(r.width<=1 || r.right<=expectedWidth+1 || el.closest('.katex-mathml')) return false;
+          for(let parent=el.parentElement;parent;parent=parent.parentElement){
+            if(['hidden','clip','auto','scroll'].includes(getComputedStyle(parent).overflowX)
+              && parent.getBoundingClientRect().right<=expectedWidth+1) return false;
+          }
+          return true;
         }).slice(0,30).map(el=>({
           tag:el.tagName,class:el.className,right:el.getBoundingClientRect().right,
+          text:el.textContent.slice(0,120),
           parent:el.parentElement?.className,
           parentOverflow:el.parentElement?getComputedStyle(el.parentElement).overflowX:null,
         })),
