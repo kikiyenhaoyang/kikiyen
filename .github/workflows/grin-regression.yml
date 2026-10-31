@@ -1,0 +1,37 @@
+name: GRIN regression
+
+on:
+  pull_request:
+    paths:
+      - 'Web/poisson_variety_grin.html'
+      - 'tests/**'
+      - '.github/workflows/grin-regression.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'Web/poisson_variety_grin.html'
+      - 'tests/**'
+      - '.github/workflows/grin-regression.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  grin:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+      - run: node --test tests/grin.test.cjs
+      - run: npm ci --prefix tests
+      - run: npx --prefix tests playwright install --with-deps chromium
+      - run: node tests/grin-browser.cjs
+      - uses: actions/upload-artifact@v6
+        if: always()
+        with:
+          name: grin-browser-results
+          path: tests/artifacts/
+          if-no-files-found: ignore

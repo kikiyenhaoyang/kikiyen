@@ -1,0 +1,11 @@
+{
+  "name": "grin-regression-tests",
+  "private": true,
+  "scripts": {
+    "test": "node --test grin.test.cjs",
+    "test:browser": "node grin-browser.cjs"
+  },
+  "devDependencies": {
+    "playwright": "1.58.2"
+  }
+}
